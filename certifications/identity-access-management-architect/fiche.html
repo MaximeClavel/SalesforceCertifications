@@ -1,0 +1,485 @@
+  <header class="hero">
+    <div class="eyebrow">Salesforce Certification · Architect</div>
+    <h1>Identity &amp; Access <span>Management Architect</span></h1>
+    <p class="sub">Fiche de révision alignée sur les six sections de l'examen Platform Identity and Access Management Architect (Plat-Arch-203) : SAML, OAuth et OpenID Connect, identités tierces, Salesforce fournisseur d'identité, MFA et sessions, licences Identity, et connexion des clients et partenaires.</p>
+    <div class="facts">
+      <span class="chip">⏱ <b>120 min</b> (à confirmer)</span>
+      <span class="chip">📝 <b>60</b> questions notées + 5 non notées max</span>
+      <span class="chip">✅ seuil de réussite <b>67 %</b></span>
+      <span class="chip">🎓 <b>aucun</b> prérequis</span>
+      <span class="chip">💵 <b>400 $</b> · repassage <b>200 $</b></span>
+      <span class="chip">🏛 compte pour <b>System Architect</b></span>
+    </div>
+    <p class="verified">Vérifié le 9 novembre 2026 avec la documentation Salesforce Identity et les plans d'examen publiés. Les sites Salesforce n'étant pas accessibles depuis la session de rédaction, le format et les poids viennent de sources concordantes qui citent le guide officiel ; la durée annoncée varie (120 min le plus souvent, 105 min ailleurs) : vérifie-la sur Trailhead.</p>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="overall-bar"></div></div>
+      <span id="overall-progress">0 / 0 points revus</span>
+    </div>
+
+    <div class="blueprint">
+      <div class="blueprint-bar">
+        <a href="#concepts" style="width:17%;background:#3450d6;">17%</a>
+        <a href="#thirdparty" style="width:21%;background:#a65a00;">21%</a>
+        <a href="#idp" style="width:17%;background:#187a4c;">17%</a>
+        <a href="#access" style="width:15%;background:#a13fc7;">15%</a>
+        <a href="#identity" style="width:12%;background:#137a8c;">12%</a>
+        <a href="#community" style="width:18%;background:#b4325a;">18%</a>
+      </div>
+      <div class="blueprint-legend">
+        <span><i class="dot" style="background:#3450d6;"></i>Concepts 17%</span>
+        <span><i class="dot" style="background:#a65a00;"></i>Identité tierce 21%</span>
+        <span><i class="dot" style="background:#187a4c;"></i>Salesforce IdP 17%</span>
+        <span><i class="dot" style="background:#a13fc7;"></i>Bonnes pratiques d'accès 15%</span>
+        <span><i class="dot" style="background:#137a8c;"></i>Salesforce Identity 12%</span>
+        <span><i class="dot" style="background:#b4325a;"></i>Clients et partenaires 18%</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Sections">
+      <a href="#concepts">Concepts <span class="nav-count">0/0</span></a>
+      <a href="#thirdparty">Identité tierce <span class="nav-count">0/0</span></a>
+      <a href="#idp">Salesforce IdP <span class="nav-count">0/0</span></a>
+      <a href="#access">Accès <span class="nav-count">0/0</span></a>
+      <a href="#identity">Salesforce Identity <span class="nav-count">0/0</span></a>
+      <a href="#community">Clients et partenaires <span class="nav-count">0/0</span></a>
+      <a href="#ref">Repères <span class="nav-count">0/0</span></a>
+    </nav>
+
+    <main class="content">
+
+      <!-- ================= CONCEPTS ================= -->
+      <section class="domain" id="concepts">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Identity Management Concepts · 17 %</span>
+            <h2>Concepts de gestion des identités</h2>
+            <p>Qui authentifie, qui fait confiance à qui, et avec quel standard.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Décrire le rôle du fournisseur d'identité (IdP) et du fournisseur de service (SP) dans une solution de contrôle d'accès.</li>
+            <li>Décrire comment s'établit la confiance entre deux systèmes.</li>
+            <li>Décrire les composants et les risques de l'authentification déléguée.</li>
+            <li>Choisir le standard adapté (SAML, OAuth 2.0, OpenID Connect, SCIM) et décrire le cycle de vie des identités.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="c-roles">
+          <div class="topic-head"><h3>IdP, SP et confiance</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Fournisseur d'identité (IdP)</b> : authentifie l'utilisateur et émet une assertion ou un jeton. <b>Fournisseur de service (SP)</b> : fait confiance à cette assertion et donne l'accès.</li>
+            <li>Salesforce peut être <b>SP</b> (les employés se connectent avec Okta, Entra ID, Ping) ou <b>IdP</b> (des applications tierces font confiance à Salesforce).</li>
+            <li>Confiance SAML : échange de métadonnées. Le SP connaît l'<b>Issuer</b> et le <b>certificat de signature</b> de l'IdP ; l'IdP connaît l'<b>Entity ID</b> et l'<b>URL ACS</b> (Assertion Consumer Service) du SP.</li>
+            <li><b>SP-initiated</b> : l'utilisateur arrive sur le SP (lien profond, My Domain), est redirigé vers l'IdP, puis revient sur la page demandée (RelayState). <b>IdP-initiated</b> : l'utilisateur part du portail de l'IdP.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Les rôles s'inversent selon le sens : quand Salesforce consomme l'assertion d'Okta, Okta est l'IdP et Salesforce le SP.</div>
+        </article>
+
+        <article class="topic" data-topic="c-standards" id="c-standards">
+          <div class="topic-head"><h3>Les standards</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Standard</th><th class="wrap">Sert à</th><th class="wrap">À retenir</th></tr></thead>
+              <tbody>
+                <tr><td>SAML 2.0</td><td class="wrap">SSO dans le navigateur</td><td class="wrap">Assertion XML signée ; identité par nom d'utilisateur, Federation ID ou ID utilisateur</td></tr>
+                <tr><td>OAuth 2.0</td><td class="wrap">Autorisation déléguée : accéder à une API pour le compte d'un utilisateur ou d'un système</td><td class="wrap">Jeton d'accès, jeton d'actualisation, scopes ; ce n'est pas un protocole d'authentification</td></tr>
+                <tr><td>OpenID Connect</td><td class="wrap">Authentification au-dessus d'OAuth 2.0</td><td class="wrap">Scope <code>openid</code>, <b>ID token</b> (JWT signé : <code>iss</code>, <code>sub</code>, <code>aud</code>, <code>exp</code>), endpoint UserInfo</td></tr>
+                <tr><td>SCIM 2.0</td><td class="wrap">Provisionnement des utilisateurs</td><td class="wrap">API REST standard ; Salesforce l'expose sous <code>/services/scim/v2/</code></td></tr>
+                <tr><td>Kerberos / IWA</td><td class="wrap">SSO de bureau sur un poste Windows du domaine</td><td class="wrap">Pris en charge par l'IdP (ADFS, Entra ID…), qui émet ensuite du SAML vers Salesforce</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="c-delegated">
+          <div class="topic-head"><h3>Authentification déléguée</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>À chaque connexion, Salesforce envoie l'identifiant et le mot de passe (ou un jeton) à un <b>service web SOAP</b> de l'entreprise, qui répond vrai ou faux.</li>
+            <li>Activée sur demande à Salesforce ; s'applique aux utilisateurs dont le profil ou un permission set porte « Is Single Sign-On Enabled ».</li>
+            <li>Risques : la connexion dépend de la disponibilité du service ; le mot de passe transite par Salesforce. La fédération SAML ou OpenID Connect est préférée : Salesforce ne voit jamais le mot de passe.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="c-lifecycle">
+          <div class="topic-head"><h3>Cycle de vie des identités</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Arrivée, mobilité, départ (joiner, mover, leaver) : la source de vérité est souvent le SIRH, propagé à l'annuaire puis aux applications.</li>
+            <li>Provisionnement : manuel, <b>Just-in-Time</b> à la connexion (création ou mise à jour seulement), ou par API (SCIM, outil d'IAM) qui gère aussi la désactivation.</li>
+            <li>Départ : on ne supprime pas un utilisateur Salesforce. On le <b>gèle</b> (Freeze, effet immédiat, même quand la désactivation est bloquée par des champs de hiérarchie), puis on le <b>désactive</b> et on révoque ses jetons OAuth.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Couper l'accès à l'IdP ne suffit pas : les sessions ouvertes et les jetons OAuth restent valides tant qu'ils ne sont pas révoqués.</div>
+        </article>
+      </section>
+
+      <!-- ================= IDENTITÉ TIERCE ================= -->
+      <section class="domain" id="thirdparty">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Accepting Third-Party Identity in Salesforce · 21 %</span>
+            <h2>Identité tierce dans Salesforce</h2>
+            <p>Salesforce fournisseur de service : SSO SAML, fournisseurs d'authentification, provisionnement à la connexion.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Configurer le SSO SAML avec un IdP tiers, y compris plusieurs IdP.</li>
+            <li>Configurer les fournisseurs d'authentification (OpenID Connect, réseaux sociaux, autre org Salesforce) et leur registration handler.</li>
+            <li>Choisir et mettre en œuvre le provisionnement Just-in-Time.</li>
+            <li>Diagnostiquer les échecs de connexion fédérée.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="tp-saml">
+          <div class="topic-head"><h3>SSO SAML vers Salesforce</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Toutes les orgs ont un <b>My Domain</b> : c'est l'URL de connexion propre à l'org, utilisée par le SSO.</li>
+            <li>Single Sign-On Settings : Issuer, certificat de l'IdP, URL de connexion de l'IdP, <b>SAML Identity Type</b> (nom d'utilisateur, <b>Federation ID</b> ou ID utilisateur Salesforce) et emplacement de l'identité (Subject ou attribut).</li>
+            <li>Quand les identifiants diffèrent entre l'annuaire et Salesforce, on stocke l'identifiant de l'annuaire dans le <b>Federation ID</b> de l'utilisateur.</li>
+            <li>Bouton de l'IdP sur la page de connexion : My Domain → Authentication Configuration → Authentication Service. On peut y masquer le formulaire classique et interdire la connexion par login.salesforce.com.</li>
+            <li>Plusieurs IdP (filiales, acquisitions) : une configuration SAML par IdP, toutes proposées sur la page de connexion, ou un <b>Login Discovery</b> qui choisit l'IdP selon l'identifiant saisi (<code>Auth.MyDomainLoginDiscoveryHandler</code>).</li>
+            <li>Application mobile Salesforce : elle doit utiliser l'URL My Domain (réglée par l'utilisateur ou déployée par MDM) pour proposer l'IdP.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tp-jit">
+          <div class="topic-head"><h3>Provisionnement Just-in-Time</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>JIT SAML</b> : à la connexion, Salesforce crée ou met à jour l'utilisateur à partir des attributs de l'assertion. Le JIT standard accepte des attributs de l'utilisateur (dont le profil et le rôle) ; pour une logique sur mesure (permission sets, règles de mapping), on écrit un handler qui implémente <code>Auth.SamlJitHandler</code> (<code>createUser</code>, <code>updateUser</code>).</li>
+            <li><b>Fournisseurs d'authentification</b> : le <code>Auth.RegistrationHandler</code> est appelé avec les données de l'IdP. <code>createUser</code> s'exécute à la première connexion (pas encore de lien), <code>updateUser</code> aux connexions suivantes.</li>
+            <li>Le JIT ne désactive personne : il ne s'exécute qu'à la connexion. Le départ d'un employé passe par un autre mécanisme (SCIM, outil d'IAM, procédure).</li>
+          </ul>
+<pre><span class="k">global class</span> CorpRegistrationHandler <span class="k">implements</span> Auth.RegistrationHandler {
+    <span class="c">// Première connexion par ce fournisseur : créer (ou retrouver) l'utilisateur</span>
+    <span class="k">global</span> User createUser(Id portalId, Auth.UserData data) { … }
+    <span class="c">// Connexions suivantes : mettre à jour l'utilisateur déjà lié</span>
+    <span class="k">global void</span> updateUser(Id userId, Id portalId, Auth.UserData data) { … }
+}</pre>
+        </article>
+
+        <article class="topic" data-topic="tp-authprov">
+          <div class="topic-head"><h3>Fournisseurs d'authentification</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Types : <b>OpenID Connect</b> (n'importe quel IdP compatible), Google, Facebook, Apple, Microsoft, LinkedIn, GitHub, <b>Salesforce</b> (une autre org)…</li>
+            <li>Configuration OpenID Connect : consumer key et secret émis par l'IdP, URL d'autorisation, de jeton et UserInfo, scopes, registration handler. Le fournisseur est ensuite ajouté à la page de connexion.</li>
+            <li>SSO entre deux orgs Salesforce : l'org cible définit un fournisseur de type Salesforce qui pointe vers l'org source (ou l'org source est IdP SAML de l'autre). Salesforce to Salesforce partage des données, pas des identités.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tp-mfa-debug">
+          <div class="topic-head"><h3>MFA fédérée et diagnostic</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Avec le SSO, l'exigence de MFA de Salesforce peut être satisfaite par la MFA de l'IdP : l'utilisateur ne la refait pas dans Salesforce.</li>
+            <li>Avantages de la fédération sur l'authentification déléguée : Salesforce ne reçoit jamais le mot de passe, et les politiques (MFA, verrouillage, départ) sont appliquées au même endroit.</li>
+            <li>Diagnostic : <b>SAML Assertion Validator</b> (dans les paramètres SSO) et Login History. Causes fréquentes : horloge décalée (assertion expirée), certificat ou Issuer différents, Federation ID absent.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Les debug logs n'aident pas à diagnostiquer une assertion SAML refusée.</div>
+        </article>
+      </section>
+
+      <!-- ================= SALESFORCE IDP ================= -->
+      <section class="domain" id="idp">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Salesforce as an Identity Provider · 17 %</span>
+            <h2>Salesforce fournisseur d'identité</h2>
+            <p>Connected apps, flux OAuth et OpenID Connect, provisionnement vers les applications.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Configurer Salesforce comme IdP SAML pour des applications tierces.</li>
+            <li>Choisir le flux OAuth adapté au type d'application.</li>
+            <li>Configurer les politiques des connected apps (utilisateurs autorisés, scopes, jetons).</li>
+            <li>Provisionner les utilisateurs vers les applications connectées.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="idp-saml">
+          <div class="topic-head"><h3>Salesforce IdP SAML</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Activer <b>Identity Provider</b> dans Setup, avec un certificat de signature.</li>
+            <li>Créer une connected app (ou une external client app) avec SAML : Entity ID et URL ACS de l'application, type de sujet, format de Name ID, URL de connexion initiée par l'IdP.</li>
+            <li>Accès : profils et permission sets de l'application ; l'application apparaît dans l'<b>App Launcher</b>.</li>
+            <li><b>User Provisioning for Connected Apps</b> : créer, mettre à jour et désactiver les comptes dans l'application tierce quand on attribue ou retire l'accès.</li>
+            <li>Single Logout : à configurer dans l'application et la connected app pour fermer les sessions des applications à la déconnexion.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="idp-flows" id="idp-flows">
+          <div class="topic-head"><h3>Choisir le flux OAuth</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Flux</th><th class="wrap">Pour</th><th class="wrap">À retenir</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Web server (authorization code) + <b>PKCE</b></td><td class="wrap">Applications web, mobiles, monopages</td><td class="wrap">PKCE protège le code d'autorisation pour les clients publics qui ne gardent pas de secret</td></tr>
+                <tr><td class="wrap"><b>JWT bearer</b></td><td class="wrap">Serveur à serveur, sans interaction</td><td class="wrap">JWT signé par un certificat ; utilisateur pré-autorisé ; pas de jeton d'actualisation</td></tr>
+                <tr><td class="wrap"><b>Client credentials</b></td><td class="wrap">Serveur à serveur, sans interaction</td><td class="wrap">Identifiant et secret de l'application ; s'exécute avec l'utilisateur défini sur la connected app</td></tr>
+                <tr><td class="wrap">Device</td><td class="wrap">Appareils à saisie limitée, outils en ligne de commande</td><td class="wrap">L'utilisateur saisit un code sur un autre appareil</td></tr>
+                <tr><td class="wrap">Refresh token</td><td class="wrap">Renouveler un jeton d'accès</td><td class="wrap">Sans réauthentifier l'utilisateur, selon la politique de jeton de la connected app</td></tr>
+                <tr><td class="wrap">SAML bearer assertion</td><td class="wrap">Réutiliser une assertion SAML</td><td class="wrap">Échange une assertion contre un jeton d'accès</td></tr>
+                <tr><td class="wrap">Username-password, user-agent</td><td class="wrap">À éviter</td><td class="wrap">Bloqués par défaut dans les orgs récentes ; mot de passe exposé ou jeton dans l'URL</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="idp-policies">
+          <div class="topic-head"><h3>Politiques des connected apps</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Permitted Users</b> : « All users may self-authorize » (chaque utilisateur accepte l'accès) ou « <b>Admin approved users are pre-authorized</b> » (seuls les profils ou permission sets attribués à l'application, sans écran d'autorisation).</li>
+            <li><b>Refresh Token Policy</b> : valide jusqu'à révocation, expiration immédiate, expiration après une durée, ou expiration s'il n'est pas utilisé pendant une durée.</li>
+            <li>Scopes au plus juste : <code>api</code>, <code>refresh_token</code> (<code>offline_access</code>), <code>openid</code>, <code>id</code>, <code>web</code> ; <code>full</code> donne tout.</li>
+            <li>IP Relaxation, durée de session, <b>High Assurance session required</b> pour exiger une session de niveau élevé.</li>
+            <li>Salesforce pousse désormais les <b>External Client Apps</b>, qui remplacent progressivement les connected apps, avec des réglages plus sûrs par défaut.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="idp-oidc">
+          <div class="topic-head"><h3>Salesforce fournisseur OpenID Connect</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Scope <code>openid</code> : Salesforce renvoie un ID token (JWT signé) en plus du jeton d'accès.</li>
+            <li>L'application valide la signature avec les clés publiques de <code>/id/keys</code>, découvertes par <code>/.well-known/openid-configuration</code>.</li>
+            <li>Endpoint UserInfo (et identity URL) : informations sur l'utilisateur. Révocation : <code>/services/oauth2/revoke</code>. Introspection : <code>/services/oauth2/introspect</code>.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= ACCÈS ================= -->
+      <section class="domain" id="access">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Access Management Best Practices · 15 %</span>
+            <h2>Bonnes pratiques d'accès</h2>
+            <p>MFA, sessions, restrictions réseau, autorisations et audit.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Décrire les risques couverts par la MFA et les niveaux de sécurité de session.</li>
+            <li>Recommander les contrôles de connexion et de session adaptés.</li>
+            <li>Attribuer les droits (profils, rôles, permission sets) dans un scénario de SSO.</li>
+            <li>Auditer l'activité après connexion et les applications connectées.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="acc-mfa">
+          <div class="topic-head"><h3>MFA</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Exigée pour <b>toutes les connexions à l'interface</b> : MFA de Salesforce pour les connexions directes, MFA de l'IdP pour les connexions SSO.</li>
+            <li>Méthodes acceptées : Salesforce Authenticator, application TOTP, clé de sécurité (WebAuthn, U2F), authentificateur intégré (Touch ID, Windows Hello). <mark class="hl">Ni SMS, ni e-mail</mark>.</li>
+            <li>Comptes exemptés (tests d'interface automatisés) : permission « Waive Multi-Factor Authentication for Exempt Users ». Les connexions par API ne sont pas concernées.</li>
+            <li><b>Lightning Login</b> : connexion sans mot de passe pour les utilisateurs internes, avec Salesforce Authenticator.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="acc-session">
+          <div class="topic-head"><h3>Connexion et sessions</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Login IP Ranges</b> (profil) : connexion refusée hors des plages. <b>Trusted IP Ranges</b> (Network Access) : pas de vérification d'identité depuis ces plages, mais connexion possible ailleurs.</li>
+            <li>Login Hours (profil) : connexion seulement pendant les heures définies.</li>
+            <li>Niveaux de session : <b>Standard</b> et <b>High Assurance</b>. Une connected app, un rapport ou une action peut exiger High Assurance : l'utilisateur doit alors valider la MFA.</li>
+            <li>Session Settings : verrouiller la session à l'adresse IP et au domaine d'origine, durée d'inactivité, attribut HttpOnly.</li>
+            <li><b>Login Flows</b> : un flow après l'authentification (accepter des conditions, vérification supplémentaire), attribué par profil.</li>
+            <li><b>Transaction Security Policies</b> (Real-Time Event Monitoring) : bloquer ou alerter en temps réel, par exemple sur un export de rapport volumineux.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="acc-authz">
+          <div class="topic-head"><h3>Autorisations</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Moindre privilège : profil minimal, droits par permission sets et permission set groups.</li>
+            <li>En SSO, les droits peuvent suivre les groupes de l'annuaire : le handler JIT ou l'outil de provisionnement attribue profil, rôle et permission sets.</li>
+            <li>Applications connectées : accès par profil ou permission set, scopes réduits.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="acc-audit">
+          <div class="topic-head"><h3>Audit et réaction</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Login History</b> (connexions, méthode, statut), <b>Identity Verification History</b>, <b>Setup Audit Trail</b> (changements de configuration, 180 jours), <b>Event Monitoring</b> (LoginEvent, API, rapports), Identity Provider Event Log.</li>
+            <li>Application compromise : sur la page Connected Apps OAuth Usage, <b>révoquer</b> ses jetons et la <b>bloquer</b>.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= SALESFORCE IDENTITY ================= -->
+      <section class="domain" id="identity">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Salesforce Identity · 12 %</span>
+            <h2>Salesforce Identity</h2>
+            <p>Licences, App Launcher, endpoints et vérification d'identité.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Choisir les licences Identity selon le public (employés, clients).</li>
+            <li>Décrire les fonctionnalités de Salesforce Identity : App Launcher, SSO, provisionnement, déconnexion unique.</li>
+            <li>Utiliser les endpoints d'identité et les méthodes de vérification.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="id-licenses">
+          <div class="topic-head"><h3>Licences</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Identity</b> (Identity Only) : employés qui utilisent Salesforce comme IdP et l'App Launcher, sans fonctions CRM.</li>
+            <li><b>External Identity</b> : clients et consommateurs à grande échelle (B2C), avec un site Experience Cloud pour la connexion et l'inscription.</li>
+            <li>Licences Experience Cloud (Customer Community, Customer Community Plus, Partner Community) : quand les utilisateurs externes travaillent sur des données CRM.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="id-features">
+          <div class="topic-head"><h3>Fonctionnalités et endpoints</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>App Launcher, Salesforce IdP SAML et OpenID Connect, provisionnement vers les applications, Single Logout.</li>
+            <li>SCIM 2.0 : <code>/services/scim/v2/Users</code> pour qu'un outil d'IAM crée, mette à jour et désactive les utilisateurs.</li>
+            <li>Jetons : <code>/services/oauth2/token</code> (obtenir, renouveler), <code>/revoke</code>, <code>/introspect</code> ; <code>/services/oauth2/userinfo</code> et l'identity URL pour les informations de l'utilisateur.</li>
+            <li><b>Headless Identity</b> : API d'inscription, de connexion, de connexion sans mot de passe et de mot de passe oublié, pour une application qui garde sa propre interface.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="id-verify">
+          <div class="topic-head"><h3>My Domain et vérification</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>My Domain est obligatoire et actif dans toutes les orgs ; changer son nom change les URL de connexion et impose de mettre à jour les configurations SSO.</li>
+            <li>Vérification d'identité : méthodes MFA, Lightning Login ; pour les utilisateurs externes, codes par e-mail ou SMS (connexion sans mot de passe).</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= CLIENTS ET PARTENAIRES ================= -->
+      <section class="domain" id="community">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Community (Partner and Customer) · 18 %</span>
+            <h2>Clients et partenaires</h2>
+            <p>Identité des utilisateurs externes dans les sites Experience Cloud.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs de la section</summary>
+          <ul>
+            <li>Choisir la licence externe et le modèle de partage adaptés.</li>
+            <li>Concevoir l'inscription et la connexion des clients (formulaire, sans mot de passe, réseaux sociaux, SSO des partenaires).</li>
+            <li>Sécuriser l'accès invité.</li>
+            <li>Connecter une application externe à l'identité Salesforce (Headless Identity).</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="co-licenses" id="co-licenses">
+          <div class="topic-head"><h3>Licences et partage</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Licence</th><th class="wrap">Rôles et règles de partage</th><th class="wrap">Usage</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Customer Community</td><td class="wrap">Non (utilisateurs à grand volume) : <b>sharing sets</b> et <b>share groups</b></td><td class="wrap">Grand nombre de clients qui voient leurs cas, leurs commandes</td></tr>
+                <tr><td class="wrap">Customer Community Plus</td><td class="wrap">Oui</td><td class="wrap">Clients qui ont besoin de rapports et de partage fin (rôles, règles de partage)</td></tr>
+                <tr><td class="wrap">Partner Community</td><td class="wrap">Oui</td><td class="wrap">Partenaires : pistes, opportunités, gestion des partenaires</td></tr>
+                <tr><td class="wrap">External Identity</td><td class="wrap">—</td><td class="wrap">Identité seule, à grande échelle</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="trap"><b>Piège</b>Les utilisateurs à grand volume (Customer Community) ne peuvent pas figurer dans des règles de partage : on passe par les sharing sets.</div>
+        </article>
+
+        <article class="topic" data-topic="co-login">
+          <div class="topic-head"><h3>Inscription et connexion</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Réglages dans Experience Workspaces → Administration → <b>Login &amp; Registration</b>.</li>
+            <li>Auto-inscription : compte par défaut pour les contacts (ou comptes personnels), page d'inscription configurable avec champs supplémentaires et vérification par e-mail ou SMS, handler <code>Auth.ConfigurableSelfRegHandler</code> pour une logique sur mesure.</li>
+            <li>Connexion sans mot de passe : code à usage unique par e-mail ou SMS.</li>
+            <li>Réseaux sociaux : fournisseurs d'authentification et registration handler, ajoutés à la page de connexion du site.</li>
+            <li>Partenaires avec leur propre IdP : une configuration SAML par partenaire, activée pour le site, avec JIT pour créer les utilisateurs partenaires.</li>
+            <li>Login Discovery du site : l'utilisateur saisit son e-mail ou son téléphone, un handler le dirige vers son IdP ou vers un code (<code>Auth.LoginDiscoveryHandler</code>).</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="co-guest">
+          <div class="topic-head"><h3>Accès invité</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Profil invité : seulement les droits d'objet et de champ nécessaires aux pages publiques ; jamais View All ni Modify All.</li>
+            <li>Partage vers les invités par des règles de partage pour invités, en lecture seule.</li>
+            <li>Les enregistrements créés par un invité sont attribués à un propriétaire interne par défaut.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="co-headless">
+          <div class="topic-head"><h3>Applications externes</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Application native qui veut son propre écran de connexion : <b>Headless Identity</b> (Authorization Code and Credentials flow), sans page web Salesforce.</li>
+            <li>Application qui accepte une page web : flux web server avec PKCE vers le site Experience Cloud.</li>
+            <li>Le flux username-password n'est pas une solution pour les clients.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= REPÈRES ================= -->
+      <section class="domain" id="ref">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Transversal — à connaître par cœur</span>
+            <h2>Repères</h2>
+            <p>Les correspondances qui reviennent dans les questions.</p>
+          </div>
+          <span class="domain-count">0/1</span>
+        </div>
+
+        <article class="topic" data-topic="ref-map">
+          <div class="topic-head"><h3>Besoin → solution</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Besoin</th><th class="wrap">Solution</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Employés connectés avec l'annuaire d'entreprise</td><td class="wrap">SSO SAML (ou OpenID Connect), Federation ID</td></tr>
+                <tr><td class="wrap">Créer l'utilisateur à la première connexion</td><td class="wrap">JIT SAML ou registration handler</td></tr>
+                <tr><td class="wrap">Créer et désactiver depuis l'outil d'IAM</td><td class="wrap">SCIM 2.0</td></tr>
+                <tr><td class="wrap">Serveur à serveur</td><td class="wrap">JWT bearer ou client credentials</td></tr>
+                <tr><td class="wrap">Application mobile ou monopage</td><td class="wrap">Web server + PKCE</td></tr>
+                <tr><td class="wrap">Bloquer hors du réseau</td><td class="wrap">Login IP Ranges du profil</td></tr>
+                <tr><td class="wrap">MFA renforcée pour une action sensible</td><td class="wrap">Session High Assurance</td></tr>
+                <tr><td class="wrap">Clients en grand nombre</td><td class="wrap">Customer Community + sharing sets, ou External Identity</td></tr>
+                <tr><td class="wrap">Clients avec des comptes Google ou Apple</td><td class="wrap">Fournisseurs d'authentification + registration handler</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <div>
+      <strong>Le jour de l'examen</strong>
+      <ul>
+        <li>60 questions notées et jusqu'à 5 non notées ; vérifie la durée au moment de l'inscription.</li>
+        <li>Identité tierce (21 %) et clients et partenaires (18 %) sont les deux plus grosses sections.</li>
+        <li>Repérer d'abord qui authentifie (IdP) et qui fait confiance (SP), puis si un humain est présent : cela désigne le standard et le flux.</li>
+        <li>Méfiance envers les réponses qui stockent un mot de passe, désactivent la MFA ou donnent des droits larges « pour simplifier ».</li>
+        <li>Lire combien de réponses sont attendues : une question à réponses multiples n'est juste que si tout est correct.</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Sources officielles</strong>
+      <ul class="src-list">
+        <li><a href="https://trailhead.salesforce.com/credentials/platformidentityandaccessmanagementarchitect" target="_blank" rel="noopener">Page de la certification</a> · <a href="https://trailhead.salesforce.com/users/strailhead/trailmixes/architect-identity-and-access-management" target="_blank" rel="noopener">Trailmix Architect Journey</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=sf.identity_overview.htm&amp;type=5" target="_blank" rel="noopener">Salesforce Identity</a> · <a href="https://help.salesforce.com/s/articleView?id=sf.sso_saml.htm&amp;type=5" target="_blank" rel="noopener">SSO SAML</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_flows.htm&amp;type=5" target="_blank" rel="noopener">Flux OAuth</a> · <a href="https://help.salesforce.com/s/articleView?id=sf.mfa_supported_verification_methods.htm&amp;type=5" target="_blank" rel="noopener">Méthodes de vérification MFA</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=sf.networks_auth_configure_login.htm&amp;type=5" target="_blank" rel="noopener">Connexion des sites Experience Cloud</a></li>
+      </ul>
+    </div>
+  </footer>

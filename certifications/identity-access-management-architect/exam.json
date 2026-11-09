@@ -1,0 +1,937 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "x-c1",
+      "domain": "concepts",
+      "question": "Universal Containers' employees sign in to Salesforce with their corporate credentials through Okta, which sends a SAML assertion to Salesforce. Which roles do the two systems play?",
+      "options": [
+        "Okta is the identity provider, and Salesforce is the service provider",
+        "Salesforce is the identity provider, and Okta is the service provider",
+        "Both systems are identity providers, because both store user records",
+        "Okta is the authorization server, and Salesforce is the OAuth client"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'IdP authentifie l'utilisateur et émet l'assertion : c'est Okta. Salesforce fait confiance à l'assertion et donne l'accès : c'est le fournisseur de service. Inverser les rôles est le piège classique (inversion). Stocker des utilisateurs ne fait pas d'un système un IdP (piège plausible). Le vocabulaire serveur d'autorisation et client appartient à OAuth, pas à un SSO SAML (confusion de notions)."
+    },
+    {
+      "id": "x-c2",
+      "domain": "concepts",
+      "question": "An architect at Universal Containers explains how Salesforce trusts the SAML assertions sent by the corporate identity provider. What lets Salesforce verify that an assertion really comes from that identity provider?",
+      "options": [
+        "The assertion's signature, checked against the identity provider's certificate stored in the SAML settings",
+        "A password shared between the identity provider and Salesforce, sent in each assertion",
+        "The identity provider's IP address, which Salesforce compares with an allowlist",
+        "The OAuth client secret of the identity provider's connected app"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'IdP signe l'assertion avec sa clé privée ; Salesforce vérifie la signature avec le certificat de l'IdP enregistré dans les paramètres SAML, et contrôle l'Issuer. Aucun mot de passe partagé ne circule dans une assertion (faux énoncé). L'adresse IP ne prouve pas l'origine d'une assertion qui transite par le navigateur (piège plausible). Le secret client relève d'OAuth (confusion de notions)."
+    },
+    {
+      "id": "x-c3",
+      "domain": "concepts",
+      "question": "A partner application must let Universal Containers' users sign in with their Salesforce account. The application needs a signed token that tells it who the user is, and it must not rely on calling an API to find out. Which standard should the architect recommend?",
+      "options": [
+        "OpenID Connect, which adds an ID token to the OAuth 2.0 flow",
+        "OAuth 2.0 alone, with the access token used as proof of identity",
+        "SCIM 2.0, with the user record read after each login",
+        "SAML attribute queries sent by the application to Salesforce"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "OpenID Connect ajoute à OAuth 2.0 un ID token, un JWT signé qui décrit l'utilisateur authentifié (iss, sub, aud, exp). Un jeton d'accès OAuth autorise l'accès à une API, il n'est pas conçu pour prouver l'identité (piège plausible). SCIM sert au provisionnement des comptes (confusion de notions). Les requêtes d'attributs SAML ne sont pas un mode de connexion proposé par Salesforce (faux terme)."
+    },
+    {
+      "id": "x-c4",
+      "domain": "concepts",
+      "question": "Universal Containers is considering delegated authentication for its employees. Which two statements about delegated authentication should the architect share?",
+      "options": [
+        "At each login, Salesforce sends the user's credentials to a SOAP web service hosted by the company",
+        "Users can't log in when the company's web service is unavailable",
+        "It relies on signed SAML assertions sent by the corporate identity provider",
+        "It's turned on by default in every org",
+        "Salesforce stores a copy of each user's corporate password"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Avec l'authentification déléguée, Salesforce transmet l'identifiant et le mot de passe (ou un jeton) à un service web SOAP de l'entreprise, qui valide la connexion : si ce service tombe, personne ne se connecte. Les assertions SAML relèvent de la fédération, pas de la délégation (confusion de notions). La fonctionnalité s'active sur demande à Salesforce (faux énoncé). Salesforce valide le mot de passe par le service sans le stocker (piège plausible)."
+    },
+    {
+      "id": "x-c5",
+      "domain": "concepts",
+      "question": "Universal Containers' identity management tool must create, update, and deactivate Salesforce users when employees join, move, or leave, using a standard API. What should the architect recommend?",
+      "options": [
+        "The SCIM 2.0 endpoints that Salesforce exposes for users",
+        "SAML just-in-time provisioning, configured in the single sign-on settings",
+        "A nightly Bulk API 2.0 load of the User object from a file",
+        "OpenID Connect, with the user data read from the ID token"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "SCIM 2.0 est le standard de provisionnement : l'outil d'IAM crée, met à jour et désactive les utilisateurs par les endpoints SCIM de Salesforce. Le JIT ne s'exécute qu'à la connexion et ne désactive personne (piège plausible). Un chargement de fichier nocturne n'est pas une API standard de provisionnement et arrive en retard (faux remède). OpenID Connect authentifie, il ne provisionne pas (confusion de notions)."
+    },
+    {
+      "id": "x-c6",
+      "domain": "concepts",
+      "question": "A Universal Containers employee clicks a link to a Salesforce record in an email. The employee must be sent to the corporate identity provider, then land on that record after signing in. Which flow handles this?",
+      "options": [
+        "SP-initiated SSO through the org's My Domain, which returns the user to the requested page",
+        "IdP-initiated SSO from the identity provider's portal",
+        "Delegated authentication, which redirects the user after the password check",
+        "The OAuth 2.0 user-agent flow, with the record URL as the callback"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'utilisateur arrive d'abord sur Salesforce : c'est un SSO initié par le fournisseur de service, qui garde la page demandée (RelayState) et y ramène l'utilisateur après l'authentification. Un SSO initié par l'IdP part du portail de l'IdP, pas d'un lien vers Salesforce (inversion). L'authentification déléguée ne redirige pas vers un IdP (confusion de notions). Le flux user-agent est un flux OAuth pour applications, pas un SSO (faux terme)."
+    },
+    {
+      "id": "x-c7",
+      "domain": "concepts",
+      "question": "An employee leaves Universal Containers today. The HR system is the source of truth, and the employee's access to Salesforce and to its connected apps must end today. What should the architect recommend?",
+      "options": [
+        "Freeze, then deactivate the user through automated deprovisioning, and revoke the user's OAuth tokens",
+        "Delete the user record in Salesforce so that no access remains",
+        "Disable the user in the identity provider only, because Salesforce sessions end at once",
+        "Reset the user's password and send it to the manager"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le départ se traite par un déprovisionnement piloté par la source de vérité : gel immédiat, désactivation, et révocation des jetons OAuth qui donnent encore accès aux applications. On ne supprime pas un utilisateur Salesforce (faux énoncé). Couper l'IdP n'invalide ni les sessions ouvertes ni les jetons OAuth déjà émis (piège plausible). Réinitialiser le mot de passe et le transmettre ouvre au contraire un accès (inversion)."
+    },
+    {
+      "id": "x-c8",
+      "domain": "concepts",
+      "question": "Universal Containers' employees use Windows PCs joined to the corporate domain. They must reach Salesforce without typing any credentials when they're on the corporate network. What should the architect recommend?",
+      "options": [
+        "An identity provider that supports Integrated Windows Authentication and sends SAML to Salesforce",
+        "The Kerberos settings in Salesforce's single sign-on configuration, with the domain's keytab",
+        "Lightning Login for all employees, so that they never type a password",
+        "Login IP ranges for the corporate network on every employee profile"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le SSO de bureau repose sur Kerberos ou IWA, pris en charge par l'IdP (ADFS, Entra ID, Ping…), qui émet ensuite une assertion SAML pour Salesforce. Salesforce n'a pas de réglage Kerberos (faux terme). Lightning Login supprime le mot de passe, mais demande une approbation sur le téléphone (piège plausible). Les plages d'IP de connexion restreignent l'accès, elles n'authentifient personne (confusion de notions)."
+    },
+    {
+      "id": "x-c9",
+      "domain": "concepts",
+      "question": "An architect at Universal Containers configures SAML single sign-on in Salesforce with the corporate identity provider. Which two values in Salesforce's Single Sign-On Settings must match the identity provider's configuration?",
+      "options": [
+        "The Issuer of the identity provider",
+        "The identity provider's signing certificate",
+        "The consumer key of a connected app",
+        "The callback URL of an OAuth flow",
+        "The client secret of an authentication provider"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Salesforce accepte une assertion si son émetteur correspond à l'Issuer configuré et si sa signature se vérifie avec le certificat de l'IdP. Consumer key, callback URL et client secret appartiennent à OAuth et aux fournisseurs d'authentification, pas à une configuration SAML (confusions de notions)."
+    },
+    {
+      "id": "x-c10",
+      "domain": "concepts",
+      "question": "A developer at Universal Containers receives an ID token from Salesforce in an OpenID Connect flow. Which statement about this token is true?",
+      "options": [
+        "It's a signed JWT with claims about the user, such as iss, sub, aud, and exp",
+        "It's an opaque string that only Salesforce can read and validate",
+        "It's encrypted with the user's password so that only the user can open it",
+        "It replaces the access token for calls to the Salesforce REST API"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'ID token est un JWT signé : l'application vérifie sa signature et lit les claims sur l'utilisateur et sa validité. Il est lisible par l'application, pas opaque (inversion). Il est signé avec une clé de Salesforce, pas chiffré avec un mot de passe (faux énoncé). Les appels d'API utilisent le jeton d'accès (confusion de notions)."
+    },
+    {
+      "id": "x-tp1",
+      "domain": "thirdparty",
+      "question": "Universal Containers has configured SAML single sign-on with its identity provider. Employees must see a button for that identity provider on the Salesforce login page. What should the admin configure?",
+      "options": [
+        "Add the SAML configuration to the Authentication Service list of My Domain",
+        "Create a login flow that redirects every user to the identity provider",
+        "Create a connected app for the identity provider, with SAML enabled",
+        "Enable Lightning Login for the employees' profiles"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les méthodes proposées sur la page de connexion My Domain se choisissent dans Authentication Configuration, rubrique Authentication Service : on y coche la configuration SAML. Un login flow s'exécute après l'authentification (confusion de notions). Une connected app SAML sert quand Salesforce est l'IdP, c'est le sens inverse (inversion). Lightning Login est une connexion sans mot de passe propre à Salesforce (piège plausible)."
+    },
+    {
+      "id": "x-tp2",
+      "domain": "thirdparty",
+      "question": "Universal Containers' usernames in Active Directory don't match the users' Salesforce usernames. The identity provider can send each employee's ID in the SAML assertion. How should the architect map the users?",
+      "options": [
+        "Store the employee ID in each user's Federation ID, and set the SAML identity type to Federation ID",
+        "Rename every Salesforce username so that it matches the Active Directory username",
+        "Set the SAML identity type to the Salesforce user ID, and send the employee ID",
+        "Map the employee ID to a custom field on User in the SAML settings"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le Federation ID est fait pour cela : il porte l'identifiant connu de l'IdP, et le type d'identité SAML indique à Salesforce de rapprocher l'assertion sur ce champ. Renommer les noms d'utilisateur est lourd, et ils doivent rester uniques dans tout Salesforce (piège plausible). Le type « ID utilisateur » attend l'ID Salesforce, pas un matricule (confusion de notions). Les paramètres SAML ne proposent pas de champ personnalisé comme identifiant (faux terme)."
+    },
+    {
+      "id": "x-tp3",
+      "domain": "thirdparty",
+      "question": "Universal Containers' employees must get a Salesforce user at their first SSO login, with a profile, a role, and permission sets that depend on attributes sent by the identity provider. Existing users must be updated at each login. Which two actions should the architect take?",
+      "options": [
+        "Enable just-in-time provisioning in the SAML single sign-on settings",
+        "Write a custom just-in-time handler that implements Auth.SamlJitHandler to map the attributes",
+        "Use SCIM to create the users when they log in for the first time",
+        "Write a class that implements Auth.RegistrationHandler for the SAML configuration",
+        "Enable self-registration on the internal login page"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le JIT SAML crée et met à jour l'utilisateur à chaque connexion ; pour attribuer des permission sets selon des règles, il faut un handler personnalisé (Auth.SamlJitHandler, méthodes createUser et updateUser). SCIM provisionne depuis un outil d'IAM, pas au moment de la connexion (piège plausible). Le registration handler sert aux fournisseurs d'authentification, pas au SAML (confusion de notions). L'auto-inscription concerne les sites Experience Cloud (faux terme)."
+    },
+    {
+      "id": "x-tp4",
+      "domain": "thirdparty",
+      "question": "Universal Containers' corporate identity provider supports OpenID Connect but not SAML. Employees must sign in to Salesforce with a Log In with Corporate ID button. What should the architect configure?",
+      "options": [
+        "An OpenID Connect authentication provider, with a registration handler, on the login page",
+        "A connected app with OpenID Connect enabled, created for the identity provider",
+        "Delegated authentication that points to the identity provider's token endpoint",
+        "A named credential that holds the identity provider's endpoints and secret"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pour accepter une identité OpenID Connect, Salesforce utilise un fournisseur d'authentification de type OpenID Connect, avec un registration handler pour créer ou lier les utilisateurs, puis l'ajoute à la page de connexion. Une connected app sert quand Salesforce est le fournisseur (inversion). L'authentification déléguée appelle un service SOAP, pas un IdP OpenID Connect (confusion de notions). Un named credential sert aux appels sortants (faux terme)."
+    },
+    {
+      "id": "x-tp5",
+      "domain": "thirdparty",
+      "question": "A developer at Universal Containers wrote this registration handler for an authentication provider. An employee who already signed in once through the provider signs in again. Which method runs?",
+      "code": "global class CorpRegistrationHandler implements Auth.RegistrationHandler {\n    global User createUser(Id portalId, Auth.UserData data) {\n        // builds a new user from data.email, data.firstName, data.lastName\n    }\n    global void updateUser(Id userId, Id portalId, Auth.UserData data) {\n        // updates the email, title, and department of the user\n    }\n}",
+      "codeOptions": true,
+      "options": [
+        "updateUser()",
+        "createUser(), which runs at every login",
+        "Neither method, because the handler runs only at the first login",
+        "linkUser(), which reconnects the existing user"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "createUser() s'exécute quand aucun utilisateur n'est encore lié à l'identité du fournisseur ; aux connexions suivantes, Salesforce appelle updateUser() pour mettre l'utilisateur à jour. Croire que createUser() tourne à chaque fois est le piège classique (piège plausible). Le handler s'exécute à chaque connexion, pas seulement la première (inversion). linkUser() n'existe pas dans cette interface (faux terme)."
+    },
+    {
+      "id": "x-tp6",
+      "domain": "thirdparty",
+      "question": "Universal Containers has two subsidiaries, each with its own identity provider. Employees of both subsidiaries work in the same Salesforce org. What should the architect recommend?",
+      "options": [
+        "Two SAML single sign-on configurations, both offered on the My Domain login page",
+        "One SAML configuration, because an org accepts only one identity provider",
+        "Delegated authentication for one subsidiary and SAML for the other",
+        "A second My Domain for the second subsidiary"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une org peut avoir plusieurs configurations SAML, une par IdP, toutes proposées sur la page de connexion My Domain (ou choisies par login discovery). La limite d'un seul IdP n'existe pas (faux énoncé). Mélanger délégation et SAML ajoute un service à exploiter sans rien apporter (piège plausible). Une org n'a qu'un My Domain (faux terme)."
+    },
+    {
+      "id": "x-tp7",
+      "domain": "thirdparty",
+      "question": "Some Universal Containers employees can't sign in through SAML single sign-on, and the admin must find out why their assertions are rejected. Which tool should the admin use?",
+      "options": [
+        "The SAML Assertion Validator, with Login History",
+        "Debug logs set on the affected users at the Finest level",
+        "The Setup Audit Trail of the last 30 days",
+        "Security Health Check and its score"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le SAML Assertion Validator analyse la dernière assertion reçue et indique ce qui échoue (signature, Issuer, horloge, identifiant), et Login History montre les tentatives. Les debug logs tracent le code Apex, pas la validation SAML (piège plausible). Setup Audit Trail suit les changements de configuration (confusion de notions). Health Check compare les réglages de sécurité à une référence (faux outil)."
+    },
+    {
+      "id": "x-tp8",
+      "domain": "thirdparty",
+      "question": "Universal Containers' employees sign in through SAML single sign-on in the browser. In the Salesforce mobile app, they see the standard login form instead of the identity provider. What should the architect recommend?",
+      "options": [
+        "Point the mobile app to the org's My Domain login URL, for example through MDM",
+        "Create a connected app with SAML enabled for the Salesforce mobile app",
+        "Turn off multi-factor authentication for logins from the mobile app",
+        "Configure delegated authentication for the mobile users"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'application mobile se connecte par défaut à login.salesforce.com ; avec l'URL My Domain (réglée par l'utilisateur ou déployée par MDM), elle affiche la page de connexion de l'org et son IdP. Une connected app SAML ferait de Salesforce l'IdP (inversion). Désactiver la MFA ne change pas la page affichée et affaiblit la sécurité (faux remède). La délégation n'a rien à voir avec l'affichage de l'IdP (piège plausible)."
+    },
+    {
+      "id": "x-tp9",
+      "domain": "thirdparty",
+      "question": "Universal Containers compares federated single sign-on with delegated authentication. Which two benefits of federated single sign-on should the architect highlight?",
+      "options": [
+        "Salesforce never receives the user's password",
+        "Authentication policies, such as multi-factor authentication, are enforced in one place, at the identity provider",
+        "Users can still sign in when the identity provider is down",
+        "It works without My Domain",
+        "It requires no certificate"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Avec la fédération, l'utilisateur s'authentifie chez l'IdP : Salesforce ne reçoit qu'une assertion, et les politiques (MFA, verrouillage, départ) sont centralisées. Si l'IdP tombe, les utilisateurs fédérés ne se connectent plus (inversion). Le SSO s'appuie sur My Domain (faux énoncé). La confiance repose justement sur le certificat de l'IdP (faux énoncé)."
+    },
+    {
+      "id": "x-tp10",
+      "domain": "thirdparty",
+      "question": "Universal Containers' identity provider already performs multi-factor authentication for all employees, who sign in to Salesforce through SAML single sign-on. Employees complain that they might be asked again for a second factor. What should the architect explain?",
+      "options": [
+        "The identity provider's multi-factor authentication satisfies Salesforce's requirement for SSO logins",
+        "Salesforce always requires its own second factor after an SSO login",
+        "The admin must assign the Waive Multi-Factor Authentication permission to all employees",
+        "SSO must be turned off so that Salesforce can apply its own MFA"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pour les connexions SSO, l'exigence de MFA est satisfaite par la MFA de l'IdP : Salesforce ne redemande pas de second facteur. Croire qu'il faut toujours une MFA Salesforce en plus est le piège (piège plausible). La permission d'exemption est réservée à des cas particuliers, comme les tests automatisés (faux remède). Désactiver le SSO irait à l'inverse du besoin (inversion)."
+    },
+    {
+      "id": "x-tp11",
+      "domain": "thirdparty",
+      "question": "Universal Containers' service org users must sign in with their accounts from the company's sales org, which is their main org. Which configuration should the architect recommend in the service org?",
+      "options": [
+        "An authentication provider of type Salesforce that points to the sales org",
+        "Salesforce to Salesforce, with the sales org's users shared to the service org",
+        "The Salesforce Connect cross-org adapter between the two orgs",
+        "Delegated authentication that calls the sales org's login API"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le SSO entre orgs se configure dans l'org qui accepte l'identité : un fournisseur d'authentification de type Salesforce vers l'org source, avec un registration handler qui lie les utilisateurs (l'org source peut aussi être l'IdP SAML de l'autre). Salesforce to Salesforce partage des enregistrements (confusion de notions). L'adaptateur cross-org lit des données (piège plausible). La délégation attend un service SOAP sur mesure (faux remède)."
+    },
+    {
+      "id": "x-tp12",
+      "domain": "thirdparty",
+      "question": "Universal Containers' employees sign in through Okta, and contractors sign in with a Salesforce password and MFA. Users must type only their email address first, and then be sent to the right method. What should the architect configure?",
+      "options": [
+        "My Domain's Discovery login page, with an Auth.MyDomainLoginDiscoveryHandler class",
+        "Two My Domains, one for employees and one for contractors",
+        "A login flow that asks each user whether they're an employee or a contractor",
+        "An authentication provider for contractors and a SAML configuration for employees"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le login discovery de My Domain demande d'abord un identifiant (e-mail, téléphone), et son handler choisit la méthode : redirection vers Okta pour les employés, mot de passe et MFA pour les prestataires. Une org n'a qu'un My Domain (faux terme). Un login flow s'exécute après l'authentification (confusion de notions). Ajouter des boutons ne donne pas l'expérience « identifiant d'abord » demandée (piège plausible)."
+    },
+    {
+      "id": "x-tp13",
+      "domain": "thirdparty",
+      "question": "An architect at Universal Containers configures an OpenID Connect authentication provider for the corporate identity provider. Which two items must the architect enter in the authentication provider?",
+      "options": [
+        "The consumer key and consumer secret issued by the identity provider",
+        "The authorize, token, and user info endpoint URLs of the identity provider",
+        "The identity provider's SAML signing certificate",
+        "Salesforce's entity ID",
+        "The SCIM endpoint of the identity provider"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un fournisseur OpenID Connect se configure avec l'identifiant et le secret client émis par l'IdP et ses endpoints d'autorisation, de jeton et UserInfo (plus les scopes et le registration handler). Le certificat SAML et l'entity ID appartiennent à une configuration SAML (confusion de notions). SCIM sert au provisionnement (faux terme)."
+    },
+    {
+      "id": "x-i1",
+      "domain": "idp",
+      "question": "Universal Containers wants its employees to sign in to a third-party expense application with their Salesforce credentials. The application supports SAML as a service provider. What should the architect configure in Salesforce?",
+      "options": [
+        "Enable Identity Provider, then create a SAML connected app with the app's entity ID and ACS URL",
+        "Create a SAML single sign-on configuration that uses the application's certificate",
+        "Create an authentication provider for the expense application, with a handler",
+        "Configure delegated authentication from Salesforce to the expense application"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Salesforce devient IdP : on active Identity Provider (avec un certificat), on crée une connected app SAML avec l'entity ID et l'URL ACS de l'application, puis on la donne aux utilisateurs par profil ou permission set. Une configuration SSO SAML sert quand Salesforce est le fournisseur de service (inversion). Un fournisseur d'authentification fait aussi de Salesforce le consommateur d'une identité (piège plausible). La délégation ne fait pas de Salesforce un IdP (confusion de notions)."
+    },
+    {
+      "id": "x-i2",
+      "domain": "idp",
+      "question": "A back-end service at Universal Containers must call Salesforce APIs as a specific user, with no human interaction and no stored password. The service can sign a token with a private key. Which OAuth flow should the architect recommend?",
+      "options": [
+        "The JWT bearer flow, with the user pre-authorized through the connected app's policies",
+        "The web server flow with PKCE, with an administrator who approves the access once",
+        "The username-password flow, with the password kept in a secure vault",
+        "The device flow, with the code entered by an administrator"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le flux JWT bearer échange un JWT signé par la clé privée du service contre un jeton d'accès, sans mot de passe ni interaction ; l'utilisateur doit être pré-autorisé (Admin approved users are pre-authorized). Le flux web server suppose un utilisateur dans un navigateur (inversion). Le flux username-password repose sur un mot de passe, ce que l'énoncé exclut (piège plausible). Le device flow demande une action humaine (confusion de notions)."
+    },
+    {
+      "id": "x-i3",
+      "domain": "idp",
+      "question": "Universal Containers is building a mobile app that calls Salesforce APIs for its users. The app can't keep a client secret safe on the device. Which OAuth flow should the architect recommend?",
+      "options": [
+        "The web server flow with PKCE",
+        "The user-agent flow, which returns the token in the redirect URL",
+        "The username-password flow, with the credentials typed in the app",
+        "The client credentials flow, with the secret embedded in the app"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "PKCE protège le code d'autorisation des clients publics, qui ne peuvent pas garder de secret : c'est le flux recommandé pour le mobile et les applications monopages. Le flux user-agent expose le jeton dans l'URL et n'est plus recommandé (piège plausible). Le flux username-password fait saisir le mot de passe Salesforce dans l'application (faux remède). Le flux client credentials suppose un secret gardé côté serveur, l'inverse du cas (inversion)."
+    },
+    {
+      "id": "x-i4",
+      "domain": "idp",
+      "question": "Universal Containers' warehouse uses rugged scanners that have a small screen and no keyboard. The scanners must call Salesforce APIs on behalf of the warehouse staff who use them. Which OAuth flow should the architect recommend?",
+      "options": [
+        "The device flow, with the user approving the access on another device",
+        "The JWT bearer flow, with a certificate stored on each scanner",
+        "The web server flow, with the staff typing their password on the scanner",
+        "The SAML bearer assertion flow"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le device flow est conçu pour les appareils à saisie limitée : l'appareil affiche un code que l'utilisateur valide sur un autre appareil. Le flux JWT bearer convient à un serveur de confiance, pas à des appareils mobiles (piège plausible). Saisir un mot de passe sur l'appareil est justement ce qu'on veut éviter (inversion). Le flux SAML bearer suppose une assertion SAML existante (confusion de notions)."
+    },
+    {
+      "id": "x-i5",
+      "domain": "idp",
+      "question": "Only users who have a specific permission set may use a connected app at Universal Containers, and they must not see an approval screen the first time. Which two settings should the architect recommend?",
+      "options": [
+        "Set the connected app's Permitted Users policy to Admin approved users are pre-authorized",
+        "Assign the connected app to the permission set",
+        "Set Permitted Users to All users may self-authorize",
+        "Set IP Relaxation to Relax IP restrictions",
+        "Add the users to the connected app's OAuth scopes"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Avec « Admin approved users are pre-authorized », seuls les profils et permission sets attribués à l'application peuvent l'utiliser, sans écran d'autorisation : on l'attribue donc au permission set. « All users may self-authorize » laisse chaque utilisateur accepter l'accès (inversion). IP Relaxation règle les restrictions d'adresse IP (confusion de notions). Les scopes sont des droits OAuth, pas une liste d'utilisateurs (faux terme)."
+    },
+    {
+      "id": "x-i6",
+      "domain": "idp",
+      "question": "Universal Containers' security policy requires that refresh tokens issued to a connected app stop working after 30 days without use. What should the architect configure?",
+      "options": [
+        "The connected app's refresh token policy: expire if not used for 30 days",
+        "The org's session timeout, set to 30 days in Session Settings",
+        "A scheduled job that revokes every token on the first day of each month",
+        "The client credentials flow, which doesn't use refresh tokens"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La politique de jeton d'actualisation de la connected app propose une expiration après une période d'inactivité. Le délai de session de l'org règle les sessions (24 heures au plus), pas les jetons d'actualisation (piège plausible). Révoquer tous les jetons chaque mois coupe aussi les utilisateurs actifs (faux remède). Changer de flux ne répond pas à l'exigence posée sur les jetons (confusion de notions)."
+    },
+    {
+      "id": "x-i7",
+      "domain": "idp",
+      "question": "A partner application at Universal Containers needs to call Salesforce APIs for its users and keep working when they're offline. It must not get broader access than that. Which OAuth scopes should the architect allow?",
+      "options": [
+        "api and refresh_token",
+        "full and refresh_token",
+        "web and openid",
+        "openid and id"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "api donne l'accès aux API, et refresh_token (ou offline_access) permet d'obtenir de nouveaux jetons quand l'utilisateur n'est pas là. full donne tous les droits, l'inverse du moindre privilège (inversion). web sert à ouvrir l'interface web avec le jeton (confusion de notions). openid et id donnent des informations d'identité, sans autoriser les appels d'API (piège plausible)."
+    },
+    {
+      "id": "x-i8",
+      "domain": "idp",
+      "question": "A third-party portal must use Salesforce as its OpenID Connect provider to authenticate Universal Containers' users. Which two steps are part of the solution?",
+      "options": [
+        "Request the openid scope so that Salesforce returns an ID token",
+        "Validate the ID token's signature with the public keys published by Salesforce, found through its discovery document",
+        "Ask Salesforce to send a SAML assertion to the portal",
+        "Use the username-password flow to get the ID token",
+        "Read the user's identity from the SCIM endpoint at each login"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Avec le scope openid, Salesforce renvoie un ID token ; le portail en vérifie la signature avec les clés publiques de /id/keys, découvertes par /.well-known/openid-configuration. Une assertion SAML relève d'un autre protocole (confusion de notions). Le flux username-password n'est pas recommandé (piège plausible). SCIM sert au provisionnement, pas à l'authentification (faux terme)."
+    },
+    {
+      "id": "x-i9",
+      "domain": "idp",
+      "question": "When a Universal Containers user is given access to a third-party connected app, an account must be created in that app. When the access is removed, the account must be deactivated. Which feature should the architect recommend?",
+      "options": [
+        "User provisioning for connected apps",
+        "Just-in-time provisioning in the third-party app only",
+        "SCIM requests from the third-party app to Salesforce",
+        "A weekly CSV export of users sent to the app's admin"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "User Provisioning for Connected Apps crée, met à jour et désactive les comptes dans l'application tierce selon les accès attribués dans Salesforce. Un JIT côté application crée le compte à la connexion, mais ne le désactive jamais (piège plausible). Des requêtes SCIM vers Salesforce provisionneraient Salesforce, pas l'application (inversion). Un export hebdomadaire n'est ni automatique ni immédiat (faux remède)."
+    },
+    {
+      "id": "x-i10",
+      "domain": "idp",
+      "question": "Universal Containers is reviewing the OAuth flows used by its connected apps. Which two flows should the architect replace, following Salesforce's security recommendations?",
+      "options": [
+        "The username-password flow",
+        "The user-agent flow",
+        "The web server flow with PKCE",
+        "The JWT bearer flow",
+        "The device flow"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le flux username-password fait transiter le mot de passe par l'application, et le flux user-agent renvoie le jeton dans l'URL : Salesforce les déconseille, et les bloque par défaut dans les orgs récentes. Le flux web server avec PKCE, le JWT bearer et le device flow restent recommandés pour leurs cas d'usage (pièges plausibles)."
+    },
+    {
+      "id": "x-a1",
+      "domain": "access",
+      "question": "An architect at Universal Containers explains Salesforce's multi-factor authentication requirement. Which statement is accurate?",
+      "options": [
+        "All UI logins need MFA: Salesforce's for direct logins, the IdP's for SSO logins",
+        "Only administrators and users with Modify All Data must use MFA",
+        "MFA applies only to API logins made by integration users",
+        "MFA becomes optional once the org has a My Domain configured"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'exigence couvre toutes les connexions à l'interface : la MFA de Salesforce pour les connexions directes, celle de l'IdP pour le SSO. Elle ne se limite pas aux administrateurs (piège plausible). Les connexions par API n'y sont justement pas soumises (inversion). My Domain ne dispense de rien (faux énoncé)."
+    },
+    {
+      "id": "x-a2",
+      "domain": "access",
+      "question": "Universal Containers' QA team runs automated user interface tests with dedicated test users, which can't complete a multi-factor authentication challenge. What should the architect recommend?",
+      "options": [
+        "Assign the Waive Multi-Factor Authentication for Exempt Users permission to the test users only",
+        "Turn off multi-factor authentication for the whole org during test campaigns",
+        "Register an administrator's Salesforce Authenticator on all the test users",
+        "Give the test users the API Only User permission, which keeps their UI logins"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La permission « Waive Multi-Factor Authentication for Exempt Users » est prévue pour ces comptes exemptés, comme les tests d'interface automatisés, et elle s'attribue au cas par cas. Désactiver la MFA pour toute l'org est l'inverse de la bonne pratique (inversion). Partager l'authentificateur d'un administrateur détruit la traçabilité (faux remède). API Only User empêche justement toute connexion à l'interface (piège plausible)."
+    },
+    {
+      "id": "x-a3",
+      "domain": "access",
+      "question": "At Universal Containers, users may open a sensitive payroll connected app only if they verified a second factor during the current session. What should the architect configure?",
+      "options": [
+        "Require a High Assurance session for the connected app",
+        "Add the payroll app to a login flow that runs once a week",
+        "Set Login IP ranges on the profiles of the payroll users",
+        "Lower the session timeout to 15 minutes for all users"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une connected app peut exiger une session de niveau High Assurance : un utilisateur dont la session est Standard doit alors valider un second facteur avant d'y accéder. Un login flow s'exécute à la connexion, pas à l'ouverture de l'application (piège plausible). Les plages d'IP limitent l'origine de la connexion, pas le niveau d'authentification (confusion de notions). Raccourcir les sessions de tous ne garantit pas la MFA (faux remède)."
+    },
+    {
+      "id": "x-a4",
+      "domain": "access",
+      "question": "Universal Containers' finance users must not be able to log in to Salesforce at all from outside the corporate network. What should the architect configure?",
+      "options": [
+        "Login IP ranges on the finance users' profile",
+        "Trusted IP ranges in Network Access",
+        "Login hours on the finance users' profile",
+        "Lock sessions to the IP address from which they originated"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les plages d'IP de connexion d'un profil refusent toute connexion venant d'une autre adresse. Les plages de confiance de Network Access évitent seulement la vérification d'identité depuis ces adresses, sans bloquer les autres (inversion). Les heures de connexion limitent le moment, pas le lieu (confusion de notions). Verrouiller la session à son IP protège contre le vol de session, pas contre la connexion depuis l'extérieur (piège plausible)."
+    },
+    {
+      "id": "x-a5",
+      "domain": "access",
+      "question": "Universal Containers' security team must review who logged in, from where, and with which method, and be able to act on login events in near real time. Which two features should the architect recommend?",
+      "options": [
+        "Login History",
+        "Real-Time Event Monitoring with LoginEvent",
+        "Setup Audit Trail",
+        "Field History Tracking on the User object",
+        "Debug logs on all users"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Login History liste les connexions (heure, adresse, méthode, statut), et LoginEvent dans Real-Time Event Monitoring permet de les traiter en quasi temps réel, par exemple avec une politique de sécurité. Setup Audit Trail suit les changements de configuration (piège plausible). L'historique des champs de User suit des modifications de fiche, pas les connexions (confusion de notions). Les debug logs tracent le code (faux outil)."
+    },
+    {
+      "id": "x-a6",
+      "domain": "access",
+      "question": "After each login, Universal Containers' employees must accept the updated terms of use before they can work in Salesforce. What should the architect recommend?",
+      "options": [
+        "A login flow, assigned to the employees' profiles",
+        "A transaction security policy on LoginEvent",
+        "A validation rule on the User object",
+        "A custom login page built with Visualforce"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un login flow s'exécute après l'authentification et avant l'accès à l'org : il peut afficher des conditions et exiger leur acceptation. Une politique de sécurité réagit à un événement pour bloquer ou alerter, sans interaction de ce type (piège plausible). Une règle de validation s'applique à l'enregistrement d'une fiche (confusion de notions). Une page de connexion personnalisée s'affiche avant l'authentification (inversion)."
+    },
+    {
+      "id": "x-a7",
+      "domain": "access",
+      "question": "Universal Containers must block, in real time, any report export of more than 10,000 records, and notify the security team. Which feature should the architect recommend?",
+      "options": [
+        "A transaction security policy based on ReportEvent, in Real-Time Event Monitoring",
+        "A login flow that warns users about large report exports",
+        "The Export Reports permission removed from every profile in the org",
+        "A weekly review of the Setup Audit Trail by the security team"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une politique de sécurité transactionnelle (Real-Time Event Monitoring) évalue l'événement d'export de rapport et peut le bloquer et notifier. Un login flow ne voit pas les exports (confusion de notions). Retirer la permission à tous bloque aussi les exports légitimes de petite taille (piège plausible). Une revue hebdomadaire arrive trop tard et Setup Audit Trail ne trace pas les exports (faux outil)."
+    },
+    {
+      "id": "x-a8",
+      "domain": "access",
+      "question": "Admins at Universal Containers grant access by job function. The Sales Manager function combines four permission sets, and managers in one region must not have one permission of the group. What should the architect recommend?",
+      "options": [
+        "A permission set group for the job function, with a muting permission set for the regional managers' group",
+        "A cloned profile for each region, with the permission removed",
+        "Four separate permission set assignments, with the permission removed from one of them for all managers",
+        "A login flow that hides the permission for the regional managers"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un permission set group réunit les permission sets d'une fonction ; un muting permission set retire une permission d'un groupe sans modifier les permission sets d'origine, d'où un second groupe pour la région concernée. Cloner des profils multiplie les profils à maintenir (piège plausible). Retirer la permission d'un permission set la retire à tous les managers (inversion). Un login flow ne retire aucune permission (confusion de notions)."
+    },
+    {
+      "id": "x-a9",
+      "domain": "access",
+      "question": "A third-party application connected to Universal Containers' org through OAuth has been compromised. Which two actions immediately cut off its access?",
+      "options": [
+        "Revoke the app's OAuth tokens from the Connected Apps OAuth Usage page",
+        "Block the connected app from the Connected Apps OAuth Usage page",
+        "Delete the users who authorized the app",
+        "Change the org's password policy",
+        "Change the My Domain name"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "La page Connected Apps OAuth Usage permet de révoquer les jetons de l'application et de la bloquer, ce qui coupe immédiatement ses sessions et empêche de nouvelles autorisations. On ne supprime pas des utilisateurs Salesforce, et cela ne viserait pas l'application (faux énoncé). La politique de mot de passe n'invalide pas les jetons existants (piège plausible). Renommer My Domain casse les connexions de tous sans révoquer les jetons (faux remède)."
+    },
+    {
+      "id": "x-id1",
+      "domain": "identity",
+      "question": "Universal Containers' 3,000 warehouse employees don't use the CRM. They only need to sign in once and open other company applications through Salesforce as their identity provider. Which licenses should the architect recommend?",
+      "options": [
+        "Identity licenses",
+        "Salesforce Platform licenses",
+        "External Identity licenses",
+        "Customer Community licenses"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La licence Identity (Identity Only) donne aux employés le SSO et l'App Launcher, sans fonctions CRM. Salesforce Platform donne accès aux applications personnalisées et coûte plus cher pour un besoin d'identité seule (piège plausible). External Identity vise les clients et consommateurs (inversion). Customer Community est une licence d'utilisateur externe (confusion de notions)."
+    },
+    {
+      "id": "x-id2",
+      "domain": "identity",
+      "question": "Universal Containers' native mobile app has two million consumers. Salesforce must manage their registration and login, and the app must keep its own screens. Which solution should the architect recommend?",
+      "options": [
+        "External Identity licenses with an Experience Cloud site, and Headless Identity APIs called by the app",
+        "Customer Community Plus licenses, with the login page of the Experience Cloud site in a web view",
+        "Identity licenses, with Salesforce as the SAML identity provider of the app",
+        "Salesforce Platform licenses, with the username-password flow"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "External Identity est la licence d'identité pour les consommateurs à grande échelle, et les API Headless Identity (inscription, connexion, mot de passe oublié) laissent l'application garder ses propres écrans. Customer Community Plus donne des droits CRM inutiles et coûteux, et une web view n'est pas une interface native (piège plausible). La licence Identity vise les employés (inversion). Le flux username-password est déconseillé (faux remède)."
+    },
+    {
+      "id": "x-id3",
+      "domain": "identity",
+      "question": "A developer at Universal Containers builds an app that holds Salesforce OAuth tokens. The app must invalidate a token when a user signs out, and check whether a token is still active. Which two endpoints should the developer use?",
+      "options": [
+        "/services/oauth2/revoke, to revoke the token",
+        "/services/oauth2/introspect, to check whether the token is active",
+        "/services/scim/v2/Users, to revoke the token",
+        "/services/data/vXX.X/limits, to check the token",
+        "/services/oauth2/userinfo, to renew the access token"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "L'endpoint revoke invalide un jeton d'accès ou d'actualisation, et introspect indique si un jeton est actif et à qui il appartient. SCIM gère les utilisateurs, pas les jetons (confusion de notions). /limits renvoie les limites de l'org (faux terme). UserInfo renvoie les informations de l'utilisateur ; on renouvelle un jeton par l'endpoint token avec un refresh token (piège plausible)."
+    },
+    {
+      "id": "x-id4",
+      "domain": "identity",
+      "question": "Universal Containers uses Salesforce as the identity provider for several SAML applications. When users log out of Salesforce, they must also be logged out of those applications. What should the architect configure?",
+      "options": [
+        "Single Logout in the SAML connected apps and in the applications",
+        "A session timeout of five minutes in the applications",
+        "A login flow that closes the other applications",
+        "The Revoke button on the Connected Apps OAuth Usage page for each logout"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le Single Logout SAML propage la déconnexion aux applications qui l'acceptent ; il se configure dans les connected apps et dans les applications. Un délai de session très court gêne les utilisateurs sans déconnecter au bon moment (piège plausible). Un login flow s'exécute à la connexion (inversion). Révoquer les jetons à la main n'est pas une déconnexion unique (faux remède)."
+    },
+    {
+      "id": "x-id5",
+      "domain": "identity",
+      "question": "An architect at Universal Containers documents the role of My Domain in the identity design. Which statement is accurate?",
+      "options": [
+        "Every org has a My Domain, whose login URL the SSO configurations use",
+        "My Domain is optional and only needed for Experience Cloud sites",
+        "Changing the My Domain name has no effect on the SSO configurations",
+        "My Domain replaces the identity provider's certificate in SAML"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "My Domain est obligatoire et actif dans toutes les orgs : son URL est celle de la page de connexion et des configurations SSO. Il n'est pas réservé à Experience Cloud (faux énoncé). Changer son nom change les URL de connexion, que les IdP doivent connaître (inversion). La confiance SAML repose toujours sur le certificat de l'IdP (confusion de notions)."
+    },
+    {
+      "id": "x-id6",
+      "domain": "identity",
+      "question": "Universal Containers' employees will use multi-factor authentication for direct Salesforce logins. Which two verification methods satisfy Salesforce's MFA requirement?",
+      "options": [
+        "The Salesforce Authenticator app",
+        "A security key, such as a WebAuthn or U2F key",
+        "A code sent by email",
+        "A code sent by SMS",
+        "A security question"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Salesforce accepte comme second facteur Salesforce Authenticator, une application TOTP, une clé de sécurité et un authentificateur intégré. Les codes par e-mail ou par SMS ne satisfont pas l'exigence de MFA, même s'ils servent ailleurs à vérifier une identité (pièges plausibles). Une question de sécurité n'est pas un facteur de possession (faux énoncé)."
+    },
+    {
+      "id": "x-id7",
+      "domain": "identity",
+      "question": "Universal Containers' employees want to sign in to Salesforce without typing a password, by approving a notification on their phone. Which feature should the architect recommend?",
+      "options": [
+        "Lightning Login with Salesforce Authenticator",
+        "Passwordless login for Experience Cloud sites",
+        "A login flow that skips the password",
+        "Delegated authentication with a phone token"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Lightning Login permet aux utilisateurs internes de se connecter sans mot de passe, en approuvant la demande dans Salesforce Authenticator. La connexion sans mot de passe par code concerne les utilisateurs externes des sites Experience Cloud (piège plausible). Un login flow s'exécute après l'authentification et ne la remplace pas (confusion de notions). La délégation transmet des identifiants à un service de l'entreprise (faux remède)."
+    },
+    {
+      "id": "x-co1",
+      "domain": "community",
+      "question": "Universal Containers will open a support site for 500,000 customers, who must see their own cases. They don't need roles, reports, or sharing rules. Which license should the architect recommend?",
+      "options": [
+        "Customer Community, with sharing sets on the customer's account",
+        "Customer Community Plus, with roles and sharing rules for each account",
+        "Partner Community, with account roles for the customers",
+        "Identity, with Salesforce as the identity provider of the site"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Customer Community est la licence à grand volume, sans rôles : les sharing sets donnent l'accès aux enregistrements liés au compte ou au contact de l'utilisateur. Customer Community Plus apporte rôles et règles de partage inutiles ici, pour un coût plus élevé (piège plausible). Partner Community vise les partenaires et leurs opportunités (confusion de notions). Une licence Identity ne donne pas accès aux cas (faux remède)."
+    },
+    {
+      "id": "x-co2",
+      "domain": "community",
+      "question": "Universal Containers' resellers must manage leads and opportunities in a partner site, and the reseller managers must see the records of their team. Which license should the architect recommend?",
+      "options": [
+        "Partner Community",
+        "Customer Community",
+        "External Identity",
+        "Salesforce Platform"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Partner Community donne aux partenaires l'accès aux pistes et opportunités, avec des rôles qui permettent aux responsables de voir les enregistrements de leur équipe. Customer Community n'a ni rôles ni accès aux opportunités (piège plausible). External Identity ne donne qu'une identité (confusion de notions). Salesforce Platform est une licence d'utilisateur interne (inversion)."
+    },
+    {
+      "id": "x-co3",
+      "domain": "community",
+      "question": "Universal Containers' customers must be able to sign up on the support site. Each new contact must be created under a default account, and the form must also ask for a customer number. Which two actions should the architect recommend?",
+      "options": [
+        "Enable self-registration in the site's Login & Registration settings, with a default account",
+        "Use the configurable self-registration page with an extra field, or a handler that implements Auth.ConfigurableSelfRegHandler",
+        "Create a Web-to-Lead form on the site",
+        "Enable SAML just-in-time provisioning for customers",
+        "Load new customers every night with Data Loader"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "L'auto-inscription s'active dans Login & Registration, avec un compte par défaut pour les contacts ; la page configurable accepte des champs supplémentaires, et un handler Auth.ConfigurableSelfRegHandler applique une logique sur mesure (vérifier le numéro client, par exemple). Web-to-Lead crée des pistes, pas des utilisateurs (confusion de notions). Le JIT SAML suppose un IdP qui authentifie déjà les clients (piège plausible). Un chargement nocturne ne permet pas l'inscription en ligne (faux remède)."
+    },
+    {
+      "id": "x-co4",
+      "domain": "community",
+      "question": "Universal Containers' customers want to sign in to the support site with their Google or Apple accounts. A Salesforce user must be created at their first login. What should the architect configure?",
+      "options": [
+        "Authentication providers with a registration handler, on the site's login page",
+        "A SAML single sign-on configuration for each customer who signs up",
+        "Delegated authentication to the Google and Apple identity services",
+        "One connected app for Google and one connected app for Apple"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La connexion sociale passe par des fournisseurs d'authentification ; leur registration handler crée l'utilisateur à la première connexion, et ils sont ajoutés à la page de connexion du site. Une configuration SAML par client n'a pas de sens pour des comptes grand public (faux remède). Google et Apple n'offrent pas de service d'authentification déléguée pour Salesforce (faux terme). Une connected app ferait de Salesforce le fournisseur d'identité de Google (inversion)."
+    },
+    {
+      "id": "x-co5",
+      "domain": "community",
+      "question": "Universal Containers' customers forget their passwords. They must be able to sign in to the site with a one-time code sent to their email address or phone. What should the architect configure?",
+      "options": [
+        "Passwordless login in the site's Login & Registration settings",
+        "Lightning Login for customer users",
+        "Multi-factor authentication with Salesforce Authenticator",
+        "Delegated authentication with a code generator"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La connexion sans mot de passe des sites Experience Cloud envoie un code à usage unique par e-mail ou SMS. Lightning Login est réservé aux utilisateurs internes (piège plausible). La MFA ajoute un facteur au mot de passe au lieu de le remplacer (confusion de notions). La délégation n'envoie pas de code (faux remède)."
+    },
+    {
+      "id": "x-co6",
+      "domain": "community",
+      "question": "Universal Containers' partner companies each have their own identity provider. Partner users must sign in to the partner site with their company account, and their Salesforce users must be created at the first login. What should the architect recommend?",
+      "options": [
+        "A SAML configuration per partner identity provider, enabled for the site, with JIT",
+        "One shared Salesforce user for each partner company, managed by the partner",
+        "Delegated authentication that calls each partner's corporate directory",
+        "Passwordless login with one-time codes for all partner users"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Chaque IdP partenaire devient une configuration SAML proposée sur la page de connexion du site, et le JIT crée l'utilisateur partenaire, avec son contact et son compte, à la première connexion. Un compte partagé par entreprise détruit la traçabilité et viole les conditions de licence (faux remède). La délégation demanderait un service SOAP par partenaire (piège plausible). La connexion par code ignore l'IdP des partenaires (inversion)."
+    },
+    {
+      "id": "x-co7",
+      "domain": "community",
+      "question": "On Universal Containers' customer site, users must enter only their email address or phone number first. Users from partner companies must then be sent to their company's identity provider, and other users must receive a one-time code. What should the architect configure?",
+      "options": [
+        "Login discovery for the site, with an Auth.LoginDiscoveryHandler class",
+        "A login flow that asks users which company they work for",
+        "A separate Experience Cloud site for each partner company",
+        "A custom login page that lists every identity provider"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le login discovery d'un site demande d'abord l'e-mail ou le téléphone, et son handler choisit la suite : redirection vers l'IdP du partenaire ou envoi d'un code. Un login flow s'exécute après l'authentification (confusion de notions). Un site par partenaire multiplie l'administration (faux remède). Une page qui liste tous les IdP oblige l'utilisateur à choisir, ce que l'énoncé veut éviter (piège plausible)."
+    },
+    {
+      "id": "x-co8",
+      "domain": "community",
+      "question": "Universal Containers' customer site has public pages that guest users can view without logging in. Which two practices should the architect recommend to secure guest access?",
+      "options": [
+        "Give the guest user profile only the object and field access that the public pages need",
+        "Share records with guest users only through guest user sharing rules",
+        "Give the guest user profile View All on the objects shown on the public pages",
+        "Make the guest user the owner of the records that guests create",
+        "Remove the site's login page so that guests can't try to log in"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le profil invité doit être réduit au strict nécessaire, et les enregistrements ne lui sont partagés que par des règles de partage pour invités. View All est interdit aux invités et ouvrirait toutes les données (inversion). Les enregistrements créés par un invité sont attribués à un propriétaire interne par défaut (faux énoncé). Retirer la page de connexion ne protège pas les pages publiques (piège plausible)."
+    },
+    {
+      "id": "x-co9",
+      "domain": "community",
+      "question": "Universal Containers' Customer Community users must see the assets of their own account. An architect proposes a sharing rule for these users. Which feature should be used instead?",
+      "options": [
+        "A sharing set",
+        "A role hierarchy for customer users",
+        "Manual sharing by the account owner",
+        "A criteria-based sharing rule that includes the users"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les utilisateurs à grand volume n'ont pas de rôle et ne peuvent pas figurer dans les règles de partage : un sharing set leur donne l'accès aux enregistrements liés à leur compte ou à leur contact. Ils n'ont pas de hiérarchie de rôles (faux énoncé). Le partage manuel ne tient pas à cette échelle (piège plausible). Une règle de partage les exclut justement (inversion)."
+    },
+    {
+      "id": "x-co10",
+      "domain": "community",
+      "question": "Universal Containers' native mobile app for customers must show its own login screen, with no browser or web view. Salesforce must authenticate the customers. Which approach should the architect recommend?",
+      "options": [
+        "Headless login, with the Authorization Code and Credentials flow",
+        "The web server flow, with the site's login page shown in a web view",
+        "The username-password flow, with the credentials sent from the app",
+        "SAML single sign-on, with the app as the identity provider"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La connexion headless laisse l'application envoyer les identifiants saisis dans ses propres écrans au site Experience Cloud (flux Authorization Code and Credentials), puis obtenir des jetons. Le flux web server convient si l'application accepte une page web, ce que l'énoncé exclut (piège plausible). Le flux username-password est déconseillé (faux remède). Faire de l'application l'IdP inverse les rôles (inversion)."
+    },
+    {
+      "id": "x-co11",
+      "domain": "community",
+      "question": "Universal Containers must choose licenses for external users who need roles and must be included in sharing rules. Which two licenses meet this need?",
+      "options": [
+        "Customer Community Plus",
+        "Partner Community",
+        "Customer Community",
+        "External Identity",
+        "Identity"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Customer Community Plus et Partner Community donnent des rôles aux utilisateurs externes et leur permettent de figurer dans des règles de partage. Customer Community est une licence à grand volume, sans rôles (piège plausible). External Identity et Identity ne donnent qu'une identité, sans accès CRM partagé (confusion de notions)."
+    }
+  ]
+}

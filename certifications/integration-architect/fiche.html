@@ -1,0 +1,492 @@
+  <header class="hero">
+    <div class="eyebrow">Salesforce Certification · Architect</div>
+    <h1>Integration <span>Architect</span></h1>
+    <p class="sub">Fiche de révision alignée sur les six sections de l'examen Platform Integration Architect (Plat-Arch-204) : évaluer le paysage et les besoins, choisir le pattern et les API, construire une solution sûre et capable de monter en charge, puis l'exploiter.</p>
+    <div class="facts">
+      <span class="chip">⏱ <b>105 min</b></span>
+      <span class="chip">📝 <b>60</b> questions notées + 5 non notées max</span>
+      <span class="chip">✅ seuil de réussite <b>67 %</b></span>
+      <span class="chip">🎓 <b>aucun</b> prérequis</span>
+      <span class="chip">💵 <b>400 $</b> · repassage <b>200 $</b></span>
+      <span class="chip">🏛 compte pour <b>System Architect</b></span>
+    </div>
+    <p class="verified">Vérifié le 9 novembre 2026 avec le guide d'examen officiel (aligné sur Summer '23) et la documentation Salesforce. Le guide a été consulté par recherche, les sites Salesforce n'étant pas accessibles depuis la session de rédaction : revérifie le format sur Trailhead avant de t'inscrire.</p>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="overall-bar"></div></div>
+      <span id="overall-progress">0 / 0 points revus</span>
+    </div>
+
+    <div class="blueprint">
+      <div class="blueprint-bar">
+        <a href="#landscape" style="width:8%;background:#3450d6;">8%</a>
+        <a href="#needs" style="width:11%;background:#a65a00;">11%</a>
+        <a href="#translate" style="width:22%;background:#187a4c;">22%</a>
+        <a href="#design" style="width:28%;background:#a13fc7;">28%</a>
+        <a href="#build" style="width:23%;background:#137a8c;">23%</a>
+        <a href="#maintain" style="width:8%;background:#b4325a;">8%</a>
+      </div>
+      <div class="blueprint-legend">
+        <span><i class="dot" style="background:#3450d6;"></i>Paysage existant 8%</span>
+        <span><i class="dot" style="background:#a65a00;"></i>Besoins métier 11%</span>
+        <span><i class="dot" style="background:#187a4c;"></i>Exigences d'intégration 22%</span>
+        <span><i class="dot" style="background:#a13fc7;"></i>Conception 28%</span>
+        <span><i class="dot" style="background:#137a8c;"></i>Construction 23%</span>
+        <span><i class="dot" style="background:#b4325a;"></i>Maintenance 8%</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Sections">
+      <a href="#landscape">Paysage existant <span class="nav-count">0/0</span></a>
+      <a href="#needs">Besoins métier <span class="nav-count">0/0</span></a>
+      <a href="#translate">Exigences <span class="nav-count">0/0</span></a>
+      <a href="#design">Conception <span class="nav-count">0/0</span></a>
+      <a href="#build">Construction <span class="nav-count">0/0</span></a>
+      <a href="#maintain">Maintenance <span class="nav-count">0/0</span></a>
+      <a href="#ref">Repères <span class="nav-count">0/0</span></a>
+    </nav>
+
+    <main class="content">
+
+      <!-- ================= PAYSAGE ================= -->
+      <section class="domain" id="landscape">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Evaluate the Current System Landscape · 8 %</span>
+            <h2>Paysage existant</h2>
+            <p>Avant de dessiner quoi que ce soit : quels systèmes, quels protocoles, quelles limites et quelle authentification existent déjà.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>À partir d'exigences métier, identifier le paysage système existant et ses standards, limites, frontières et protocoles.</li>
+            <li>Analyser ce paysage pour en dégager les contraintes et les points de douleur.</li>
+            <li>Évaluer les besoins d'authentification et d'autorisation du paysage existant.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="land-inventory">
+          <div class="topic-head"><h3>Inventorier les systèmes et les protocoles</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Pour chaque système : rôle (<b>système de référence</b> de quelle donnée), hébergement (cloud, on-premise derrière un pare-feu), protocoles exposés (REST/JSON, SOAP/XML, fichiers SFTP, files JMS ou MQ), volumes, disponibilité et fenêtres de maintenance.</li>
+            <li>Pour chaque flux existant : source, cible, sens, déclencheur, fréquence, volume, pattern, middleware utilisé, propriétaire.</li>
+            <li>Ce que Salesforce ne sait pas faire seul : parler JMS ou SFTP, ouvrir un VPN, traverser un pare-feu qui refuse les appels entrants. Il faut alors un <b>middleware</b> ou une passerelle sécurisée.</li>
+            <li>Un système on-premise appelé depuis Salesforce doit autoriser les plages d'adresses IP de Salesforce (Hyperforce) ou passer par un middleware qu'il connaît déjà.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Apex n'ouvre ni VPN ni connexion SFTP : les réponses qui le supposent sont fausses.</div>
+        </article>
+
+        <article class="topic" data-topic="land-constraints">
+          <div class="topic-head"><h3>Contraintes et points de douleur</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Côté Salesforce : allocation <b>quotidienne</b> de requêtes API, partagée par toute l'org (pas par utilisateur) ; limites Apex par transaction (100 callouts, 120 s de timeout cumulé, 6 Mo de heap synchrone, 12 Mo asynchrone) ; allocations d'événements de plateforme.</li>
+            <li>Côté externe : limitation de débit (rate limiting), temps de réponse, disponibilité, absence d'API (fichiers uniquement), schéma rigide.</li>
+            <li>Points de douleur typiques d'un existant <b>point à point</b> : chaque changement casse un autre flux, pas de supervision centrale, logique de transformation dupliquée, sécurité hétérogène.</li>
+          </ul>
+          <div class="why"><b>Pourquoi c'est testé</b>La bonne réponse traite la contrainte décisive de l'énoncé (pare-feu, débit, fenêtre de maintenance) avant de proposer une technologie.</div>
+        </article>
+
+        <article class="topic" data-topic="land-auth">
+          <div class="topic-head"><h3>Authentification de l'existant</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Utilisateurs : souvent un fournisseur d'identité d'entreprise (Entra ID, Okta, Ping) en SAML ou OpenID Connect.</li>
+            <li>Systèmes : un <b>utilisateur d'intégration</b> dédié par intégration, avec la licence Salesforce Integration et le profil « Salesforce API Only System Integrations », plus des permission sets au plus juste.</li>
+            <li>Flux OAuth de système à système : <b>JWT bearer</b> (certificat, utilisateur pré-autorisé, pas de mot de passe) ou <b>client credentials</b> (utilisateur d'exécution défini sur l'application).</li>
+            <li>À proscrire : mots de passe dans le code, flux username-password, compte administrateur partagé.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= BESOINS ================= -->
+      <section class="domain" id="needs">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Evaluate Business Needs · 11 %</span>
+            <h2>Besoins métier</h2>
+            <p>Ce que l'intégration doit faire, à quel niveau de service, avec quelles données et sous quelles règles.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>À partir d'un cas d'usage, identifier les exigences fonctionnelles et non fonctionnelles.</li>
+            <li>Classer les données selon leur sensibilité (Confidential, Secure, Public).</li>
+            <li>Identifier les facteurs de succès du CRM à intégrer aux exigences.</li>
+            <li>Identifier les facteurs de croissance et les contraintes réglementaires qui influencent le choix de la solution.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="needs-nfr">
+          <div class="topic-head"><h3>Fonctionnel ou non fonctionnel</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Fonctionnel</b> : quoi. Quelles données, dans quel sens, déclenchées par quel événement, avec quelle règle métier.</li>
+            <li><b>Non fonctionnel</b> : comment. Volume (par jour et en pointe), <mark class="hl">délai acceptable</mark> (temps réel, quasi temps réel, batch), disponibilité, garantie de livraison, ordre, idempotence, sécurité, traçabilité, évolutivité.</li>
+            <li>Une demande vague (« Salesforce doit le savoir immédiatement ») se transforme en questions chiffrées : délai maximal acceptable, volume, comportement si la cible est indisponible.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Choisir SOAP ou REST n'est pas une exigence métier : c'est une décision de conception qui vient après.</div>
+        </article>
+
+        <article class="topic" data-topic="needs-data">
+          <div class="topic-head"><h3>Sensibilité des données et réglementation</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Classer chaque donnée échangée : publique, interne, confidentielle ou réglementée (données personnelles, santé, carte bancaire).</li>
+            <li>Ne transférer que les champs utiles à la cible ; chiffrer en transit (TLS 1.2 ou plus) et, si exigé, au repos (Shield Platform Encryption).</li>
+            <li>Carte bancaire (PCI DSS) : ne pas la stocker dans Salesforce ; passer par une passerelle de paiement qui renvoie un <b>jeton</b>. Chiffrer un champ ne sort pas la donnée du périmètre PCI.</li>
+            <li>Résidence des données : le stockage et le traitement doivent rester dans la région exigée pour <b>chaque</b> composant (org Hyperforce, middleware, cible, journaux). Chiffrer ne remplace pas la résidence.</li>
+            <li>RGPD : droit à l'effacement propagé à tous les systèmes qui ont reçu la donnée, avec une trace de confirmation.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="needs-growth">
+          <div class="topic-head"><h3>Facteurs de succès et croissance</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Facteurs de succès CRM : vue client unique, qualité des données, adoption, délai de traitement. Ils deviennent des exigences (par exemple, « les commandes de l'ERP sont visibles sur le compte, à jour »).</li>
+            <li>Croissance : concevoir pour le volume prévu (acquisitions, nouveaux canaux), pas pour l'actuel. Les patterns découplés (événements, middleware) et les API de masse supportent la montée en charge ; les appels synchrones point à point non.</li>
+            <li>Les limites Salesforce ne grandissent pas seules : l'allocation d'API dépend de l'édition et des licences, et la consommation doit être budgétée.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= EXIGENCES ================= -->
+      <section class="domain" id="translate">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Translate Needs to Integration Requirements · 22 %</span>
+            <h2>Exigences d'intégration</h2>
+            <p>Passer du besoin au pattern, au délai, au volume et aux exigences de sécurité.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>À partir d'un schéma du paysage, inventorier les systèmes et les patterns d'intégration.</li>
+            <li>Évaluer les contraintes des systèmes et des processus.</li>
+            <li>Identifier les exigences de sécurité, d'authentification et d'autorisation de l'intégration.</li>
+            <li>Proposer des solutions qui répondent aux besoins de performance : volume, temps de réponse, latence.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="tr-patterns" id="tr-patterns">
+          <div class="topic-head"><h3>Les six patterns d'intégration Salesforce</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Pattern</th><th>Sens</th><th>Timing</th><th class="wrap">Cas typique et outils</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Remote Process Invocation — Request and Reply</b></td><td>Salesforce → externe</td><td>Synchrone</td><td class="wrap">L'utilisateur attend la réponse : vérification de crédit, calcul de prix. Callout Apex depuis un contrôleur LWC, Continuation si le service est lent.</td></tr>
+                <tr><td class="wrap"><b>Remote Process Invocation — Fire and Forget</b></td><td>Salesforce → externe</td><td>Asynchrone</td><td class="wrap">Salesforce notifie sans attendre : création de commande dans l'ERP. Événement de plateforme, message sortant, callout asynchrone (Queueable).</td></tr>
+                <tr><td class="wrap"><b>Batch Data Synchronization</b></td><td>Les deux</td><td>Planifié</td><td class="wrap">Gros volumes à fréquence fixe : prix chaque nuit, entrepôt de données. ETL, Bulk API 2.0, Change Data Capture pour les deltas.</td></tr>
+                <tr><td class="wrap"><b>Remote Call-In</b></td><td>Externe → Salesforce</td><td>Synchrone ou non</td><td class="wrap">Un système crée ou modifie des données Salesforce : site e-commerce qui crée des commandes. REST, SOAP, Composite, Bulk API, Apex REST.</td></tr>
+                <tr><td class="wrap"><b>UI Update Based on Data Changes</b></td><td>Salesforce → interface</td><td>Quasi temps réel</td><td class="wrap">L'écran se met à jour sans rafraîchir quand une donnée change. Événements de plateforme ou CDC reçus par <code>lightning/empApi</code>.</td></tr>
+                <tr><td class="wrap"><b>Data Virtualization</b></td><td>Externe → Salesforce</td><td>À la lecture</td><td class="wrap">Afficher des données externes sans les copier. Salesforce Connect (OData 2.0 ou 4.0, cross-org, adaptateur Apex), objets externes.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="trap"><b>Piège</b>Un ETL qui charge un fichier chaque nuit appelle bien les API Salesforce, mais le pattern est Batch Data Synchronization, pas Remote Call-In.</div>
+        </article>
+
+        <article class="topic" data-topic="tr-timing">
+          <div class="topic-head"><h3>Synchrone, asynchrone, batch</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Synchrone</b> seulement si l'utilisateur ou le processus ne peut pas continuer sans la réponse. Il couple la disponibilité des deux systèmes.</li>
+            <li><b>Asynchrone</b> dès que l'appelant n'a pas besoin d'attendre, que la cible est souvent indisponible ou qu'il faut lisser des pics : file d'attente, événements, reprise automatique.</li>
+            <li><b>Batch</b> quand le délai accepté se compte en heures et que le volume est important : transférer seulement les <b>deltas</b>, avec un identifiant externe et un <code>upsert</code>.</li>
+            <li>Cible limitée en débit (par exemple 100 messages par minute) face à des rafales Salesforce : découpler par des événements ou une file, consommées par le middleware à son rythme.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tr-volume">
+          <div class="topic-head"><h3>Choisir l'API selon le volume et la latence</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Quelques enregistrements, réponse immédiate : REST API, sObject Collections (jusqu'à 200 enregistrements par requête), Composite (jusqu'à 25 sous-requêtes).</li>
+            <li>Plusieurs milliers à plusieurs millions d'enregistrements : <b>Bulk API 2.0</b>, asynchrone, qui découpe les jobs lui-même.</li>
+            <li>Plusieurs systèmes à appeler pour un même écran : appels <b>en parallèle</b> avec une Continuation (jusqu'à trois callouts), cache des données peu changeantes (Platform Cache).</li>
+            <li>Interroger Salesforce toutes les dix secondes pour détecter les changements consomme l'allocation d'API : s'abonner à des événements (CDC, événements de plateforme) via Pub/Sub API.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tr-security">
+          <div class="topic-head"><h3>Exigences de sécurité de l'intégration</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Authentification</b> : OAuth 2.0 (JWT bearer, client credentials, web server pour un utilisateur) ; secrets dans un coffre du middleware ou dans un named credential, jamais dans le code.</li>
+            <li><b>Autorisation</b> : moindre privilège. Un utilisateur d'intégration par intégration, des permission sets limités aux objets et champs utiles, des scopes OAuth réduits (par exemple <code>api</code>).</li>
+            <li>Quand chaque utilisateur externe ne doit voir que ses propres données, l'intégration doit agir <b>au nom de cet utilisateur</b> (son jeton OAuth) pour que le partage Salesforce s'applique, au lieu d'un compte technique qui voit tout.</li>
+            <li>Transport : TLS ; TLS mutuel (certificats client) quand la cible ou Salesforce l'exige ; restrictions d'adresses IP.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Donner « Modify All Data » à l'utilisateur d'intégration « pour que ça ne casse jamais » est toujours une mauvaise réponse.</div>
+        </article>
+      </section>
+
+      <!-- ================= CONCEPTION ================= -->
+      <section class="domain" id="design">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Design Integration Solutions · 28 %</span>
+            <h2>Conception</h2>
+            <p>La plus grosse section : le pattern, les composants, les compromis et les API Salesforce adaptées.</p>
+          </div>
+          <span class="domain-count">0/5</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>À partir d'un cas d'usage, identifier le pattern d'intégration qui répond aux exigences.</li>
+            <li>Définir les composants de la solution.</li>
+            <li>Identifier les compromis et les contraintes de la solution.</li>
+            <li>Choisir les API Salesforce adaptées.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="design-apis" id="design-apis">
+          <div class="topic-head"><h3>Les API Salesforce et leur usage</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">API</th><th class="wrap">À utiliser pour</th><th class="wrap">À retenir</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">REST API</td><td class="wrap">CRUD, requêtes, applications web et mobiles</td><td class="wrap">JSON ou XML ; sObject Collections jusqu'à 200 enregistrements</td></tr>
+                <tr><td class="wrap">Composite</td><td class="wrap">Plusieurs opérations liées en un appel</td><td class="wrap">Jusqu'à 25 sous-requêtes, références entre elles (<code>@{refAccount.id}</code>), <code>allOrNone</code>. Batch : sous-requêtes indépendantes. sObject Tree : parent et enfants (200 enregistrements)</td></tr>
+                <tr><td class="wrap">SOAP API</td><td class="wrap">Systèmes qui exigent un WSDL typé</td><td class="wrap">WSDL Enterprise (typé pour l'org) ou Partner (générique)</td></tr>
+                <tr><td class="wrap">Bulk API 2.0</td><td class="wrap">Chargement et extraction de gros volumes</td><td class="wrap">Asynchrone, découpage automatique, CSV. Bulk API 1.0 garde le mode série (contre les verrous)</td></tr>
+                <tr><td class="wrap">GraphQL API</td><td class="wrap">Récupérer des données liées en une requête, champs choisis</td><td class="wrap">Une seule requête, charge utile minimale ; adaptée au mobile</td></tr>
+                <tr><td class="wrap">Pub/Sub API</td><td class="wrap">Publier et s'abonner aux événements depuis l'extérieur</td><td class="wrap">gRPC, HTTP/2, Avro, contrôle du flux ; recommandée pour les nouveaux clients</td></tr>
+                <tr><td class="wrap">Streaming API (CometD)</td><td class="wrap">Abonnés existants</td><td class="wrap">Toujours prise en charge ; PushTopic et Generic Streaming sont legacy</td></tr>
+                <tr><td class="wrap">Apex REST et Apex SOAP</td><td class="wrap">Exposer une logique métier sur mesure</td><td class="wrap"><code>@RestResource</code>, <code>webservice</code> ; à versionner dans l'URL</td></tr>
+                <tr><td class="wrap">Metadata et Tooling API</td><td class="wrap">Configuration, déploiement, outils</td><td class="wrap">Pas pour les données métier</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="design-events" id="design-events">
+          <div class="topic-head"><h3>Événements : platform events, CDC, messages sortants</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Événement de plateforme</b> : message métier défini par toi (« commande expédiée »), publié par Apex, Flow ou API. Rétention de <b>72 heures</b>, rejeu avec le <code>ReplayId</code>. Comportement de publication : <b>Publish After Commit</b> (seulement si la transaction est validée) ou <b>Publish Immediately</b> (même en cas de rollback, utile pour les journaux d'erreur).</li>
+            <li><b>Change Data Capture</b> : Salesforce publie lui-même les créations, modifications, suppressions et restaurations des objets sélectionnés, sans code. L'en-tête <code>ChangeEventHeader</code> donne <code>changeType</code>, <code>changedFields</code>, <code>transactionKey</code>, <code>commitUser</code>. Une modification ne contient que les champs changés. Rétention de 3 jours ; événements <b>gap</b> et <b>overflow</b> à gérer.</li>
+            <li><b>Message sortant</b> (outbound message) : message SOAP déclaratif, lancé par un flow déclenché par un enregistrement, avec les champs de l'objet. Reprises automatiques pendant <b>24 heures</b>. Livraison au moins une fois, éventuellement dans le désordre : le récepteur accuse réception et ignore les identifiants de notification déjà traités.</li>
+            <li><b>Event Relay</b> : relaie les événements de plateforme et CDC vers Amazon EventBridge sans middleware.</li>
+            <li>Abonnés possibles : triggers Apex, flows, LWC (<code>empApi</code>), clients externes via Pub/Sub API ou CometD.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>CDC pour répliquer des données ; un événement de plateforme pour un fait métier qui n'est pas une simple modification d'enregistrement.</div>
+        </article>
+
+        <article class="topic" data-topic="design-virtual">
+          <div class="topic-head"><h3>Virtualisation : Salesforce Connect et External Services</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Salesforce Connect</b> : objets externes (<code>__x</code>) lus à la demande dans le système source. Adaptateurs OData 2.0 et 4.0, cross-org (une autre org Salesforce), Apex personnalisé. Relations par lookup externe et lookup indirect.</li>
+            <li>Compromis : pas de stockage dans Salesforce et données toujours à jour, mais chaque accès dépend de la <b>disponibilité et du temps de réponse</b> du système externe ; pas de triggers Apex sur les objets externes, et certaines fonctionnalités (rapports, recherche) sont limitées.</li>
+            <li><b>External Services</b> : enregistre une spécification OpenAPI et génère des actions invocables pour Flow, sans code. Ce sont des actions, pas des données affichées.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="design-middleware">
+          <div class="topic-head"><h3>Middleware ou point à point</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Point à point</b> (callout Apex direct) : acceptable pour un ou deux systèmes simples. Devient fragile quand le nombre de flux augmente.</li>
+            <li><b>ESB / iPaaS</b> (MuleSoft Anypoint, par exemple) : orchestration de plusieurs systèmes, transformation, routage, reprises, supervision centrale, sécurité homogène.</li>
+            <li><b>ETL</b> : transformations lourdes et chargements planifiés de gros volumes.</li>
+            <li>API-led connectivity : des API <b>système</b> (accès réutilisable à un système), <b>process</b> (orchestration métier) et <b>expérience</b> (adaptées à un canal).</li>
+            <li>Synchronisation bidirectionnelle : définir le système maître de chaque champ, rapprocher par identifiant externe, et ne pas renvoyer à la source les changements faits par l'utilisateur d'intégration, pour éviter les boucles.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="design-ui">
+          <div class="topic-head"><h3>Appels depuis l'interface</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Un composant Lightning appelle un service externe via un contrôleur Apex : les secrets restent côté serveur, dans un named credential.</li>
+            <li>Service lent (jusqu'à 120 s) : <b>Continuation</b>, l'appel asynchrone recommandé pour les longues requêtes depuis LWC, Aura ou Visualforce ; jusqu'à trois callouts en parallèle.</li>
+            <li>Mise à jour de l'écran sans rafraîchir : événements de plateforme ou CDC, reçus par <code>lightning/empApi</code>.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= CONSTRUCTION ================= -->
+      <section class="domain" id="build">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Build Solution · 23 %</span>
+            <h2>Construction</h2>
+            <p>Salesforce en fournisseur et en consommateur d'API, options d'appel sortant, montée en charge, gestion des erreurs et sécurité.</p>
+          </div>
+          <span class="domain-count">0/5</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Concevoir les API quand Salesforce est fournisseur ou consommateur.</li>
+            <li>Choisir parmi les options d'appel sortant.</li>
+            <li>Construire une solution capable de monter en charge.</li>
+            <li>Gérer les erreurs.</li>
+            <li>Mettre en place la sécurité entrante et sortante.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="build-provider">
+          <div class="topic-head"><h3>Salesforce fournisseur d'API</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Préférer les API standard (REST, Composite, Bulk) ; écrire de l'Apex REST seulement pour une logique métier qui doit s'exécuter en un appel.</li>
+            <li>Versionner dans l'URL (<code>@RestResource(urlMapping='/v1/orders/*')</code>, puis une nouvelle classe pour <code>/v2/</code>) pour ne pas casser les consommateurs existants.</li>
+            <li>Idempotence : <code>upsert</code> sur un champ External ID unique, pour qu'un message renvoyé après un timeout ne crée pas de doublon.</li>
+            <li>Échecs partiels : <code>allOrNone: false</code> dans sObject Collections ou Composite, puis lecture de <code>success</code> et <code>errors</code> pour chaque enregistrement.</li>
+          </ul>
+<pre><span class="k">@RestResource</span>(urlMapping=<span class="k">'/v1/orders/*'</span>)
+<span class="k">global with sharing class</span> OrderApiV1 {
+    <span class="k">@HttpPost</span>
+    <span class="k">global static</span> Id upsertOrder(String orderNumber, Decimal amount) {
+        Order__c o = <span class="k">new</span> Order__c(Order_Number__c = orderNumber, Amount__c = amount);
+        <span class="k">upsert</span> o Order_Number__c;   <span class="c">// External ID : pas de doublon si le message est renvoyé</span>
+        <span class="k">return</span> o.Id;
+    }
+}</pre>
+        </article>
+
+        <article class="topic" data-topic="build-consumer">
+          <div class="topic-head"><h3>Salesforce consommateur et appels sortants</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Callouts Apex : 100 par transaction, 120 s de timeout cumulé ; impossible après un DML non validé et depuis un trigger. Depuis un trigger, passer par un Queueable qui implémente <code>Database.AllowsCallouts</code>, un seul par exécution du trigger.</li>
+            <li>SOAP : générer les classes avec <b>WSDL2Apex</b> (Generate from WSDL) ; tester avec <code>WebServiceMock</code>. External Services n'accepte que les spécifications OpenAPI.</li>
+            <li><b>Named credential</b> + <b>external credential</b> : URL et authentification hors du code (OAuth 2.0 browser, JWT, client credentials, AWS Signature v4, protocole personnalisé avec en-têtes). L'appel s'écrit <code>callout:Nom_Credential/chemin</code>, sans remote site setting.</li>
+            <li>Sans code : message sortant, action HTTP Callout de Flow (avec un named credential), External Services, événement de plateforme publié par un flow.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="build-scale">
+          <div class="topic-head"><h3>Monter en charge</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Bulkifier : une requête et un DML par lot, un seul job asynchrone par exécution de trigger (et non un <code>@future</code> par enregistrement : 50 par transaction).</li>
+            <li>Chargements massifs : Bulk API 2.0 ; trier les enfants par <b>ID parent</b> pour limiter les verrous ; Bulk API 1.0 en mode série si les erreurs <code>UNABLE_TO_LOCK_ROW</code> persistent ; différer le calcul du partage (fonctionnalité à faire activer) ; charger les parents avant les enfants.</li>
+            <li>Extractions massives : job de requête Bulk API 2.0, plutôt que des requêtes REST successives.</li>
+            <li>Allocation d'API partagée par toute l'org : multiplier les utilisateurs d'intégration ne l'augmente pas ; réduire les appels (Composite, Bulk, événements au lieu du polling).</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="build-errors">
+          <div class="topic-head"><h3>Gérer les erreurs</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Vérifier le code HTTP avant de lire la réponse : une page HTML 503 ne se désérialise pas en JSON.</li>
+            <li>Reprises avec délai croissant : <code>System.enqueueJob(job, delaiMinutes)</code> (0 à 10 minutes) et un compteur de tentatives ; au-delà, journaliser et alerter.</li>
+            <li>Finalizer de Queueable pour journaliser et relancer, même après une exception de limite.</li>
+            <li>Trigger d'événement : <code>EventBus.RetryableException</code> pour faire rejouer le lot (jusqu'à neuf fois), puis la souscription passe en erreur et se reprend depuis Setup.</li>
+            <li>Journal d'erreurs : événement de plateforme en <b>Publish Immediately</b>, pour que le journal survive au rollback ; identifiant de corrélation partagé avec le middleware.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="build-security">
+          <div class="topic-head"><h3>Sécurité entrante et sortante</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Sortant : named credential (secrets hors du code), certificat client pour le TLS mutuel (Certificate and Key Management), restrictions d'IP côté cible.</li>
+            <li>Entrant : OAuth avec une connected app (ou une external client app) limitée à l'utilisateur d'intégration ; plages d'IP de connexion sur son profil ; TLS mutuel avec un certificat d'authentification mutuelle et la permission « Enforce SSL/TLS Mutual Authentication » (connexion sur le port 8443).</li>
+            <li>Remote site settings et CSP trusted sites ne concernent que les appels <b>sortants</b>.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Une clé d'API déplacée dans un custom label, une static resource ou « chiffrée » dans le code reste dans le code : seul un named credential répond à l'exigence.</div>
+        </article>
+      </section>
+
+      <!-- ================= MAINTENANCE ================= -->
+      <section class="domain" id="maintain">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Maintain Integration · 8 %</span>
+            <h2>Maintenance</h2>
+            <p>Superviser, reprendre après incident, et rendre compte.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Identifier les besoins de supervision de la performance.</li>
+            <li>Identifier les procédures de gestion d'erreur et d'escalade pour les intégrations en échec.</li>
+            <li>Identifier les besoins de reporting.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="maint-monitor">
+          <div class="topic-head"><h3>Superviser</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Consommation d'API : System Overview, ressource REST <code>/limits</code>, <b>API Usage Notifications</b> (alerte à un seuil).</li>
+            <li>Détail des appels (qui, quelle ressource) : Event Monitoring (types API et API Total Usage).</li>
+            <li>Événements : utilisation publiée et livrée par rapport aux allocations (<code>PlatformEventUsageMetric</code>), retard de chaque abonné (dernier <code>ReplayId</code> traité).</li>
+            <li>Jobs : Apex Jobs (<code>AsyncApexJob</code>), Bulk Data Load Jobs, état de livraison des messages sortants dans Setup.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="maint-recover">
+          <div class="topic-head"><h3>Reprendre après un incident</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Abonné arrêté moins longtemps que la rétention : reprendre depuis le dernier <code>ReplayId</code> conservé.</li>
+            <li>Abonné arrêté plus longtemps (au-delà de 72 heures) : resynchroniser par une extraction complète (Bulk API 2.0), puis reprendre les événements depuis la fin du flux.</li>
+            <li>Trigger d'événement suspendu après les reprises : corriger, puis reprendre la souscription depuis la page de l'événement dans Setup.</li>
+            <li>Procédure d'escalade : seuils d'alerte, propriétaire de chaque intégration, runbook. Ne pas réessayer indéfiniment ni supprimer les messages en échec.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="maint-report">
+          <div class="topic-head"><h3>Rendre compte</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Objet de journal d'intégration (statut, système, identifiant de corrélation, message) alimenté par un événement Publish Immediately : rapports et tableaux de bord sur le taux de réussite par système.</li>
+            <li>Les debug logs, Login History et Setup Audit Trail ne sont pas des outils de reporting d'intégration.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= REPÈRES ================= -->
+      <section class="domain" id="ref">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Transversal — à connaître par cœur</span>
+            <h2>Repères</h2>
+            <p>Les chiffres qui reviennent dans les questions.</p>
+          </div>
+          <span class="domain-count">0/1</span>
+        </div>
+
+        <article class="topic" data-topic="ref-limits">
+          <div class="topic-head"><h3>Limites et durées à retenir</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Élément</th><th class="wrap">Valeur</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Callouts par transaction</td><td class="wrap">100, timeout cumulé de 120 s</td></tr>
+                <tr><td class="wrap">Méthodes <code>@future</code> par transaction</td><td class="wrap">50</td></tr>
+                <tr><td class="wrap">Continuation</td><td class="wrap">Jusqu'à 3 callouts en parallèle, 120 s</td></tr>
+                <tr><td class="wrap">Délai d'un Queueable mis en file</td><td class="wrap">0 à 10 minutes</td></tr>
+                <tr><td class="wrap">Composite</td><td class="wrap">25 sous-requêtes ; sObject Collections et sObject Tree : 200 enregistrements</td></tr>
+                <tr><td class="wrap">Rétention des événements de plateforme</td><td class="wrap">72 heures</td></tr>
+                <tr><td class="wrap">Rétention des événements CDC</td><td class="wrap">3 jours</td></tr>
+                <tr><td class="wrap">Reprises d'un message sortant</td><td class="wrap">Pendant 24 heures</td></tr>
+                <tr><td class="wrap">Reprises par <code>RetryableException</code></td><td class="wrap">Jusqu'à 9</td></tr>
+                <tr><td class="wrap">Allocation de requêtes API</td><td class="wrap">Par 24 heures, partagée par toute l'org</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <div>
+      <strong>Le jour de l'examen</strong>
+      <ul>
+        <li>105 minutes pour 60 questions notées et jusqu'à 5 non notées : environ 1 min 40 par question.</li>
+        <li>Conception (28 %) et Construction (23 %) font plus de la moitié de la note.</li>
+        <li>Repérer d'abord le délai acceptable, le volume et le sens du flux : ils désignent le pattern.</li>
+        <li>La bonne réponse est souvent la plus déclarative et la plus découplée qui respecte les contraintes.</li>
+        <li>Lire combien de réponses sont attendues : une question à réponses multiples n'est juste que si tout est correct.</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Sources officielles</strong>
+      <ul class="src-list">
+        <li><a href="https://trailhead.salesforce.com/credentials/platformintegrationarchitect" target="_blank" rel="noopener">Page de la certification</a> · <a href="https://help.salesforce.com/s/articleView?id=005298980&amp;type=1&amp;language=en_US" target="_blank" rel="noopener">Guide d'examen</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_intro_overview.htm" target="_blank" rel="noopener">Integration Patterns and Practices</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.platform_events.meta/platform_events/platform_events_intro.htm" target="_blank" rel="noopener">Platform Events</a> · <a href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_intro.htm" target="_blank" rel="noopener">Change Data Capture</a> · <a href="https://developer.salesforce.com/docs/platform/pub-sub-api/overview" target="_blank" rel="noopener">Pub/Sub API</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_gov_limits.htm" target="_blank" rel="noopener">Limites Apex</a> · <a href="https://help.salesforce.com/s/articleView?id=sf.named_credentials_about.htm&amp;type=5" target="_blank" rel="noopener">Named credentials</a></li>
+      </ul>
+    </div>
+  </footer>

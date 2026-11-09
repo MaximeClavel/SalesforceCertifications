@@ -1,0 +1,100 @@
+{
+  "id": "integration-architect",
+  "title": "Integration Architect",
+  "shortTitle": "Integration",
+  "vendor": "Salesforce",
+  "track": "Architect",
+  "code": "Plat-Arch-204",
+  "summary": "Fiche de révision alignée sur les six sections de l'examen Platform Integration Architect : patterns d'intégration, API Salesforce, événements, sécurité, montée en charge et exploitation. L'une des quatre certifications du parcours System Architect.",
+  "verified": "Vérifié le 9 novembre 2026 avec le guide d'examen officiel (aligné sur Summer '23) et la documentation Salesforce sur les patterns d'intégration, les API et les événements. Les sites Salesforce n'étant pas accessibles depuis la session de rédaction, le guide a été consulté par recherche : à revérifier sur Trailhead avant l'examen.",
+  "language": {
+    "content": "fr",
+    "questions": "en"
+  },
+  "exam": {
+    "durationMinutes": 105,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.67,
+    "passingLabel": "seuil 67 %",
+    "price": "400 $ · repassage 200 $"
+  },
+  "domains": [
+    {
+      "id": "landscape",
+      "label": "Paysage existant",
+      "short": "Paysage",
+      "name": "Evaluate the Current System Landscape",
+      "weight": 8,
+      "color": "#3450d6"
+    },
+    {
+      "id": "needs",
+      "label": "Besoins métier",
+      "short": "Besoins",
+      "name": "Evaluate Business Needs",
+      "weight": 11,
+      "color": "#a65a00"
+    },
+    {
+      "id": "translate",
+      "label": "Exigences d'intégration",
+      "short": "Exigences",
+      "name": "Translate Needs to Integration Requirements",
+      "weight": 22,
+      "color": "#187a4c"
+    },
+    {
+      "id": "design",
+      "label": "Conception",
+      "short": "Conception",
+      "name": "Design Integration Solutions",
+      "weight": 28,
+      "color": "#a13fc7"
+    },
+    {
+      "id": "build",
+      "label": "Construction",
+      "short": "Construction",
+      "name": "Build Solution",
+      "weight": 23,
+      "color": "#137a8c"
+    },
+    {
+      "id": "maintain",
+      "label": "Maintenance",
+      "short": "Maintenance",
+      "name": "Maintain Integration",
+      "weight": 8,
+      "color": "#b4325a"
+    }
+  ],
+  "quiz": {
+    "style": "certification"
+  },
+  "content": {
+    "fiche": "fiche.html",
+    "quiz": "quiz.json",
+    "exam": "exam.json"
+  },
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen blanc",
+      "source": "exam",
+      "durationMinutes": 105
+    }
+  ],
+  "searchExamples": [
+    "Fire and Forget",
+    "Pub/Sub API",
+    "Bulk API 2.0",
+    "Named Credential",
+    "Change Data Capture",
+    "Salesforce Connect"
+  ],
+  "stats": {
+    "quiz": 30,
+    "exam": 60
+  }
+}

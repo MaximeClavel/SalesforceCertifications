@@ -1,0 +1,100 @@
+{
+  "id": "identity-access-management-architect",
+  "title": "Identity and Access Management Architect",
+  "shortTitle": "IAM",
+  "vendor": "Salesforce",
+  "track": "Architect",
+  "code": "Plat-Arch-203",
+  "summary": "Fiche de révision alignée sur les six sections de l'examen Platform Identity and Access Management Architect : SAML, OAuth et OpenID Connect, Salesforce fournisseur d'identité, MFA et sessions, licences Identity et connexion des clients et partenaires. L'une des quatre certifications du parcours System Architect.",
+  "verified": "Vérifié le 9 novembre 2026 avec la documentation Salesforce Identity et les plans d'examen publiés. Les sites Salesforce n'étant pas accessibles depuis la session de rédaction, le format et les poids viennent de sources concordantes qui citent le guide officiel ; la durée (120 min selon la plupart, 105 min selon d'autres) est à confirmer sur Trailhead.",
+  "language": {
+    "content": "fr",
+    "questions": "en"
+  },
+  "exam": {
+    "durationMinutes": 120,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.67,
+    "passingLabel": "seuil 67 %",
+    "price": "400 $ · repassage 200 $"
+  },
+  "domains": [
+    {
+      "id": "concepts",
+      "label": "Concepts de gestion des identités",
+      "short": "Concepts",
+      "name": "Identity Management Concepts",
+      "weight": 17,
+      "color": "#3450d6"
+    },
+    {
+      "id": "thirdparty",
+      "label": "Identité tierce dans Salesforce",
+      "short": "Identité tierce",
+      "name": "Accepting Third-Party Identity in Salesforce",
+      "weight": 21,
+      "color": "#a65a00"
+    },
+    {
+      "id": "idp",
+      "label": "Salesforce fournisseur d'identité",
+      "short": "Salesforce IdP",
+      "name": "Salesforce as an Identity Provider",
+      "weight": 17,
+      "color": "#187a4c"
+    },
+    {
+      "id": "access",
+      "label": "Bonnes pratiques d'accès",
+      "short": "Accès",
+      "name": "Access Management Best Practices",
+      "weight": 15,
+      "color": "#a13fc7"
+    },
+    {
+      "id": "identity",
+      "label": "Salesforce Identity",
+      "short": "Identity",
+      "name": "Salesforce Identity",
+      "weight": 12,
+      "color": "#137a8c"
+    },
+    {
+      "id": "community",
+      "label": "Clients et partenaires",
+      "short": "Experience Cloud",
+      "name": "Community (Partner and Customer)",
+      "weight": 18,
+      "color": "#b4325a"
+    }
+  ],
+  "quiz": {
+    "style": "certification"
+  },
+  "content": {
+    "fiche": "fiche.html",
+    "quiz": "quiz.json",
+    "exam": "exam.json"
+  },
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen blanc",
+      "source": "exam",
+      "durationMinutes": 120
+    }
+  ],
+  "searchExamples": [
+    "JWT bearer",
+    "Federation ID",
+    "Registration handler",
+    "High Assurance",
+    "Sharing set",
+    "Login discovery"
+  ],
+  "stats": {
+    "quiz": 30,
+    "exam": 60
+  }
+}

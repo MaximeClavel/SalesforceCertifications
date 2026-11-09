@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "q-l1",
+      "domain": "landscape",
+      "question": "Universal Containers needs a Salesforce user for a middleware that only calls the APIs. The user must not log in to the user interface and must have only the permissions that the integration needs. What should the architect recommend?",
+      "options": [
+        "The Salesforce Integration license with the API Only System Integrations profile, plus permission sets",
+        "A full Salesforce license with the System Administrator profile, to avoid permission errors",
+        "An Identity license, which gives access to the APIs without the user interface",
+        "A Chatter Free license with the API Enabled permission added to the user"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La licence Salesforce Integration et le profil « Salesforce API Only System Integrations » donnent un utilisateur limité aux API ; ses droits viennent de permission sets au plus juste. Un administrateur avec une licence complète est l'inverse du moindre privilège (inversion). Une licence Identity sert au SSO, pas à l'accès aux données par API (confusion de notions). Chatter Free ne donne pas accès aux objets métier (faux terme)."
+    },
+    {
+      "id": "q-l2",
+      "domain": "landscape",
+      "question": "Universal Containers' ERP publishes its order updates only to an internal JMS queue. Salesforce must receive these updates. What does the architect identify as necessary?",
+      "options": [
+        "A middleware that reads the JMS queue and calls the Salesforce APIs or publishes events",
+        "An Apex class that connects to the JMS queue and reads the messages",
+        "The Salesforce Connect JMS adapter, which reads the queue as an external object",
+        "An outbound message that subscribes to the JMS queue for order updates"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Salesforce ne parle pas JMS : un middleware fait le pont entre la file et les API ou les événements Salesforce. Apex ne sait pas se connecter à une file JMS (piège plausible). Salesforce Connect n'a pas d'adaptateur JMS (faux terme). Un message sortant envoie du SOAP depuis Salesforce, il ne s'abonne à rien (inversion)."
+    },
+    {
+      "id": "q-n1",
+      "domain": "needs",
+      "question": "Which requirement for Universal Containers' order integration is non-functional?",
+      "options": [
+        "The integration must be available 99.9% of the time during business hours",
+        "Each order sent to the ERP must include all of its order lines",
+        "A shipped order must update the status of its related case",
+        "The ERP must receive the customer's shipping address with each order"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La disponibilité est une exigence non fonctionnelle : elle décrit un niveau de service, pas une donnée ou une règle métier. Les lignes de commande, la mise à jour du statut et l'adresse d'expédition disent ce que fait l'intégration : ce sont des exigences fonctionnelles (pièges plausibles)."
+    },
+    {
+      "id": "q-n2",
+      "domain": "needs",
+      "question": "Universal Containers' integration with a marketing platform sends contact data that includes personal information. Which two measures reduce the exposure of this sensitive data?",
+      "options": [
+        "Send only the fields that the marketing platform needs",
+        "Encrypt the data in transit with TLS 1.2 or later and, where required, at rest with Shield Platform Encryption",
+        "Log the full payloads in debug logs for audit purposes",
+        "Use a System Administrator user for the integration",
+        "Pass the contact data in URL query strings"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Minimiser les données transférées et les chiffrer en transit (et au repos si l'exigence le demande) réduit l'exposition. Journaliser les charges utiles complètes recopie les données sensibles ailleurs (inversion). Un administrateur donne au flux bien plus d'accès que nécessaire (piège plausible). Les paramètres d'URL apparaissent dans les journaux des serveurs et des proxys (faux remède)."
+    },
+    {
+      "id": "q-n3",
+      "domain": "needs",
+      "question": "Universal Containers plans to triple its number of users. Today, 20 external systems poll Salesforce every minute through the REST API to detect changes. Which change should the architect recommend to support the growth?",
+      "options": [
+        "Replace the polling with Change Data Capture or platform events that the systems subscribe to",
+        "Poll every 10 seconds so that the changes are detected sooner",
+        "Create one integration user per system so that each one gets its own API allocation",
+        "Move the polling to the SOAP API"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "S'abonner à des événements supprime les appels de polling et suit la croissance sans consommer l'allocation d'API. Interroger plus souvent multiplie les appels (inversion). L'allocation est partagée par toute l'org, quel que soit le nombre d'utilisateurs d'intégration (piège plausible). Changer d'API ne change rien au nombre d'appels (faux remède)."
+    },
+    {
+      "id": "q-t1",
+      "domain": "translate",
+      "question": "Universal Containers' e-commerce site must create an order in Salesforce as soon as a customer pays. Which integration pattern does this flow use?",
+      "options": [
+        "Remote Call-In",
+        "Remote Process Invocation — Request and Reply",
+        "Batch Data Synchronization",
+        "UI Update Based on Data Changes"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un système externe qui crée ou modifie des données dans Salesforce utilise le pattern Remote Call-In. Remote Process Invocation part de Salesforce vers l'extérieur (inversion). Une synchronisation batch est planifiée, pas déclenchée à chaque paiement (piège plausible). UI Update concerne le rafraîchissement d'un écran Salesforce (confusion de notions)."
+    },
+    {
+      "id": "q-t2",
+      "domain": "translate",
+      "question": "Universal Containers' agents must see a customer's invoices, which are stored in the billing system, without copying the invoices into Salesforce. Which integration pattern meets this requirement?",
+      "options": [
+        "Data Virtualization",
+        "Batch Data Synchronization",
+        "Remote Process Invocation — Fire and Forget",
+        "Remote Call-In"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Afficher des données externes à la demande, sans les stocker, est le pattern Data Virtualization (Salesforce Connect). Une synchronisation batch copie les données (inversion). Fire and Forget envoie une notification sans rien afficher (confusion de notions). Remote Call-In fait écrire le système externe dans Salesforce (piège plausible)."
+    },
+    {
+      "id": "q-t3",
+      "domain": "translate",
+      "question": "A Universal Containers dispatcher keeps the case console open while technicians update work orders from a field app. The console must show each change without a refresh. Which integration pattern meets this requirement?",
+      "options": [
+        "UI Update Based on Data Changes",
+        "Data Virtualization",
+        "Batch Data Synchronization",
+        "Remote Process Invocation — Request and Reply"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pousser vers l'écran les changements de données Salesforce, sans rafraîchir, est le pattern UI Update Based on Data Changes : événements de plateforme ou CDC et lightning/empApi côté composant. La virtualisation lit à l'ouverture sans pousser de changement (piège plausible). Un batch arrive trop tard (inversion). Request and Reply suppose un appel lancé par l'utilisateur (confusion de notions)."
+    },
+    {
+      "id": "q-t4",
+      "domain": "translate",
+      "question": "Which two requirements at Universal Containers point to an asynchronous integration?",
+      "options": [
+        "The user must not wait for the external system before continuing",
+        "The external system is often unavailable, and the messages must be delivered when it comes back",
+        "The user needs the external system's answer before saving the record",
+        "The data must be read live from the external system when the page opens",
+        "The response must be displayed in less than one second"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Quand l'utilisateur n'a pas à attendre et que la cible peut être indisponible, un flux asynchrone avec file ou événements découple les systèmes et garantit la livraison. Attendre la réponse avant d'enregistrer impose un appel synchrone (inversion). Une lecture en direct à l'ouverture relève de la virtualisation ou d'un appel synchrone (piège plausible). Un affichage en moins d'une seconde est une exigence de temps de réponse d'un appel synchrone (confusion de notions)."
+    },
+    {
+      "id": "q-t5",
+      "domain": "translate",
+      "question": "Universal Containers' middleware must authenticate to Salesforce without user interaction, and it supports only the OAuth 2.0 client credentials grant. What should the architect specify?",
+      "options": [
+        "A connected app with the client credentials flow enabled and a run-as user with minimal access",
+        "The JWT bearer flow, with a certificate uploaded to the connected app and a pre-authorized user",
+        "The device flow, with a user code entered by an administrator when the middleware starts",
+        "The user-agent flow, with the access token returned in the redirect URL"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le flux client credentials échange l'identifiant et le secret de l'application contre un jeton, et s'exécute avec l'utilisateur défini sur la connected app : il faut le limiter au strict nécessaire. JWT bearer conviendrait, mais le middleware ne le prend pas en charge (piège plausible). Le device flow suppose une saisie humaine (inversion). Le flux user-agent est fait pour un navigateur et n'est plus recommandé (faux remède)."
+    },
+    {
+      "id": "q-t6",
+      "domain": "translate",
+      "question": "Before designing a new integration, an architect at Universal Containers documents the existing landscape. Which artifact best supports the integration design?",
+      "options": [
+        "A landscape diagram with an inventory of interfaces: systems, direction, pattern, volume",
+        "An entity relationship diagram of the Salesforce data model, with every custom object",
+        "The list of Apex classes and triggers in the org, with their test coverage",
+        "The organization chart of the IT department, with the owner of each system"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'inventaire des interfaces (qui parle à qui, comment, à quelle fréquence, avec quel volume, et qui en est responsable) est la base de la conception. Le modèle de données Salesforce est utile, mais ne décrit aucun échange (piège plausible). La liste des classes Apex ne dit rien des flux (confusion de notions). L'organigramme n'est pas un document d'architecture (faux outil)."
+    },
+    {
+      "id": "q-t7",
+      "domain": "translate",
+      "question": "Which two practices apply the principle of least privilege to Universal Containers' integration users?",
+      "options": [
+        "Grant object and field access with permission sets limited to what each integration needs",
+        "Restrict each connected app to its integration user, and limit its OAuth scopes, for example to api",
+        "Assign the Modify All Data permission so that the integrations never fail",
+        "Use the same integration user for every integration",
+        "Turn off multi-factor authentication for all users"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Des permission sets ajustés à chaque intégration et une connected app réservée à son utilisateur, avec des scopes réduits, limitent ce que chaque intégration peut faire. Modify All Data est l'inverse du moindre privilège (inversion). Un utilisateur partagé cumule les droits de toutes les intégrations et brouille la traçabilité (piège plausible). La MFA concerne les connexions à l'interface et n'a rien à voir avec ce principe (faux remède)."
+    },
+    {
+      "id": "q-d1",
+      "domain": "design",
+      "question": "Universal Containers has two Salesforce orgs. Users of the service org must see the contracts stored in the sales org, without copying them. Which solution should the architect recommend?",
+      "options": [
+        "Salesforce Connect with the cross-org adapter",
+        "Salesforce to Salesforce, sharing the contracts every night",
+        "A nightly Bulk API 2.0 copy of the contracts",
+        "A Canvas app that displays the other org's pages"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'adaptateur cross-org de Salesforce Connect expose les enregistrements d'une autre org comme objets externes, lus à la demande. Salesforce to Salesforce copie les enregistrements partagés (piège plausible). Une copie nocturne contredit l'exigence (inversion). Une application Canvas affiche une interface externe, pas des enregistrements utilisables dans l'org (confusion de notions)."
+    },
+    {
+      "id": "q-d2",
+      "domain": "design",
+      "question": "An architect at Universal Containers considers outbound messages for a new integration. Which statement about outbound messages is true?",
+      "options": [
+        "They send SOAP messages with fields of the triggering object, and are retried for up to 24 hours",
+        "They send JSON messages to any REST endpoint configured in a named credential",
+        "Salesforce guarantees that each message is delivered exactly once and in order",
+        "They can include fields from the triggering object and from any related object"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un message sortant envoie un message SOAP contenant des champs de l'objet déclencheur, et Salesforce le réessaie pendant 24 heures en cas d'échec. Il n'envoie pas de JSON (faux terme). Il peut être livré plusieurs fois : le récepteur doit être idempotent (inversion). Seuls les champs de l'objet lui-même sont disponibles (piège plausible)."
+    },
+    {
+      "id": "q-d3",
+      "domain": "design",
+      "question": "An external system at Universal Containers must subscribe to Salesforce platform events. Which two APIs can it use?",
+      "options": [
+        "Pub/Sub API",
+        "Streaming API with CometD",
+        "Bulk API 2.0",
+        "Metadata API",
+        "SOAP API"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un client externe s'abonne aux événements avec Pub/Sub API (gRPC, recommandée) ou avec Streaming API en CometD (toujours prise en charge). Bulk API 2.0 charge ou extrait des données (confusion de notions). Metadata API déploie de la configuration (faux terme). L'API SOAP lit et écrit des enregistrements, sans abonnement (piège plausible)."
+    },
+    {
+      "id": "q-d4",
+      "domain": "design",
+      "question": "A subscriber to Universal Containers' order events was offline for two hours and must process the events it missed. What should the subscriber do?",
+      "options": [
+        "Resubscribe with the ReplayId of the last event it processed, because events are kept for 72 hours",
+        "Ask Salesforce Support to publish the missed events again on the channel",
+        "Subscribe from the tip of the stream, because events that were missed can't be retrieved",
+        "Read the missed events from the field history of the Order object"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les événements de plateforme sont conservés 72 heures : en se réabonnant avec le dernier ReplayId traité, l'abonné reçoit ce qu'il a manqué. Republier créerait des doublons et Salesforce ne le fait pas à la demande (piège plausible). S'abonner à la fin du flux fait justement perdre les événements manqués (inversion). L'historique des champs n'est pas une source d'événements (confusion de notions)."
+    },
+    {
+      "id": "q-d5",
+      "domain": "design",
+      "question": "A Lightning web component at Universal Containers must show data from an external API that requires a secret key. The key must never be exposed to the browser. Which design should the architect recommend?",
+      "options": [
+        "An Apex controller method that makes the callout through a named credential and returns only the data",
+        "A fetch() call from the component's JavaScript, with the key stored in a private property",
+        "A CSP trusted site for the API, with the key stored in a static resource",
+        "A platform event that the component publishes and the API answers"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le callout part du serveur, par un contrôleur Apex et un named credential qui porte la clé : le navigateur ne reçoit que les données. Une clé dans le JavaScript est lisible par tout utilisateur (inversion). Une static resource est téléchargeable par le navigateur, et un trusted site ne protège pas la clé (piège plausible). Un événement de plateforme ne renvoie pas de réponse au composant (confusion de notions)."
+    },
+    {
+      "id": "q-d6",
+      "domain": "design",
+      "question": "Every night, Universal Containers must load data from its data warehouse into Salesforce after heavy transformations and aggregations. Which type of tool fits this need best?",
+      "options": [
+        "An ETL tool",
+        "An enterprise service bus that routes real-time messages",
+        "Salesforce Connect",
+        "Outbound messages"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un ETL extrait, transforme et charge de gros volumes sur un planning : c'est son cas d'usage. Un ESB est conçu pour l'orchestration et le routage en temps réel (piège plausible). Salesforce Connect lit des données sans les charger (inversion). Les messages sortants partent de Salesforce (confusion de notions)."
+    },
+    {
+      "id": "q-d7",
+      "domain": "design",
+      "question": "Universal Containers adopts API-led connectivity with MuleSoft. Which layer exposes the ERP's data in a reusable way, independent of the applications that use it?",
+      "options": [
+        "System APIs",
+        "Process APIs",
+        "Experience APIs",
+        "Event APIs"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les API système donnent un accès réutilisable à un système de référence, en masquant ses détails. Les API process orchestrent plusieurs systèmes pour un processus métier (piège plausible). Les API expérience adaptent les données à un canal, comme une application mobile (inversion). « Event APIs » n'est pas une couche de l'API-led connectivity (faux terme)."
+    },
+    {
+      "id": "q-d8",
+      "domain": "design",
+      "question": "Which two use cases at Universal Containers fit Change Data Capture better than custom platform events?",
+      "options": [
+        "Replicating Salesforce record changes to an external data store",
+        "Notifying external systems of field changes on standard objects without writing code",
+        "Sending an Order Shipped business event with a custom payload that isn't tied to a single record change",
+        "Calling an external API synchronously when a user clicks a button",
+        "Loading external data into Salesforce"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "CDC est fait pour la réplication et la notification des changements d'enregistrements, sans code. Un fait métier avec une charge utile sur mesure relève d'un événement de plateforme (inversion). Un appel synchrone sur clic est du Request and Reply (confusion de notions). CDC publie depuis Salesforce, il ne charge rien dans Salesforce (piège plausible)."
+    },
+    {
+      "id": "q-b1",
+      "domain": "build",
+      "question": "A developer at Universal Containers writes a unit test for a class that calls the ERP's REST API. The test must not call the real service. Which line should the developer add before calling the class?",
+      "codeOptions": true,
+      "options": [
+        "Test.setMock(HttpCalloutMock.class, new ErpCalloutMock());",
+        "Test.setMock(WebServiceMock.class, new ErpCalloutMock());",
+        "Test.enableCallouts(false);",
+        "System.runAs(new User(Id = UserInfo.getUserId())) { }"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pour une callout HTTP, on enregistre une implémentation de HttpCalloutMock avec Test.setMock(). WebServiceMock sert aux services SOAP générés par WSDL2Apex (piège plausible). Test.enableCallouts() n'existe pas (faux terme). System.runAs() change l'utilisateur d'exécution, pas les callouts (confusion de notions)."
+    },
+    {
+      "id": "q-b2",
+      "domain": "build",
+      "question": "A developer at Universal Containers designs a class that calls several external services. Which limit applies to Apex callouts in a single transaction?",
+      "options": [
+        "At most 100 callouts, with a total callout time of 120 seconds",
+        "At most 10 callouts, with no limit on the total time",
+        "No limit in asynchronous Apex",
+        "At most 50 callouts, the same as the limit on @future methods"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une transaction Apex accepte jusqu'à 100 callouts, et le timeout cumulé des callouts ne peut pas dépasser 120 secondes. 10 est une valeur inventée (faux terme). L'Apex asynchrone a les mêmes limites de callouts (inversion). 50 est la limite des méthodes @future par transaction, pas celle des callouts (piège plausible)."
+    },
+    {
+      "id": "q-b3",
+      "domain": "build",
+      "question": "Admins at Universal Containers must send data from Salesforce to external systems without Apex code. Which two options can they use?",
+      "options": [
+        "An outbound message action in a record-triggered flow",
+        "An HTTP Callout action in Flow Builder, with a named credential",
+        "An Apex callout in a Queueable job",
+        "An @future(callout=true) method",
+        "Apex classes generated with WSDL2Apex"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les messages sortants et l'action HTTP Callout de Flow Builder se configurent sans code. Un Queueable, une méthode @future et les classes générées par WSDL2Apex sont du code Apex (pièges plausibles)."
+    },
+    {
+      "id": "q-b4",
+      "domain": "build",
+      "question": "A partner's system logs in to Salesforce through the API as a dedicated integration user. Universal Containers requires that this user be able to log in only from the partner's IP addresses. What should the architect configure?",
+      "options": [
+        "Login IP ranges on the integration user's profile",
+        "A remote site setting with the partner's IP addresses",
+        "A CSP trusted site for the partner's domain",
+        "A named credential for the partner"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les plages d'IP de connexion du profil refusent toute connexion venant d'ailleurs, API comprises. Remote site settings et CSP trusted sites autorisent des appels sortants de Salesforce ou du navigateur (confusion de notions). Un named credential sert aux appels sortants (inversion)."
+    },
+    {
+      "id": "q-b5",
+      "domain": "build",
+      "question": "In one request, Universal Containers' middleware must create an account, then a contact and an opportunity that reference the new account. Which REST API resource should the architect recommend?",
+      "options": [
+        "The Composite resource, with reference IDs such as @{newAccount.id} between subrequests",
+        "The Batch resource, which runs up to 25 independent subrequests in one call",
+        "A Bulk API 2.0 job that contains the three records in one CSV file",
+        "Three separate REST API requests, sent over a single HTTP connection"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le Composite enchaîne jusqu'à 25 sous-requêtes et permet de réutiliser l'Id créé par une sous-requête précédente. La ressource Batch exécute des sous-requêtes indépendantes, sans référence entre elles (piège plausible). Bulk API 2.0 est asynchrone et ne relie pas des enregistrements créés dans le même job (confusion de notions). Trois requêtes séparées ne répondent pas à l'exigence d'un seul appel (inversion)."
+    },
+    {
+      "id": "q-b6",
+      "domain": "build",
+      "question": "Universal Containers must load 15 million records into Salesforce during a migration. Which two practices make the load faster?",
+      "options": [
+        "Use Bulk API 2.0",
+        "Defer sharing calculations during the load, a feature that Salesforce Support can enable",
+        "Use the SOAP API with one record per call",
+        "Turn on every trigger and flow so that the data is validated during the load",
+        "Load the child records before their parents"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Bulk API 2.0 traite les gros volumes en parallèle, et différer le calcul du partage évite de recalculer les accès à chaque lot. Un enregistrement par appel multiplie les requêtes (inversion). Les automatisations ralentissent le chargement : on les contourne pendant la migration et on valide les données en amont (piège plausible). Les enfants doivent être chargés après les parents qu'ils référencent (faux énoncé)."
+    },
+    {
+      "id": "q-b7",
+      "domain": "build",
+      "question": "A middleware polls Salesforce every 10 seconds for changed records and starts getting REQUEST_LIMIT_EXCEEDED errors. What should the architect recommend?",
+      "options": [
+        "Replace the polling with Change Data Capture events received through Pub/Sub API",
+        "Poll every second so that each call returns fewer records and finishes sooner",
+        "Create more integration users and spread the polling calls across them",
+        "Ask Salesforce for a higher limit of concurrent long-running requests"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "REQUEST_LIMIT_EXCEEDED signale que l'allocation quotidienne de requêtes API est épuisée : les événements CDC suppriment les appels de polling. Interroger plus souvent consomme davantage (inversion). L'allocation est partagée par toute l'org (piège plausible). La limite des requêtes longues simultanées est une autre limite (confusion de notions)."
+    },
+    {
+      "id": "q-m1",
+      "domain": "maintain",
+      "question": "Universal Containers' security team must analyze which users and integrations call which Salesforce APIs, and how often. Which tool should the architect recommend?",
+      "options": [
+        "Event Monitoring, with the API event types",
+        "Setup Audit Trail, filtered on the integration users",
+        "Login History, exported for each integration user",
+        "Debug logs, enabled on each integration user"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Event Monitoring enregistre les appels d'API (utilisateur, ressource, volume) dans des fichiers d'événements exploitables. Setup Audit Trail suit les changements de configuration (confusion de notions). Login History liste les connexions, pas les appels qui suivent (piège plausible). Les debug logs tracent l'exécution du code, sur demande et pour une durée courte (faux outil)."
+    },
+    {
+      "id": "q-m2",
+      "domain": "maintain",
+      "question": "A data warehouse subscribed to Universal Containers' Change Data Capture events was offline for five days. What should the team do?",
+      "options": [
+        "Reload the warehouse with a full extract, then resume the change events from the tip",
+        "Resubscribe with the last processed ReplayId to receive the five days of events",
+        "Ask Salesforce to publish the change events of the last five days again",
+        "Do nothing, because the warehouse receives the missed changes in the next events"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les événements CDC ne sont conservés que trois jours : au-delà, il faut recharger les données par une extraction complète, puis reprendre le flux. Le ReplayId ne permet de remonter que dans la période de rétention (piège plausible). Salesforce ne republie pas les événements (faux énoncé). Les événements suivants ne contiennent que les nouveaux changements (inversion)."
+    },
+    {
+      "id": "q-m3",
+      "domain": "maintain",
+      "question": "Which two metrics should Universal Containers monitor for an event-driven integration?",
+      "options": [
+        "Published and delivered platform events compared with the org's allocations",
+        "The lag of each subscriber, for example its last processed ReplayId",
+        "The number of page layouts on the published objects",
+        "The size of the debug logs",
+        "The number of Apex classes in the org"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Pour une intégration par événements, on surveille la consommation par rapport aux allocations (événements publiés et livrés) et le retard de chaque abonné. Le nombre de mises en page n'a aucun effet sur les événements (faux sujet). La taille des debug logs ne mesure pas le flux (piège plausible). Le nombre de classes Apex n'est pas un indicateur d'exploitation (faux sujet)."
+    }
+  ]
+}
