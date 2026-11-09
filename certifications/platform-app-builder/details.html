@@ -1,0 +1,220 @@
+    <div class="subhead">
+      <div class="eyebrow">Approfondissement</div>
+      <h1>Chaque point, en détail</h1>
+      <p class="sub">Les 26 points de la fiche, avec des scénarios, des formules et les nuances qui font la différence dans les questions à scénario.</p>
+    </div>
+    <div class="layout">
+      <nav class="sidenav" aria-label="Sections détaillées"><a href="#d-fund">Fondamentaux</a><a href="#d-data">Données</a><a href="#d-logic">Logique &amp; automatisation</a><a href="#d-ui">Interface</a><a href="#d-dep">Déploiement</a></nav>
+      <main class="content">
+
+        <section class="domain" id="d-fund">
+          <div class="domain-head"><div><span class="weight">Salesforce Fundamentals · 18 %</span><h2>Fondamentaux Salesforce</h2></div></div>
+          <article class="topic">
+            <div class="topic-head"><h3>Où s'arrête le déclaratif</h3></div>
+          <p class="lead">Scénario type : Universal Containers veut qu'un commercial saisisse une demande en trois écrans, qu'un enregistrement soit créé et qu'un service externe de notation soit interrogé. Un Screen Flow, un Create Records et un HTTP Callout suffisent. Aucun besoin d'Apex.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Besoin</th><th class="wrap">Déclaratif ?</th><th class="wrap">Réponse</th></tr></thead><tbody><tr><td class="wrap">Appeler une API REST sortante</td><td class="wrap">Oui</td><td class="wrap">HTTP Callout ou External Services dans Flow</td></tr><tr><td class="wrap">Total d'enfants sur une lookup</td><td class="wrap">Oui</td><td class="wrap">Flow record-triggered</td></tr><tr><td class="wrap">Empêcher une suppression selon une règle</td><td class="wrap">Oui</td><td class="wrap">Flow avant suppression et Custom Error</td></tr><tr><td class="wrap">Formulaire qui change selon une valeur</td><td class="wrap">Oui</td><td class="wrap">Dynamic Forms</td></tr><tr><td class="wrap">Composant graphique interactif sur mesure</td><td class="wrap">Non</td><td class="wrap">LWC</td></tr><tr><td class="wrap">Traitement de plusieurs millions de lignes</td><td class="wrap">Non</td><td class="wrap">Batch Apex</td></tr><tr><td class="wrap">Endpoint REST entrant sur mesure</td><td class="wrap">Non</td><td class="wrap">Apex REST</td></tr></tbody></table></div>
+          <ul><li>Les questions glissent souvent un mot décisif : « without code », « minimal maintenance », « admins must be able to change it ». Il écarte les réponses Apex, même quand elles fonctionnent.</li><li>À l'inverse, « custom interface that no standard component provides » ouvre la porte à LWC.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Le rôle d'App Builder consiste à savoir jusqu'où aller sans développeur, et à reconnaître le moment où il faut en appeler un.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Étendre l'org avec AgentExchange</h3></div>
+          <p class="lead">Scénario type : l'équipe commerciale veut signer électroniquement ses contrats dans deux semaines, sans développeur. La bonne démarche : chercher une solution sur AgentExchange, l'installer en sandbox, vérifier qu'elle convient, puis l'installer en production.</p>
+          <ul><li>Comparer acheter et construire : coût de licence, couverture du besoin, maintenance. Une solution générique et mature l'emporte sur un développement interne.</li><li>AgentExchange expose aussi des composants à déposer dans Lightning App Builder : ils apparaissent dans la palette, sous la rubrique Custom - Managed après installation.</li><li>Le catalogue inclut désormais des agents, des actions d'agent et des serveurs MCP : une question peut demander comment doter un agent d'une capacité prête à l'emploi.</li><li>Le choix du périmètre d'installation (admins, tous, profils choisis) décide des droits accordés sur les composants du package.</li></ul>
+          <div class="trap"><b>Piège</b>Un composant géré se met à jour par son éditeur : on ne peut pas modifier son code pour l'adapter.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Accès aux objets, enregistrements et champs</h3></div>
+          <p class="lead">Scénario type : tous les commerciaux partagent le profil Sales User. Cinq d'entre eux doivent supprimer des opportunités. On ne clone pas le profil : un Permission Set avec le droit Delete, attribué à ces cinq personnes, suffit.</p>
+          <ul><li>Pour un ensemble de droits récurrent, un <b>Permission Set Group</b> regroupe plusieurs Permission Sets ; un Muting Permission Set y retire un droit pour un cas particulier sans modifier le groupe source.</li><li>Ordre de lecture d'un problème d'accès : droit sur l'objet, puis accès à l'enregistrement, puis FLS.</li><li>Exemple de Restriction Rule : des prestataires ne voient que les tâches qu'ils possèdent, même si l'OWD des activités leur en ouvrirait davantage.</li><li>Exemple de Scoping Rule : un conseiller voit par défaut les clients de son agence, mais peut élargir sa recherche.</li><li>Une seule Restriction Rule active devrait s'appliquer à un utilisateur donné sur un objet.</li></ul>
+          <div class="trap"><b>Piège</b>View All sur un objet donne accès en lecture à tous ses enregistrements, sans passer par le partage : c'est souvent la mauvaise réponse quand le besoin n'est que partiel.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Choisir la bonne solution de partage</h3></div>
+          <p class="lead">Scénario type : OWD Private sur Opportunity. L'équipe Finance doit lire toutes les opportunités supérieures à 100 000 $. Une Sharing Rule par critères, vers le groupe public Finance, en lecture seule. Pas besoin de modifier l'OWD ni la hiérarchie.</p>
+          <ol class="steps"><li>Définir l'OWD pour l'utilisateur qui doit voir le moins.</li><li>Laisser la hiérarchie des rôles ouvrir vers le haut.</li><li>Ajouter des Sharing Rules pour les exceptions latérales.</li><li>Garder le partage manuel et les équipes pour le cas par cas.</li></ol>
+          <ul><li>Si le partage doit suivre une personne référencée dans un champ lookup, ni la Sharing Rule ni le manuel ne conviennent : c'est un cas d'Apex managed sharing, donc programmatique.</li><li>Le propriétaire d'un enregistrement et ses supérieurs gardent l'accès, sauf si « Grant Access Using Hierarchies » est décoché sur un objet personnalisé.</li><li>Pour un objet detail, régler le partage sur le master.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Les scénarios combinent un OWD, un groupe d'utilisateurs et une condition ; il faut trouver la plus petite ouverture qui répond au besoin.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Rapports, types de rapports, tableaux de bord</h3></div>
+          <p class="lead">Scénario type : la direction veut la liste des comptes sans opportunité ouverte, avec les contacts de chaque compte. Un Custom Report Type « Accounts with or without Opportunities » ou un cross filter répond à l'absence d'enregistrements enfants.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Besoin</th><th class="wrap">Fonction</th></tr></thead><tbody><tr><td class="wrap">Regrouper des valeurs en catégories sans créer de champ</td><td class="wrap">Bucket</td></tr><tr><td class="wrap">Calculer par ligne</td><td class="wrap">Row-level formula</td></tr><tr><td class="wrap">Calculer sur les groupes</td><td class="wrap">Summary formula</td></tr><tr><td class="wrap">Comparer des types de rapports différents</td><td class="wrap">Joined report</td></tr><tr><td class="wrap">Enregistrements sans enfant</td><td class="wrap">Cross filter ou report type « with or without »</td></tr><tr><td class="wrap">Conserver l'état des données dans le temps</td><td class="wrap">Reporting Snapshot</td></tr><tr><td class="wrap">Chaque manager voit ses chiffres</td><td class="wrap">Dashboard dynamique</td></tr></tbody></table></div>
+          <ul><li>Un rapport ne montre que ce à quoi l'utilisateur a accès. Un dashboard montre les données de son running user.</li><li>Le dossier du rapport source doit être accessible au lecteur du dashboard.</li><li>Type de rapport encore In Development : invisible pour les utilisateurs standard.</li></ul>
+          <div class="trap"><b>Piège</b>Un dashboard qui affiche les données d'un seul directeur à tous : running user désigné. Si chacun doit voir ses données : dashboard dynamique, dans la limite de l'édition.</div>
+          </article>
+        </section>
+
+        <section class="domain" id="d-data">
+          <div class="domain-head"><div><span class="weight">Data Modeling and Management · 20 %</span><h2>Modélisation et gestion des données</h2></div></div>
+          <article class="topic">
+            <div class="topic-head"><h3>Choisir le modèle de données</h3></div>
+          <p class="lead">Scénario type : un même étudiant suit plusieurs cours, et un cours compte plusieurs étudiants ; on veut la note de chaque inscription. Objet de jonction Inscription, avec deux master-detail (Étudiant, Cours) et un champ Note.</p>
+          <ul><li>La note appartient à la relation, pas à l'étudiant ni au cours : c'est le signe qu'un objet de jonction est nécessaire.</li><li>Pour un objet commun à plusieurs équipes avec des valeurs différentes : Record Types et mises en page, pas un objet par équipe.</li><li>Un champ qui devient une liste de valeurs répétées (Contact_1, Contact_2…) annonce un objet enfant.</li><li>Schema Builder aide à concevoir et documenter un modèle visuellement, sans remplacer la mise à jour des mises en page et des droits.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Le choix du modèle commande le partage, les roll-ups et les rapports. La mauvaise relation se paie partout ensuite.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Relations : effets sur l'accès, l'interface, les rapports</h3></div>
+          <p class="lead">Scénario type : les lignes de frais n'ont pas de sens sans note de frais, le manager doit voir le total, et l'accès suit celui de la note. Master-detail : suppression en cascade, partage hérité, roll-up sur le total.</p>
+          <ul><li>Une lookup convient quand l'enfant vit seul : un cas peut exister sans produit référencé.</li><li>Lookup : options à la suppression du parent. <b>Clear the value</b> (défaut), <b>Don't allow deletion</b>, <b>Delete this record also</b> selon la configuration.</li><li>Le roll-up ne remonte que d'un niveau : pour un grand-parent, roll-up d'un roll-up ou Flow.</li><li>Un enregistrement de jonction disparaît avec l'un ou l'autre de ses masters ; supprimé avec les deux, il ne se restaure pas.</li><li>Le partage sur une jonction dépend de l'accès aux deux masters et de l'option Sharing Setting du champ.</li><li><b>Lookup Filter</b> : limite les enregistrements proposés dans une lookup, par exemple aux contacts du compte courant.</li></ul>
+          <div class="trap"><b>Piège</b>Une conversion échoue pour une raison simple : valeur vide côté lookup, ou roll-up existant côté master-detail. Un roll-up supprimé doit aussi disparaître de la corbeille des champs.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Choisir ou changer un type de champ</h3></div>
+          <p class="lead">Scénario type : un champ Text contient des références comme 00421. Le passer en Number supprime les zéros significatifs. Il reste en Text, éventuellement avec External ID et unicité.</p>
+          <ul><li>Risques en cas de type Multi-Select : pas de comparaison simple dans une formule (<code>INCLUDES</code> seulement), regroupements difficiles dans les rapports.</li><li>Avant de changer un type : vérifier les automatisations, les rapports et les intégrations qui lisent le champ.</li><li>Option prudente : nouveau champ, migration par Data Loader ou Flow, contrôle, puis retrait de l'ancien.</li><li>Une picklist restreinte refuse par API les valeurs absentes de la liste.</li><li>External ID : Text, Number, Email ou Auto Number. Avec l'option Unique, il empêche les doublons sur cette valeur.</li></ul>
+          <div class="trap"><b>Piège</b>Salesforce affiche un avertissement de perte de données, mais ne propose pas d'annulation : la sauvegarde se fait avant.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Import, export et données externes</h3></div>
+          <p class="lead">Scénario type : importer 200 000 lignes de commandes rattachées à des comptes identifiés par un numéro ERP. Data Loader en upsert, avec un champ External ID sur Account pour résoudre la relation.</p>
+          <ol class="steps"><li>Nettoyer les données, supprimer les doublons, contrôler les valeurs de picklists.</li><li>Créer les champs manquants, dont les External ID.</li><li>Vérifier les règles de validation et automatisations qui peuvent bloquer ou ralentir le chargement.</li><li>Charger les parents, puis les enfants.</li><li>Contrôler sur un échantillon en sandbox avant la production.</li></ol>
+          <ul><li>Salesforce Connect garde les données à la source : pas de stockage consommé, mais une dépendance à la disponibilité du système externe.</li><li>External Objects : pas de roll-up, pas de master-detail en tant que detail.</li><li>Copier des données externes régulièrement : ETL ou API. Accéder à la demande : External Objects.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Le seuil de 50 000, les objets non pris en charge par le Wizard et l'usage de l'External ID reviennent régulièrement.</div>
+          </article>
+        </section>
+
+        <section class="domain" id="d-logic">
+          <div class="domain-head"><div><span class="weight">Business Logic and Process Automation · 32 %</span><h2>Logique métier et automatisation</h2></div></div>
+          <article class="topic">
+            <div class="topic-head"><h3>Champs formule</h3></div>
+          <p class="lead">Scénario type : afficher sur chaque opportunité le niveau du compte client, et un indicateur Retard si la date de clôture est dépassée. Deux formules, l'une inter-objets, l'autre basée sur <code>TODAY()</code>.</p>
+          <pre><span class="c">// Formule Text inter-objets</span>
+Account.Tier__c
+
+<span class="c">// Formule Checkbox</span>
+<span class="k">AND</span>( CloseDate &lt; <span class="k">TODAY</span>(), <span class="k">NOT</span>(IsClosed) )
+
+<span class="c">// Picklist dans une formule Text</span>
+<span class="k">CASE</span>( <span class="k">TEXT</span>(Priority__c), "High", "P1", "Medium", "P2", "P3" )</pre>
+          <ul><li><code>ISBLANK</code> est préférable à <code>ISNULL</code>, notamment pour les champs texte.</li><li>Le type renvoyé se choisit à la création ; une formule qui additionne deux Currency renvoie Currency.</li><li>Une formule ne déclenche aucune automatisation quand sa valeur change avec le temps ; pour agir à une date, utiliser un Scheduled Path ou un flow planifié.</li></ul>
+          <div class="trap"><b>Piège</b>Une formule ne peut pas lire les enregistrements enfants, ni écrire dans un autre champ.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Champs roll-up summary</h3></div>
+          <p class="lead">Scénario type : compter les lignes de commande dont le statut est Livré sur chaque commande. Roll-up COUNT sur le master, avec filtre Statut = Livré.</p>
+          <ul><li>Filtre : pas de champs Long Text, Multi-Select, Auto Number, ni de formule inter-objets.</li><li>Les champs agrégeables : Number, Currency, Percent ; Date pour MIN et MAX.</li><li>La création ou la modification d'un roll-up peut lancer un recalcul sur tous les enregistrements. Prévoir un moment calme.</li><li>Le recalcul fait repasser le parent par la sauvegarde.</li><li>Sur lookup, Flow record-triggered couvre création, modification, suppression, et le changement de parent.</li></ul>
+          <div class="trap"><b>Piège</b>Sur une lookup, penser aussi au cas de suppression de l'enfant et au changement de parent, sinon le total se décale.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Règles de validation</h3></div>
+          <p class="lead">Scénario type : interdire qu'une opportunité passe en Closed Won sans date de livraison, sauf pour les responsables disposant d'une permission spécifique.</p>
+          <pre><span class="k">AND</span>(
+  <span class="k">ISCHANGED</span>(StageName),
+  <span class="k">ISPICKVAL</span>(StageName, "Closed Won"),
+  <span class="k">ISBLANK</span>(Delivery_Date__c),
+  <span class="k">NOT</span>($Permission.Bypass_Delivery_Check)
+)</pre>
+          <ul><li>Un test de longueur sur un champ texte : <code>LEN(Code__c) &lt;&gt; 8</code>.</li><li>Format contrôlé : <code>NOT(REGEX(Code__c, "[A-Z]{3}-[0-9]{4}"))</code>.</li><li>La conversion de leads ne les applique que si le réglage correspondant est actif.</li><li>Pour bloquer une suppression, utiliser un flow avant suppression avec Custom Error.</li></ul>
+          <div class="trap"><b>Piège</b>Inverser la logique est l'erreur la plus fréquente : la formule décrit la situation <mark class="hl">invalide</mark>.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Créer et configurer un flow</h3></div>
+          <p class="lead">Scénario type : à la création d'un cas Priorité Haute, avertir le responsable de compte, créer une tâche et positionner un champ Niveau sur le cas. Record-triggered en Actions and Related Records, ou deux flows si l'on veut profiter de Fast Field Updates pour le champ.</p>
+          <ol class="steps"><li>Choisir le type et définir l'objet, l'événement et les conditions d'entrée.</li><li>Choisir l'optimisation : Fast Field Updates ou Actions and Related Records.</li><li>Récupérer les données avec Get Records, en filtrant au plus juste.</li><li>Traiter avec Decision, Assignment, Loop, Transform.</li><li>Écrire en une seule opération sur une collection.</li><li>Ajouter des fault paths sur les éléments qui peuvent échouer.</li><li>Tester avec Debug, puis activer.</li></ol>
+          <ul><li>Pour éviter une exécution répétée à chaque mise à jour : conditions d'entrée et « Only when a record is updated to meet the condition requirements ».</li><li>Un flow qui met à jour le record déclencheur en after-save le fait passer à nouveau par la sauvegarde ; Fast Field Updates l'évite.</li><li>Screen Flow : composants réactifs à l'écran, validation d'entrée, navigation.</li><li>Subflow : factorise une logique dans un autolaunched flow, avec variables d'entrée et de sortie.</li><li>Plusieurs flows sur le même objet : <b>Trigger Order</b> réglé de 1 à 2000 et visualisé dans Flow Trigger Explorer.</li></ul>
+          <div class="trap"><b>Piège</b>Scheduled Paths demande que le flow s'exécute à la création, ou seulement quand la mise à jour fait entrer l'enregistrement dans les conditions.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Processus d'approbation Flow</h3></div>
+          <p class="lead">Scénario type : une remise supérieure à 15 % requiert l'accord du manager, puis celui de la direction financière au-delà de 30 %. Record-triggered Approval Orchestration à deux stages, Decision entre les deux, verrouillage pendant l'approbation.</p>
+          <ol class="steps"><li>Créer le flow Record-Triggered Approval Orchestration et ses conditions d'entrée.</li><li>Ajouter un stage avec un Approval Step et l'approbateur (User, Queue ou Group).</li><li>Router selon le résultat avec un Decision.</li><li>Ajouter un Background Step pour mettre à jour le statut final.</li><li>Prévoir un Recall path et un fault path.</li><li>Déboguer, activer, suivre dans l'app Approvals.</li></ol>
+          <ul><li>Un stage se termine par défaut quand toutes ses étapes sont terminées ; une condition personnalisée ou un Evaluation Flow peut changer ce comportement.</li><li>Les approbateurs répondent par e-mail avec des mots-clés, dans l'Orchestration Work Guide, ou depuis l'app Approvals.</li><li>Les données sont dans Approval Submission et Approval Work Item, utilisables dans des Custom Report Types.</li><li>La permission <b>Approval Designer</b> permet de gérer les flows d'approbation autolaunched, avec un passage par « Submit for Activation ».</li></ul>
+          <div class="trap"><b>Piège</b>Tous les approbateurs doivent être déterminés dans l'étape : la sélection manuelle du suivant n'est pas prévue.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Choisir le type de flow</h3></div>
+          <p class="lead">Scénario type : « trente jours avant la fin du contrat, créer une tâche de renouvellement, sauf si le contrat a été annulé ». Record-triggered avec Scheduled Path relatif à la date de fin : l'action n'a pas lieu si l'enregistrement ne remplit plus les conditions.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Formule de l'énoncé</th><th class="wrap">Type</th></tr></thead><tbody><tr><td class="wrap">« user enters », « guide users », « wizard »</td><td class="wrap">Screen</td></tr><tr><td class="wrap">« when a record is created or updated »</td><td class="wrap">Record-Triggered</td></tr><tr><td class="wrap">« every night », « each Monday »</td><td class="wrap">Schedule-Triggered</td></tr><tr><td class="wrap">« called from another flow », « reusable »</td><td class="wrap">Autolaunched</td></tr><tr><td class="wrap">« when the external system publishes an event »</td><td class="wrap">Platform Event-Triggered</td></tr><tr><td class="wrap">« several teams, in stages »</td><td class="wrap">Orchestration</td></tr><tr><td class="wrap">« approve », « approval chain »</td><td class="wrap">Approval Orchestration</td></tr></tbody></table></div>
+          <ul><li>Screen Flow sur une page : composant Flow. Sur un bouton : action rapide ou URL.</li><li>Schedule-Triggered traite des enregistrements par lots, <code>$Record</code> représentant chacun d'eux.</li><li>Une action d'agent repose sur un autolaunched flow.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>C'est l'objectif ajouté en 2026 qui demande le plus de discernement. Les réponses incorrectes sont généralement des flows réels, simplement inadaptés.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Maintenir, surveiller, dépanner</h3></div>
+          <p class="lead">Scénario type : un flow record-triggered échoue en production avec un message générique. L'admin lit l'e-mail d'erreur, ouvre l'interview en échec dans Paused and Failed Flow Interviews, identifie l'élément, reproduit avec Debug sur l'enregistrement concerné, puis enregistre une nouvelle version.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Symptôme</th><th class="wrap">Où regarder</th></tr></thead><tbody><tr><td class="wrap">« An unhandled fault has occurred »</td><td class="wrap">E-mail d'erreur, Paused and Failed Flow Interviews</td></tr><tr><td class="wrap">Fonctionne pour l'admin, échoue pour un utilisateur</td><td class="wrap">Debug en tant qu'autre utilisateur, droits, contexte d'exécution</td></tr><tr><td class="wrap">Le flow ne se lance pas</td><td class="wrap">Version active, conditions d'entrée, option d'exécution sur mise à jour</td></tr><tr><td class="wrap">Chemin planifié qui n'agit pas</td><td class="wrap">Time-Based Workflow, conditions, date de référence</td></tr><tr><td class="wrap">Plusieurs flows sur l'objet, ordre inattendu</td><td class="wrap">Flow Trigger Explorer, Trigger Order</td></tr><tr><td class="wrap">Dépassement de limites</td><td class="wrap">Élément de données dans un Loop, debug log</td></tr></tbody></table></div>
+          <ul><li>Écran d'erreur utile à l'utilisateur : fault path vers un écran, avec un message clair et <code>$Flow.FaultMessage</code> consigné.</li><li>Une interview en pause conserve sa version de flow.</li><li>Une version ne se supprime pas tant que des interviews lui sont rattachées.</li><li><b>Roll Back Records</b> annule ce qui a été fait dans la transaction courante.</li><li>Flow Tests : tests réutilisables pour certains flows record-triggered, directement dans Flow Builder.</li></ul>
+          <div class="trap"><b>Piège</b>Un Get Records sans résultat ne passe pas par le fault path : c'est un succès, à tester avec un Decision avant d'utiliser la variable.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Agentforce pour automatiser</h3></div>
+          <p class="lead">Scénario type : les clients écrivent de façon libre pour modifier leur réservation. Un agent comprend la demande, identifie la réservation et appelle une action qui repose sur un autolaunched flow. Le flow applique les règles strictes.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Critère</th><th class="wrap">Flow</th><th class="wrap">Agentforce</th></tr></thead><tbody><tr><td class="wrap">Entrée</td><td class="wrap">Événement ou clic</td><td class="wrap">Langage naturel</td></tr><tr><td class="wrap">Chemin</td><td class="wrap">Toujours le même</td><td class="wrap">Choisi par raisonnement</td></tr><tr><td class="wrap">Résultat</td><td class="wrap">Déterministe</td><td class="wrap">Variable, encadré par les instructions</td></tr><tr><td class="wrap">Bon usage</td><td class="wrap">Enregistrement, calcul, règle</td><td class="wrap">Conversation, ambiguïté, plusieurs étapes</td></tr></tbody></table></div>
+          <ul><li>Le Subagent délimite un domaine : ce n'est pas une garantie d'autorisation. Le contrôle d'accès reste dans les droits et les actions.</li><li>Un flow en contexte système ne devient pas sécurisé parce qu'un agent l'appelle.</li><li>Ne transmettre à l'action que les entrées et sorties nécessaires.</li><li>Tester séparément la partie conversationnelle et la partie déterministe, puis ensemble.</li></ul>
+          <div class="trap"><b>Piège</b>Un agent n'est pas la bonne réponse à une mise à jour de champ fixe à l'enregistrement : c'est le cas type de Flow.</div>
+          </article>
+        </section>
+
+        <section class="domain" id="d-ui">
+          <div class="domain-head"><div><span class="weight">User Interface · 17 %</span><h2>Interface utilisateur</h2></div></div>
+          <article class="topic">
+            <div class="topic-head"><h3>Options de personnalisation</h3></div>
+          <p class="lead">Scénario type : sur Case, un bloc Remboursement ne doit apparaître que si Type = Remboursement, et seulement pour le service client. Dynamic Forms avec section visible selon le champ et une permission, sans multiplier les mises en page.</p>
+          <ul><li>Priorité d'activation : la combinaison application, type d'enregistrement et profil est la plus spécifique ; l'org default est le filet de sécurité.</li><li>Dynamic Related List : filtrer et trier une related list directement sur la page.</li><li>Path : guide les utilisateurs d'étape en étape, avec champs clés et conseils pour chaque valeur.</li><li>Console : onglets et sous-onglets, pour le travail répétitif et multi-enregistrements.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Plusieurs options affichent le même résultat ; il faut choisir la plus simple à maintenir.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Boutons, liens et actions</h3></div>
+          <p class="lead">Scénario type : depuis un compte, créer une opportunité déjà reliée, avec l'étape Prospection préremplie, en mobile comme sur desktop. Action spécifique à l'objet, Create a Record, avec une Predefined Field Value.</p>
+          <ul><li>Lien vers un système externe avec le numéro de commande : bouton ou lien URL avec champ de fusion.</li><li>Action sur plusieurs lignes sélectionnées : List Button, ou Screen Flow lancé depuis la vue de liste.</li><li>Screen Flow en action : flow object-specific, qui reçoit <code>recordId</code>.</li><li>Default field values et mise en page d'action se règlent sur l'action.</li></ul>
+          <div class="trap"><b>Piège</b>Les boutons URL fonctionnent en Lightning ; le JavaScript exécuté au clic, non.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Ajouter des composants Lightning sans code</h3></div>
+          <p class="lead">Scénario type : ajouter à la page de compte un graphique du chiffre d'affaires, visible uniquement sur desktop. Composant standard Report Chart, filtre de visibilité sur le facteur de forme.</p>
+          <ul><li>Un composant AgentExchange s'ajoute comme un composant standard après installation du package.</li><li>Pour réutiliser une logique de saisie : screen flow exposé dans le composant Flow.</li><li>Un composant peut prendre l'Id du record courant sans configuration quand il est conçu pour.</li><li>Trop de composants ralentissent la page : préférer Tabs ou Accordion, qui chargent à la demande.</li></ul>
+          <div class="trap"><b>Piège</b>Pour un même besoin, composant standard d'abord, AgentExchange ensuite, code en dernier.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Composants Lightning personnalisés (programmatique)</h3></div>
+          <p class="lead">Scénario type : un développeur livre un LWC, mais il n'apparaît pas dans Lightning App Builder. Il manque <code>isExposed</code> à true ou la cible de page.</p>
+          <pre>&lt;LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata"&gt;
+  &lt;apiVersion&gt;67.0&lt;/apiVersion&gt;
+  &lt;isExposed&gt;true&lt;/isExposed&gt;
+  &lt;targets&gt;
+    &lt;target&gt;lightning__RecordPage&lt;/target&gt;
+    &lt;target&gt;lightning__AppPage&lt;/target&gt;
+  &lt;/targets&gt;
+&lt;/LightningComponentBundle&gt;</pre>
+          <ul><li><code>lightning__FlowScreen</code> rend le composant disponible dans un écran de Flow ; <code>lightning__RecordAction</code>, en action.</li><li><code>&lt;targetConfigs&gt;</code> permet à l'admin de régler des propriétés sans code.</li><li>Côté Aura, <code>force:hasRecordId</code> donne accès à l'Id du record courant.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>Un App Builder ne code pas, mais doit savoir ce qu'il faut pour qu'un composant soit disponible dans ses outils.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Actions et mises en page pour le mobile</h3></div>
+          <p class="lead">Scénario type : les techniciens veulent enregistrer une intervention depuis un compte sur leur téléphone, en trois champs. Action spécifique à l'objet, Create a Record, avec une mise en page réduite et des valeurs prédéfinies.</p>
+          <ul><li>Pour une action disponible partout, sans lien avec un enregistrement : action globale, ajoutée à la Publisher Layout.</li><li>Pour personnaliser l'action bar d'un objet : section Salesforce Mobile and Lightning Experience Actions ou Dynamic Actions.</li><li>Les quatre champs du haut de la Compact Layout sont ceux qui s'affichent sur le téléphone : y mettre ce qui sert sur le terrain.</li><li>Une page d'application peut être rendue disponible sur mobile et ajoutée au menu.</li></ul>
+          <div class="trap"><b>Piège</b>Compact Layout et Page Layout sont deux réglages distincts : le premier gère le résumé, le second le détail.</div>
+          </article>
+        </section>
+
+        <section class="domain" id="d-dep">
+          <div class="domain-head"><div><span class="weight">App Deployment · 13 %</span><h2>Déploiement</h2></div></div>
+          <article class="topic">
+            <div class="topic-head"><h3>Cycle de vie et sandboxes</h3></div>
+          <p class="lead">Scénario type : une petite équipe construit dans un sandbox, puis les métiers valident sur des données ressemblant à la production avant mise en ligne. Developer pour construire, Partial Copy pour l'UAT.</p>
+          <div class="table-wrap"><table><thead><tr><th class="wrap">Besoin</th><th class="wrap">Sandbox</th></tr></thead><tbody><tr><td class="wrap">Développer, sans données</td><td class="wrap">Developer</td></tr><tr><td class="wrap">Charger un grand jeu de données de test</td><td class="wrap">Developer Pro</td></tr><tr><td class="wrap">Former ou valider sur un échantillon réel</td><td class="wrap">Partial Copy</td></tr><tr><td class="wrap">Reproduire un problème de volume ou mesurer les performances</td><td class="wrap">Full</td></tr></tbody></table></div>
+          <ul><li>Partial Copy impose un sandbox template ; Full le permet en option.</li><li>Les utilisateurs sont copiés avec des adresses e-mail neutralisées.</li><li>Un sandbox de Preview reçoit la prochaine version plus tôt : utile pour tester avant une release.</li><li>Lifecycle Center ajoute Git, des work items et des pipelines, sans ligne de commande.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>La question porte presque toujours sur la combinaison données, fréquence de refresh et stockage.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Change sets</h3></div>
+          <p class="lead">Scénario type : un Inbound Change Set échoue car un champ référencé par un flow n'y figure pas. Cloner l'Outbound, ajouter le champ avec View/Add Dependencies, renvoyer, puis valider.</p>
+          <ol class="steps"><li>Autoriser la connexion dans l'org cible (Allow Inbound Changes).</li><li>Créer l'Outbound, ajouter les composants et dépendances.</li><li>Uploader vers l'org cible.</li><li>Valider l'Inbound, puis déployer.</li><li>Effectuer les étapes manuelles et activer les flows.</li></ol>
+          <ul><li>Les droits d'un nouveau champ passent par un profil inclus ; un Permission Set inclus est plus lisible.</li><li>Un Inbound ne se réexpédie pas : pour aller à l'org suivante, recréer un Outbound depuis l'org intermédiaire.</li><li>L'exigence de couverture de test des flows ne concerne pas les flows avec écrans.</li></ul>
+          <div class="trap"><b>Piège</b>La suppression d'un champ ne se déploie pas par change set : la faire à la main ou utiliser un outil Metadata API.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Packages gérés et non gérés</h3></div>
+          <p class="lead">Scénario type : un partenaire veut distribuer une application à plusieurs clients et corriger les bugs sans intervention de leur part. Package géré.</p>
+          <ul><li>Un non-géré sert à offrir un point de départ : l'utilisateur en devient responsable.</li><li>Un géré impose un namespace, créé à partir d'une org dédiée.</li><li>Dépendances : installer dans l'ordre requis.</li><li>Tester dans un sandbox avant de l'installer en production.</li></ul>
+          <div class="why"><b>Pourquoi c'est testé</b>La question compare le droit de modifier le contenu et la capacité à recevoir des mises à jour.</div>
+          </article>
+          <article class="topic">
+            <div class="topic-head"><h3>Plan de déploiement</h3></div>
+          <p class="lead">Scénario type : une mise en production comporte un nouvel objet, deux flows et une page. Le plan : valider en amont, déployer en heures creuses, exécuter les étapes manuelles consignées, activer les flows, vérifier, communiquer.</p>
+          <ul><li>Séparer les changements à risque et prévoir une marche arrière : version précédente du flow à réactiver, sauvegarde de métadonnées.</li><li>Former les utilisateurs et publier une note de version avant l'ouverture.</li><li>Si un correctif urgent est nécessaire, partir de la production via un sandbox rafraîchi plutôt que de modifier directement la production.</li><li>Un environnement de staging proche de la production évite les surprises.</li></ul>
+          <div class="trap"><b>Piège</b>Le plan doit inclure ce qui n'est pas déployable : réglages, activations, données de référence.</div>
+          </article>
+        </section>
+
+      </main>
+    </div>

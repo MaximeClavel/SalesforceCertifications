@@ -1,0 +1,183 @@
+{
+  "id": "claude-certified-architect",
+  "title": "Claude Certified Architect – Professional",
+  "shortTitle": "CCAR-P",
+  "vendor": "Anthropic",
+  "track": "Architect",
+  "code": "CCAR-P",
+  "summary": "Révision du guide d’examen v1.0 : sept domaines, des fiches mémo, des questions d’entraînement, un mini-examen chronométré et un aide-mémoire des choix d’architecture.",
+  "verified": "Informations du guide d’examen v1.0 (juillet 2026), tel que relayé par des sites de préparation indépendants. Vérifie les chiffres dans le guide officiel avant de t’inscrire.",
+  "language": {
+    "content": "fr",
+    "questions": "fr"
+  },
+  "exam": {
+    "durationMinutes": 120,
+    "scoredQuestions": 63,
+    "passRate": 0.72,
+    "passingLabel": "réussite 720 / 1000",
+    "price": "175 USD"
+  },
+  "facts": [
+    "**63** questions",
+    "**120** min",
+    "réussite **720 / 1000**",
+    "guide **v1.0**",
+    "**175 USD** par tentative"
+  ],
+  "domains": [
+    {
+      "id": "d1",
+      "label": "Conception de solutions et architecture",
+      "short": "Conception",
+      "name": "Solution Design & Architecture",
+      "weight": 17,
+      "color": "#3450d6",
+      "objectives": [
+        "Traduire des problèmes métier en solutions basées sur Claude",
+        "Concevoir des architectures de bout en bout (entrée → traitement → sortie → boucles de feedback)",
+        "Choisir le pattern adapté : workflow, agentique, augmented LLM",
+        "Concevoir des systèmes multi-agents et leur orchestration",
+        "Appliquer des techniques de décomposition aux problèmes complexes",
+        "Aligner la solution sur les piliers de valeur : efficacité, transformation, productivité, coût, SLA de performance"
+      ]
+    },
+    {
+      "id": "d2",
+      "label": "Modèles, prompts et ingénierie du contexte",
+      "short": "Modèles & contexte",
+      "name": "Claude Models, Prompting & Context Engineering",
+      "weight": 13,
+      "color": "#a65a00",
+      "objectives": [
+        "Choisir le modèle Claude selon les arbitrages",
+        "Concevoir prompts système, gabarits et guardrails",
+        "Techniques de prompt engineering : zero-shot, few-shot, chain-of-thought",
+        "Optimiser la fenêtre de contexte et la consommation de tokens",
+        "Réutiliser les prompts : caching, prompts modulaires, Skills"
+      ]
+    },
+    {
+      "id": "d3",
+      "label": "Intégration",
+      "short": "Intégration",
+      "name": "Integration",
+      "weight": 19,
+      "color": "#187a4c",
+      "objectives": [
+        "Évaluer la configuration des outils et agents pour repérer le capability bloat",
+        "Analyser authentification et autorisation pour identifier les failles",
+        "Évaluer les arbitrages précision-latence et justifier la configuration",
+        "Analyser l’observabilité à grande échelle et choisir une stratégie de monitoring",
+        "Concevoir un pipeline RAG (chunking et indexation)",
+        "Choisir la stratégie de retrieval selon la forme des données et le type de requête",
+        "Choisir le mécanisme d’intégration : MCP, API/CLI, agent-to-agent",
+        "Comparer progressive discovery et contexte monolithique"
+      ]
+    },
+    {
+      "id": "d4",
+      "label": "Évaluation, tests et optimisation",
+      "short": "Évaluation",
+      "name": "Evaluation, Testing & Optimisation",
+      "weight": 16,
+      "color": "#a13fc7",
+      "objectives": [
+        "Définir les métriques : exactitude, latence, coût, sécurité",
+        "Concevoir jeux d’évaluation et frameworks de test avec des méthodes mixtes",
+        "Conduire des A/B tests et des améliorations itératives",
+        "Diagnostiquer : échec de prompt, hallucinations, inadéquation du modèle",
+        "Optimiser tokens, latence et rapport coût-performance",
+        "Surveiller la performance avec logs et outils d’observabilité"
+      ]
+    },
+    {
+      "id": "d5",
+      "label": "Gouvernance, sécurité et gestion des risques",
+      "short": "Gouvernance",
+      "name": "Governance, Safety & Risk Management",
+      "weight": 14,
+      "color": "#137a8c",
+      "objectives": [
+        "Mettre en place guardrails et contrôles de sécurité",
+        "Identifier risques, limites et modes de défaillance des systèmes LLM",
+        "Appliquer la validation humaine (human-in-the-loop)",
+        "Assurer la conformité : GDPR, HIPAA, FedRAMP",
+        "Traiter l’éthique : biais, équité, transparence"
+      ]
+    },
+    {
+      "id": "d6",
+      "label": "Communication avec les parties prenantes et cycle de vie",
+      "short": "Parties prenantes",
+      "name": "Stakeholder Communication & Lifecycle Management",
+      "weight": 14,
+      "color": "#b4325a",
+      "objectives": [
+        "Mener une discovery structurée et recueillir les exigences",
+        "Communiquer les décisions d’architecture et leurs compromis",
+        "Gérer les boucles de feedback et l’alignement des attentes, SLA compris",
+        "Documenter les architectures et guider l’implémentation",
+        "Accompagner les phases : discovery, design, handoff, monitoring, itération"
+      ]
+    },
+    {
+      "id": "d7",
+      "label": "Productivité des développeurs et exploitation",
+      "short": "Productivité",
+      "name": "Developer Productivity & Operational Enablement",
+      "weight": 7,
+      "color": "#5f6b12",
+      "objectives": [
+        "Configurer les outils et environnements Claude pour les équipes (ex. Claude Code)",
+        "Améliorer les workflows de développement avec l’outillage IA",
+        "Soutenir le débogage et la résolution d’incidents"
+      ]
+    }
+  ],
+  "content": {
+    "pages": [
+      {
+        "id": "memo",
+        "label": "Aide-mémoire",
+        "file": "memo.html"
+      }
+    ],
+    "quiz": "quiz.json",
+    "flashcards": "flashcards.json"
+  },
+  "mockExams": [
+    {
+      "id": "mini",
+      "label": "Mini-examen",
+      "source": "quiz",
+      "durationMinutes": 38,
+      "allocation": {
+        "d1": 3,
+        "d2": 3,
+        "d3": 4,
+        "d4": 3,
+        "d5": 3,
+        "d6": 3,
+        "d7": 1
+      },
+      "description": "Questions tirées selon le poids des domaines, au rythme de l’examen réel (environ 1 min 54 s par question). Le seuil appliqué ici, 72 %, approche le score normalisé de 720 / 1000."
+    }
+  ],
+  "notes": [
+    "L’inscription passe par l’Anthropic Partner Academy, ouverte aux organisations partenaires.",
+    "Les fiches et les questions sont des créations originales de révision, pas des questions d’examen."
+  ],
+  "searchExamples": [
+    "Prompt caching",
+    "MCP",
+    "Orchestrator-workers",
+    "Capability bloat",
+    "Human-in-the-loop",
+    "CLAUDE.md"
+  ],
+  "stats": {
+    "quiz": 28,
+    "flashcards": 43
+  }
+}

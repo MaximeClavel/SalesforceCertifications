@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "c1",
+      "domain": "d1",
+      "front": "Workflow ou agent : quelle différence ?",
+      "back": "Workflow : le LLM et les outils sont orchestrés par des chemins de code prédéfinis. Agent : le LLM décide lui-même de son déroulé et de ses outils. Quand les étapes sont connues, le workflow est plus prévisible, moins cher et plus simple à auditer."
+    },
+    {
+      "id": "c2",
+      "domain": "d1",
+      "front": "Quand choisir le prompt chaining ?",
+      "back": "Quand la tâche se décompose en sous-tâches fixes et dépendantes. On accepte plus de latence pour gagner en précision, et on peut placer des contrôles (gates) entre les étapes."
+    },
+    {
+      "id": "c3",
+      "domain": "d1",
+      "front": "Citer les cinq patterns de workflow courants.",
+      "back": "Prompt chaining, routing, parallelization (sectioning ou voting), orchestrator-workers, evaluator-optimizer."
+    },
+    {
+      "id": "c4",
+      "domain": "d1",
+      "front": "Orchestrator-workers ou parallelization ?",
+      "back": "Parallelization : sous-tâches connues d’avance et indépendantes. Orchestrator-workers : l’orchestrateur décide à l’exécution des sous-tâches (ex. nombre de fichiers à modifier inconnu au départ)."
+    },
+    {
+      "id": "c5",
+      "domain": "d1",
+      "front": "Qu’est-ce qu’un augmented LLM ?",
+      "back": "Le bloc de base des systèmes agentiques : un LLM enrichi de retrieval, d’outils et de mémoire."
+    },
+    {
+      "id": "c6",
+      "domain": "d1",
+      "front": "Comment relier un choix d’architecture à la valeur métier ?",
+      "back": "En le rattachant à un résultat mesurable parmi les piliers du guide : efficacité, transformation, productivité, coût, SLA de performance. Un objectif sans chiffre ne se défend pas."
+    },
+    {
+      "id": "c7",
+      "domain": "d2",
+      "front": "Comment choisir un modèle Claude ?",
+      "back": "Arbitrage entre capacité de raisonnement, latence, coût et taille de contexte. Démarrer avec le plus petit modèle qui atteint le seuil de qualité mesuré, et n’escalader que si l’évaluation le justifie."
+    },
+    {
+      "id": "c8",
+      "domain": "d2",
+      "front": "Comment fonctionne le prompt caching et que faut-il en retenir ?",
+      "back": "Un préfixe de prompt identique (system prompt, outils, documents) est réutilisé : les lectures en cache coûtent une fraction du prix d’entrée et réduisent la latence. Placer le contenu stable en tête et le contenu variable à la fin, sinon le cache ne sert pas."
+    },
+    {
+      "id": "c9",
+      "domain": "d2",
+      "front": "Zero-shot, few-shot, chain-of-thought : quand utiliser quoi ?",
+      "back": "Zero-shot : instruction claire pour une tâche simple. Few-shot : quelques exemples variés pour fixer un format ou des cas ambigus. Chain-of-thought : raisonnement multi-étapes, on laisse Claude réfléchir avant de conclure."
+    },
+    {
+      "id": "c10",
+      "domain": "d2",
+      "front": "À quoi servent les Skills côté contexte ?",
+      "back": "Ce sont des dossiers d’instructions et de ressources chargés à la demande. Ils évitent de glisser toutes les consignes dans chaque requête et standardisent les tâches récurrentes."
+    },
+    {
+      "id": "c11",
+      "domain": "d2",
+      "front": "Comment optimiser une fenêtre de contexte ?",
+      "back": "Prioriser l’information pertinente, retirer le superflu, garder les instructions critiques bien visibles, résumer ou élaguer l’historique long. Chaque token pèse sur le coût et la latence."
+    },
+    {
+      "id": "c12",
+      "domain": "d2",
+      "front": "Que peuvent et que ne peuvent pas faire les guardrails d’un prompt ?",
+      "back": "Ils cadrent rôle, périmètre, format et refus. Ils ne remplacent pas les contrôles hors modèle : validation de sortie par le code, permissions, plafonds, revue humaine."
+    },
+    {
+      "id": "c13",
+      "domain": "d3",
+      "front": "Qu’est-ce que le capability bloat ?",
+      "back": "Donner à un agent trop d’outils ou de permissions. Conséquences : mauvaise sélection d’outils, tokens gaspillés, surface d’attaque élargie. Remède : outils minimaux par agent ou sous-agent, moindre privilège."
+    },
+    {
+      "id": "c14",
+      "domain": "d3",
+      "front": "Progressive discovery ou contexte monolithique ?",
+      "back": "Progressive discovery : charger des descriptions courtes puis le détail à la demande (recherche d’outils, Skills). Monolithique : tout injecter d’emblée. À grande échelle, la première réduit les tokens et améliore la précision."
+    },
+    {
+      "id": "c15",
+      "domain": "d3",
+      "front": "MCP, API directe, CLI, agent-to-agent : comment trancher ?",
+      "back": "MCP : capacités à partager entre plusieurs clients IA. API directe : intégration ciblée avec contrôle fin. CLI : outils déjà en ligne de commande, flux de développement. Agent-to-agent : délégation entre agents autonomes de systèmes distincts."
+    },
+    {
+      "id": "c16",
+      "domain": "d3",
+      "front": "Chunking RAG : quels principes ?",
+      "back": "Découper selon la structure du document (sections), garder tableaux et blocs de code entiers, prévoir un léger chevauchement, indexer avec des métadonnées. Ajouter un court contexte à chaque chunk avant indexation limite la perte de sens."
+    },
+    {
+      "id": "c17",
+      "domain": "d3",
+      "front": "Quelle stratégie de retrieval selon la requête ?",
+      "back": "Codes, identifiants, noms exacts : recherche lexicale (BM25). Questions en langage naturel : embeddings. Les deux types de requêtes : recherche hybride avec reranking."
+    },
+    {
+      "id": "c18",
+      "domain": "d3",
+      "front": "Authentification et autorisation d’un agent : bonnes pratiques ?",
+      "back": "Agir avec l’identité de l’utilisateur ou un compte de service minimal, jetons à portée limitée, secrets hors du modèle, autorisation vérifiée côté outil ou serveur à chaque appel et jamais déléguée au prompt."
+    },
+    {
+      "id": "c19",
+      "domain": "d3",
+      "front": "Observabilité à grande échelle : que mettre en place ?",
+      "back": "Traces structurées par requête et par étape avec identifiant de corrélation, logs des appels d’outils, métriques de latence, coût, tokens et erreurs, échantillonnage pour revue qualité."
+    },
+    {
+      "id": "c20",
+      "domain": "d3",
+      "front": "Précision contre latence : quels leviers ?",
+      "back": "Plus de précision vient souvent d’un modèle plus grand, de plus de raisonnement ou de plus de retrieval, au prix de la latence. On compense avec le caching, le streaming, le routage selon la difficulté et la parallélisation."
+    },
+    {
+      "id": "c21",
+      "domain": "d4",
+      "front": "Quelles métriques définir avant de construire ?",
+      "back": "Exactitude ou réussite de la tâche, latence, coût, safety (sûreté des sorties) et security (sécurité du système). Les seuils sont fixés avec les parties prenantes avant les premiers tests."
+    },
+    {
+      "id": "c22",
+      "domain": "d4",
+      "front": "À quoi ressemble un bon jeu d’évaluation ?",
+      "back": "Représentatif du trafic réel, avec cas limites et cas adversariaux, versionné, et distinct des exemples few-shot du prompt."
+    },
+    {
+      "id": "c23",
+      "domain": "d4",
+      "front": "Quelles méthodes d’évaluation combiner ?",
+      "back": "Contrôles par code (exact match, schéma), LLM-as-judge avec rubrique claire et calibrage sur des jugements humains, évaluation humaine sur échantillon pour les cas subjectifs."
+    },
+    {
+      "id": "c24",
+      "domain": "d4",
+      "front": "Comment mener un A/B test de prompts ?",
+      "back": "Changer une seule variable à la fois, même jeu d’évaluation, mêmes métriques. En production, répartir le trafic et attendre un volume suffisant avant de conclure."
+    },
+    {
+      "id": "c25",
+      "domain": "d4",
+      "front": "Hallucination, échec de prompt, inadéquation du modèle : comment les distinguer ?",
+      "back": "Hallucination : exiger des réponses ancrées dans des sources avec citations et autoriser « je ne sais pas ». Échec de prompt : consigne ambiguë ou exemples manquants. Inadéquation : capacité insuffisante ou modèle surdimensionné pour la tâche."
+    },
+    {
+      "id": "c26",
+      "domain": "d4",
+      "front": "Quels leviers pour réduire coût et latence ?",
+      "back": "Prompt caching, modèle plus petit sur les tâches simples validées par évaluation, Message Batches API pour le non urgent (tarif réduit), sorties plus courtes, max_tokens borné, streaming pour la latence perçue."
+    },
+    {
+      "id": "c27",
+      "domain": "d5",
+      "front": "Qu’est-ce que la prompt injection et comment s’en protéger ?",
+      "back": "Des instructions malveillantes cachées dans des données (page web, email, document). Traiter tout contenu externe comme donnée non fiable, limiter les permissions, plafonner les actions, exiger une validation humaine pour les effets de bord."
+    },
+    {
+      "id": "c28",
+      "domain": "d5",
+      "front": "Quand placer un humain dans la boucle ?",
+      "back": "Pour les actions irréversibles ou à fort impact, les sorties à faible confiance et les cas ambigus. Avec des points d’approbation explicites et une file de revue."
+    },
+    {
+      "id": "c29",
+      "domain": "d5",
+      "front": "GDPR, HIPAA, FedRAMP : à quoi correspond chacun ?",
+      "back": "GDPR : données personnelles de l’UE (minimisation, base légale, droits d’accès et d’effacement). HIPAA : informations de santé protégées aux États-Unis, avec accord de sous-traitance (BAA). FedRAMP : autorisation de sécurité des services cloud pour les agences fédérales américaines."
+    },
+    {
+      "id": "c30",
+      "domain": "d5",
+      "front": "Citer des modes de défaillance typiques d’un système LLM.",
+      "back": "Hallucination, incohérence entre appels, biais, fuite de données, sur-confiance, jailbreak, dérive de comportement après un changement de modèle ou de prompt."
+    },
+    {
+      "id": "c31",
+      "domain": "d5",
+      "front": "Que couvre l’éthique dans une architecture Claude ?",
+      "back": "Biais et équité (tests par sous-groupes), transparence (informer que l’on parle à une IA, expliquer les limites), décisions importantes revues par un humain."
+    },
+    {
+      "id": "c32",
+      "domain": "d5",
+      "front": "À quoi ressemblent des guardrails en couches ?",
+      "back": "Entrée (filtres), modèle (prompt système), sortie (validation, classifieurs), actions (permissions, plafonds), audit (journalisation). Aucune couche seule ne suffit."
+    },
+    {
+      "id": "c33",
+      "domain": "d6",
+      "front": "Que couvre une discovery structurée ?",
+      "back": "Objectifs métier, utilisateurs, sources de données, contraintes légales et de sécurité, indicateurs de succès, SLA, risques. On pose ces questions avant de proposer une solution."
+    },
+    {
+      "id": "c34",
+      "domain": "d6",
+      "front": "Que contient un mémo d’arbitrage (trade-off memo) ?",
+      "back": "Les options comparées sur des critères explicites (coût, latence, qualité, risque), une recommandation, les risques résiduels et les conditions qui déclencheraient une révision."
+    },
+    {
+      "id": "c35",
+      "domain": "d6",
+      "front": "Comment traiter un SLA avec un système probabiliste ?",
+      "back": "Le traduire en cibles mesurables (taux de réussite sur jeu d’évaluation, latence p95, disponibilité), prévoir une escalade humaine hors périmètre et expliquer qu’aucune garantie de 100 % n’existe."
+    },
+    {
+      "id": "c36",
+      "domain": "d6",
+      "front": "Que livrer pour documenter une architecture ?",
+      "back": "Diagrammes, décisions d’architecture (ADR), prompts versionnés, jeux d’évaluation, runbooks d’exploitation, guide d’implémentation pour l’équipe qui reprend."
+    },
+    {
+      "id": "c37",
+      "domain": "d6",
+      "front": "Quelles sont les phases du cycle de vie ?",
+      "back": "Discovery, design, handoff, monitoring, itération, avec des boucles de feedback à chaque étape."
+    },
+    {
+      "id": "c38",
+      "domain": "d6",
+      "front": "Comment parler à un public non technique ?",
+      "back": "En résultats et risques métier (temps gagné, erreurs évitées, coûts), pas en tokens ni en détails d’API. Les compromis sont chiffrés quand c’est possible."
+    },
+    {
+      "id": "c39",
+      "domain": "d7",
+      "front": "À quoi sert CLAUDE.md ?",
+      "back": "À donner à Claude Code un contexte persistant : conventions, commandes, architecture du projet. Il est lu au démarrage et se superpose selon une hiérarchie (utilisateur, projet…)."
+    },
+    {
+      "id": "c40",
+      "domain": "d7",
+      "front": "Que garantissent les managed settings ?",
+      "back": "Ils occupent le niveau le plus haut de la hiérarchie et ne peuvent pas être surchargés par les réglages utilisateur, projet, local ni la ligne de commande. C’est l’outil pour imposer une politique de sécurité."
+    },
+    {
+      "id": "c41",
+      "domain": "d7",
+      "front": "À quoi sert une marketplace de plugins gérée ?",
+      "back": "À distribuer à toutes les équipes des Skills, agents, hooks et serveurs MCP approuvés, avec versions et mises à jour centralisées."
+    },
+    {
+      "id": "c42",
+      "domain": "d7",
+      "front": "Hook ou instruction dans CLAUDE.md ?",
+      "back": "Un hook s’exécute de façon déterministe sur un événement (ex. lancer le linter après chaque édition). Une instruction dans CLAUDE.md est indicative : Claude peut l’oublier."
+    },
+    {
+      "id": "c43",
+      "domain": "d7",
+      "front": "Comment utiliser Claude pour déboguer un incident ?",
+      "back": "Fournir stack trace, logs pertinents et changements récents, demander des hypothèses classées, vérifier avant d’appliquer un correctif, commencer en lecture seule."
+    }
+  ]
+}

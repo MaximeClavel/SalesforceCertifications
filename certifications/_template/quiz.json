@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "a1",
+      "domain": "domaine-a",
+      "objective": 0,
+      "question": "Énoncé de la question à une seule réponse ?",
+      "options": ["Bonne réponse", "Piège plausible", "Inversion", "Faux terme"],
+      "answer": [0],
+      "explanation": "Pourquoi la bonne réponse est juste, et pourquoi chaque autre option est fausse."
+    },
+    {
+      "id": "a2",
+      "domain": "domaine-a",
+      "objective": 1,
+      "question": "Énoncé d'une question à deux réponses ? (Choisissez 2)",
+      "options": ["Première bonne réponse", "Seconde bonne réponse", "Distracteur 1", "Distracteur 2", "Distracteur 3"],
+      "answer": [0, 1],
+      "explanation": "Une question à réponses multiples ne compte que si toutes les bonnes réponses sont choisies."
+    },
+    {
+      "id": "b1",
+      "domain": "domaine-b",
+      "question": "Question avec un extrait de code : que renvoie cette requête ?",
+      "code": "SELECT Id FROM Account LIMIT 1",
+      "options": ["Un enregistrement au plus", "Tous les comptes", "Une erreur", "Aucun résultat"],
+      "answer": [0],
+      "explanation": "LIMIT 1 borne le résultat à un enregistrement."
+    }
+  ]
+}

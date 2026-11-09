@@ -1,0 +1,1361 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "ag01",
+      "domain": "agents",
+      "objective": 5,
+      "question": "Un agent Service répond aux clients sur un site Experience Cloud. Sous quelle identité ses actions s’exécutent-elles ?",
+      "options": [
+        "L’utilisateur invité du site",
+        "L’utilisateur dédié de l’agent (Agent User)",
+        "L’administrateur qui a activé l’agent",
+        "Le propriétaire du dossier en cours"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Un agent Service s’exécute dans le contexte de son Agent User. Les ensembles d’autorisations de cet utilisateur (objets, champs, classes Apex, flux) déterminent ce que les actions peuvent lire ou modifier. On applique le moindre privilège."
+    },
+    {
+      "id": "ag02",
+      "domain": "agents",
+      "objective": 5,
+      "question": "Un commercial utilise un agent Employee dans Lightning Experience et demande le détail d’une opportunité qu’il n’a pas le droit de voir. Que se passe-t-il ?",
+      "options": [
+        "L’agent affiche l’opportunité, car il s’exécute en mode système",
+        "L’agent ne peut pas y accéder, car il s’exécute avec les permissions et le partage de l’utilisateur connecté",
+        "L’agent bascule sur l’Agent User, qui voit tout",
+        "L’agent demande l’approbation d’un administrateur"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Un agent Employee s’exécute dans le contexte de l’utilisateur connecté. Profil, ensembles d’autorisations, sécurité au niveau des champs et partage s’appliquent aux données récupérées par ses actions."
+    },
+    {
+      "id": "ag03",
+      "domain": "agents",
+      "objective": 6,
+      "question": "Une entreprise veut un agent qui répond 24 h/24 aux clients non authentifiés sur son site web et qui peut créer des dossiers. Quel type d’agent ?",
+      "options": [
+        "Agent Employee",
+        "Agent Service",
+        "Agent Sales Coach",
+        "Un modèle d’invite Field Generation"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Les clients externes et le service 24 h/24 relèvent de l’agent Service, déployé sur des canaux comme la messagerie web, la voix ou l’e-mail. L’agent Employee sert les utilisateurs internes."
+    },
+    {
+      "id": "ag04",
+      "domain": "agents",
+      "objective": 6,
+      "question": "L’équipe RH veut un assistant interne, dans Slack, qui aide les employés à retrouver les politiques internes et leurs propres demandes. Quel type d’agent ?",
+      "options": [
+        "Agent Service",
+        "Agent Employee",
+        "Agent API uniquement",
+        "Un flux planifié"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Usage interne, avec les données accessibles à chaque employé : c’est l’agent Employee. Il peut être disponible dans Lightning Experience, l’application mobile et Slack."
+    },
+    {
+      "id": "ag05",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Sur quoi le moteur de raisonnement s’appuie-t-il principalement pour choisir la rubrique (topic / subagent) qui traitera une demande ?",
+      "options": [
+        "Les instructions d’entrée des actions",
+        "La description de classification de chaque rubrique",
+        "Le nom API de l’agent",
+        "L’ordre de création des rubriques"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Le sélecteur compare la demande aux descriptions de classification. Des descriptions précises et sans chevauchement réduisent les erreurs de routage."
+    },
+    {
+      "id": "ag06",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Votre agent envoie souvent les demandes « où est ma commande ? » vers la rubrique Retours au lieu de Suivi de commande. Quelle correction faire en premier ?",
+      "options": [
+        "Ajouter des actions à la rubrique Retours",
+        "Rendre les descriptions de classification et la portée (scope) des deux rubriques plus précises et distinctes",
+        "Changer de modèle LLM",
+        "Supprimer la rubrique Suivi de commande"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Un mauvais routage vient presque toujours de descriptions trop proches. On clarifie ce que couvre chaque rubrique (et ce qu’elle ne couvre pas), puis on re-teste dans Testing Center."
+    },
+    {
+      "id": "ag07",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Quels éléments font partie de la définition d’une rubrique (topic) ? (Choisissez 2)",
+      "options": [
+        "La description de classification",
+        "Les instructions",
+        "Le profil de l’Agent User",
+        "La file Omni-Channel par défaut"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une rubrique regroupe un nom, une description de classification, une portée, des instructions et des actions. L’Agent User et les files Omni-Channel se configurent ailleurs."
+    },
+    {
+      "id": "ag08",
+      "domain": "agents",
+      "objective": 2,
+      "question": "L’action Remboursement ne doit être proposée qu’aux clients dont l’identité a été vérifiée. Quelle approche garantit ce comportement ?",
+      "options": [
+        "Écrire dans les instructions : « ne rembourse que les clients vérifiés »",
+        "Stocker le résultat de la vérification dans une variable et conditionner la disponibilité de l’action à cette variable (filtre, ou `available when` en Agent Script)",
+        "Créer un second agent pour les remboursements",
+        "Masquer l’action avec le Trust Layer"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Une instruction en langage naturel reste probabiliste. Une condition sur une variable est déterministe : l’action n’est tout simplement pas proposée au LLM tant que la condition est fausse."
+    },
+    {
+      "id": "ag09",
+      "domain": "agents",
+      "objective": 1,
+      "question": "Quel est l’intérêt principal du raisonnement hybride proposé par Agent Script ?",
+      "options": [
+        "Il remplace entièrement le LLM par des règles",
+        "Il combine des étapes déterministes (conditions, actions exécutées dans un ordre fixe, transitions) et le raisonnement du LLM pour les échanges ouverts",
+        "Il choisit un LLM différent à chaque message",
+        "Il supprime le besoin de tester l’agent"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Les règles fixes (seuils, statuts, étapes obligatoires) passent par la logique déterministe, ce qui rend l’agent prévisible. Le LLM garde la main sur la compréhension et la conversation."
+    },
+    {
+      "id": "ag10",
+      "domain": "agents",
+      "objective": 1,
+      "question": "Un administrateur modifie une rubrique dans la vue Canvas du nouvel Agentforce Builder. Que voit un développeur qui ouvre ensuite la vue Script ?",
+      "options": [
+        "Une version figée à régénérer manuellement",
+        "La même définition, à jour, sous forme d’Agent Script",
+        "Rien : la vue Script ne concerne que les agents migrés",
+        "Un fichier de métadonnées Bot au format XML"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Canvas (visuel, low-code) et Script (texte Agent Script) sont deux vues du même agent. Une modification dans l’une se reflète dans l’autre."
+    },
+    {
+      "id": "ag11",
+      "domain": "agents",
+      "objective": 2,
+      "question": "En Agent Script, quelle est la différence entre une variable `mutable` et une variable `linked` ?",
+      "options": [
+        "Une variable mutable peut être modifiée pendant la conversation ; une variable liée tire sa valeur d’une source externe (par exemple la session)",
+        "Une variable mutable est stockée dans Data 360 ; une variable liée dans le navigateur",
+        "Une variable liée est partagée entre tous les agents de l’org",
+        "Aucune différence, ce sont des synonymes"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Exemples de syntaxe : `order_id: mutable string = \"\"` et `session_id: linked string`. La valeur d’une variable liée vient de l’extérieur (contexte de session, canal)."
+    },
+    {
+      "id": "ag12",
+      "domain": "agents",
+      "objective": 2,
+      "question": "Vous voulez insérer le nom du produit en promotion, stocké dans une variable, dans une instruction envoyée au LLM. Que utilisez-vous ?",
+      "options": [
+        "Une expression de modèle, par exemple `{!@variables.promotion_product}`",
+        "Une formule de champ",
+        "Un champ de fusion de modèle d’e-mail",
+        "Une description de classification"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La syntaxe `{!expression}` résout une variable ou une ressource dans les instructions de prompt. Dans les instructions logiques, on référence directement `@variables.nom`."
+    },
+    {
+      "id": "ag13",
+      "domain": "agents",
+      "objective": 0,
+      "question": "En Agent Script, que distingue `->` de `|` dans un bloc d’instructions ?",
+      "options": [
+        "`->` introduit des instructions logiques exécutées de façon déterministe ; `|` introduit du texte d’instruction envoyé au LLM",
+        "`->` est un commentaire ; `|` une condition",
+        "`->` appelle un flux ; `|` appelle Apex",
+        "Ils sont interchangeables"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les instructions logiques (`->`) contiennent par exemple `if`, `run`, `set` ou `transition to`. Les instructions de prompt (`|`) guident le raisonnement du LLM."
+    },
+    {
+      "id": "ag14",
+      "domain": "agents",
+      "objective": 0,
+      "question": "Quel bloc d’Agent Script sert de point d’entrée pour classer la demande et la router vers le bon subagent ?",
+      "options": [
+        "`system`",
+        "`config`",
+        "`start_agent`",
+        "`variables`"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "`start_agent` (par exemple `start_agent agent_router:`) gère la classification et le routage. `system` porte les instructions et messages globaux, `config` la configuration, `variables` les variables globales."
+    },
+    {
+      "id": "ag15",
+      "domain": "agents",
+      "objective": 2,
+      "question": "L’agent doit toujours récupérer la commande avant de répondre, sans laisser le LLM décider s’il appelle l’action. Que mettez-vous dans le subagent ?",
+      "options": [
+        "Une instruction de prompt : « appelle toujours l’action de commande »",
+        "Une instruction logique `run @actions.get_order` avec ses entrées liées par `with`",
+        "Une description de classification plus longue",
+        "Un message de bienvenue"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "`run @actions.x` exécute l’action de façon déterministe. `with` lie les entrées, `set` stocke une sortie (`@outputs.nom`) dans une variable."
+    },
+    {
+      "id": "ag16",
+      "domain": "agents",
+      "objective": 2,
+      "question": "Dans `run @actions.get_order with order_id = ...`, que signifie `...` ?",
+      "options": [
+        "La valeur est vide",
+        "Le LLM remplit la valeur à partir de la conversation (slot filling)",
+        "La valeur vient d’une variable liée",
+        "L’action est ignorée"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "`...` est un jeton de remplissage : le LLM extrait la valeur de la conversation. Pour une valeur connue, on lie plutôt une variable."
+    },
+    {
+      "id": "ag17",
+      "domain": "agents",
+      "objective": 0,
+      "question": "Comment faire passer la conversation, de façon déterministe, vers un autre subagent une fois une condition remplie ?",
+      "options": [
+        "`transition to @subagent.wrap_up` dans les instructions logiques",
+        "Ajouter une phrase « passe à la suite » dans le prompt",
+        "Créer une nouvelle version de l’agent",
+        "Utiliser l’action Escalation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "`transition to` déplace la conversation vers un autre subagent depuis la logique. `@utils.transition to` permet aussi d’exposer cette transition comme outil au LLM."
+    },
+    {
+      "id": "ag18",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Un agent Service doit répondre aux questions à partir des articles Knowledge et de PDF produits. Quelle action standard utiliser ?",
+      "options": [
+        "Answer Questions with Knowledge",
+        "Summarize Record",
+        "Draft or Revise Email",
+        "Identify Record by Name"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Answer Questions with Knowledge interroge un Agentforce Data Library (articles Knowledge, fichiers) par récupération augmentée (RAG) et formule une réponse ancrée."
+    },
+    {
+      "id": "ag19",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Quels éléments peuvent servir de cible à une action d’agent personnalisée ? (Choisissez 2)",
+      "options": [
+        "Un flux lancé automatiquement (autolaunched flow)",
+        "Une méthode Apex `@InvocableMethod`",
+        "Un rapport",
+        "Une règle de validation"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les actions personnalisées s’appuient sur des flux, des méthodes Apex invocables, des modèles d’invite ou des API (services externes, MuleSoft). Rapports et règles de validation ne sont pas des cibles d’action."
+    },
+    {
+      "id": "ag20",
+      "domain": "agents",
+      "objective": 3,
+      "question": "L’action Créer un dossier ne doit s’exécuter qu’après accord explicite du client. Quel réglage de l’action utiliser ?",
+      "options": [
+        "Exiger la confirmation de l’utilisateur (Require User Confirmation)",
+        "Afficher dans la conversation (Show in conversation)",
+        "Rendre l’entrée obligatoire (Require input)",
+        "Ajouter un filtre sur le canal"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La confirmation utilisateur fait demander l’accord avant l’exécution. « Show in conversation » concerne l’affichage des sorties ; « Require input » rend une entrée obligatoire."
+    },
+    {
+      "id": "ag21",
+      "domain": "agents",
+      "objective": 3,
+      "question": "L’agent transmet souvent la date au mauvais format à une action Flow. Quelle correction est la plus ciblée ?",
+      "options": [
+        "Préciser l’instruction de l’entrée de l’action, avec le format attendu et un exemple",
+        "Ajouter une nouvelle rubrique",
+        "Changer d’Agent User",
+        "Augmenter le nombre de résultats du retriever"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le LLM lit les instructions d’entrée et de sortie des actions pour savoir quoi passer. Une instruction précise (« date au format AAAA-MM-JJ ») corrige l’erreur à la source."
+    },
+    {
+      "id": "ag22",
+      "domain": "agents",
+      "objective": 4,
+      "question": "Pour déployer un agent Service dans la messagerie d’un site web, que faut-il configurer ?",
+      "options": [
+        "Un déploiement Messaging for In-App and Web (Enhanced Chat) et un flux Omni-Channel qui route les conversations vers l’agent",
+        "Uniquement Email-to-Case",
+        "Une application connectée OAuth sans canal",
+        "Un espace de travail Slack"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le canal de messagerie (Enhanced Chat / Embedded Service) reçoit les conversations, et un flux Omni-Channel les route vers l’agent. Le déploiement s’ajoute au site Experience Cloud ou au site web."
+    },
+    {
+      "id": "ag23",
+      "domain": "agents",
+      "objective": 4,
+      "question": "En messagerie, un client demande à parler à un humain. Que faut-il pour que la rubrique standard Escalation fonctionne ?",
+      "options": [
+        "Une route sortante Omni-Channel (flux) définie dans la connexion messagerie de l’agent, vers une file d’agents humains",
+        "Un second agent IA",
+        "Une règle d’attribution de dossier",
+        "Un rapport d’escalade"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’escalade transfère la conversation via Omni-Channel. Sans route sortante configurée dans la connexion du canal, l’agent ne peut pas passer la main."
+    },
+    {
+      "id": "ag24",
+      "domain": "agents",
+      "objective": 3,
+      "question": "Un client pose une question sans aucun rapport avec l’activité de l’entreprise. Quelle rubrique système gère ce cas dans un agent Service ?",
+      "options": [
+        "Off Topic",
+        "Escalation",
+        "Ambiguous Question",
+        "General FAQ"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Off Topic traite les demandes hors périmètre. Ambiguous Question sert quand la demande est trop vague pour être routée et qu’il faut demander une précision."
+    },
+    {
+      "id": "ag25",
+      "domain": "agents",
+      "objective": 7,
+      "question": "Une entreprise a sa propre application mobile et veut y intégrer un agent avec sa propre interface. Quelle solution ?",
+      "options": [
+        "Agent API (REST : démarrer une session, envoyer des messages, terminer la session)",
+        "Embedded Service sur un site Experience Cloud",
+        "Un flux d’écran",
+        "Un modèle Field Generation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’Agent API permet d’appeler un agent de façon programmatique depuis une application, un site ou un système externe, sans le widget de messagerie Salesforce."
+    },
+    {
+      "id": "ag26",
+      "domain": "agents",
+      "objective": 7,
+      "question": "De quoi un système externe a-t-il besoin pour appeler l’Agent API ?",
+      "options": [
+        "Une application connectée (ou External Client App) configurée avec le flux OAuth Client Credentials",
+        "Un utilisateur invité de site",
+        "Un Data Library",
+        "Un package géré"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’appelant s’authentifie via OAuth (client credentials) sur une application connectée liée à l’agent, puis utilise l’ID de l’agent pour ouvrir une session."
+    },
+    {
+      "id": "ag27",
+      "domain": "agents",
+      "objective": 0,
+      "question": "Quelle séquence décrit le mieux la boucle du moteur de raisonnement Atlas ?",
+      "options": [
+        "Comprendre la demande et choisir la rubrique → planifier et choisir les actions → exécuter → évaluer le résultat, puis répondre ou reboucler",
+        "Exécuter toutes les actions de l’agent → résumer les résultats",
+        "Interroger Data 360 → répondre sans LLM",
+        "Choisir un LLM → générer une réponse sans actions"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Atlas raisonne par itérations : il classe la demande, sélectionne les actions disponibles, les exécute, évalue si l’objectif est atteint et recommence si nécessaire."
+    },
+    {
+      "id": "ag28",
+      "domain": "agents",
+      "objective": 5,
+      "question": "Quelles bonnes pratiques s’appliquent à l’Agent User d’un agent Service ? (Choisissez 2)",
+      "options": [
+        "N’accorder que les permissions nécessaires aux actions de l’agent",
+        "Donner accès aux objets, champs, classes Apex et flux utilisés via des ensembles d’autorisations",
+        "Lui attribuer le profil Administrateur système pour éviter les erreurs",
+        "Le partager avec des utilisateurs humains"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "L’Agent User est un compte technique dédié. Moindre privilège et ensembles d’autorisations ciblés limitent l’exposition si l’agent est manipulé."
+    },
+    {
+      "id": "ag29",
+      "domain": "agents",
+      "objective": 2,
+      "question": "Dans l’ancien builder, à quoi servent les filtres sur une rubrique ou une action ?",
+      "options": [
+        "À rendre la rubrique ou l’action disponible seulement si une condition sur une variable (de contexte ou personnalisée) est remplie",
+        "À trier les résultats du retriever",
+        "À masquer les données sensibles envoyées au LLM",
+        "À limiter le nombre de conversations"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les filtres évaluent des variables, comme l’état de vérification du client ou le canal. C’est un mécanisme déterministe, contrairement aux instructions."
+    },
+    {
+      "id": "pr01",
+      "domain": "prompt",
+      "objective": 0,
+      "question": "Un responsable veut générer, à la demande, une synthèse du compte dans un champ texte de la page d’enregistrement. Quelle solution ?",
+      "options": [
+        "Un modèle d’invite Field Generation dans Prompt Builder",
+        "Un agent Service",
+        "L’Agent API",
+        "Un flux planifié sans IA"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Field Generation est fait pour remplir un champ à partir de l’enregistrement, depuis la page. Pas besoin d’un agent conversationnel pour une génération ponctuelle et ciblée."
+    },
+    {
+      "id": "pr02",
+      "domain": "prompt",
+      "objective": 2,
+      "question": "Le bouton de génération Einstein n’apparaît pas à côté du champ prévu. Cause la plus probable ?",
+      "options": [
+        "La page n’utilise pas Dynamic Forms, ou le champ n’a pas été placé sur la page",
+        "Le Trust Layer est désactivé",
+        "Le modèle est de type Flex",
+        "L’org n’a pas de Data Library"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un modèle Field Generation est associé à un champ et s’utilise depuis une page Lightning avec Dynamic Forms. Le champ doit être présent sur la page et le modèle activé."
+    },
+    {
+      "id": "pr03",
+      "domain": "prompt",
+      "objective": 2,
+      "question": "Vous devez rédiger une proposition commerciale qui combine une opportunité, un compte et un objet personnalisé, appelée depuis un flux. Quel type de modèle ?",
+      "options": [
+        "Flex",
+        "Sales Email",
+        "Field Generation",
+        "Record Summary"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Flex permet de définir vous-même les entrées (jusqu’à cinq) et s’appelle depuis Flow, Apex ou une action d’agent. Les autres types ont des entrées imposées par leur usage."
+    },
+    {
+      "id": "pr04",
+      "domain": "prompt",
+      "objective": 2,
+      "question": "Quel type de modèle d’invite s’utilise directement dans le compositeur d’e-mails ?",
+      "options": [
+        "Sales Email",
+        "Flex",
+        "Field Generation",
+        "Record Summary"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Sales Email prend un destinataire (contact ou piste) et un objet associé facultatif, et produit un brouillon dans le compositeur."
+    },
+    {
+      "id": "pr05",
+      "domain": "prompt",
+      "objective": 1,
+      "question": "Quels ensembles d’autorisations correspondent aux rôles de Prompt Builder ? (Choisissez 2)",
+      "options": [
+        "Prompt Template Manager pour créer et gérer les modèles",
+        "Prompt Template User pour exécuter les modèles",
+        "Data Cloud Admin pour lire les modèles",
+        "Agentforce Service Agent User pour créer les modèles"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Prompt Template Manager donne la création et la gestion ; Prompt Template User donne l’exécution. Séparer les deux limite qui peut changer le comportement de l’IA."
+    },
+    {
+      "id": "pr06",
+      "domain": "prompt",
+      "objective": 6,
+      "question": "Un utilisateur exécute un modèle ancré sur des champs qu’il n’a pas le droit de lire. Que se passe-t-il ?",
+      "options": [
+        "L’ancrage respecte ses permissions : les données inaccessibles ne sont pas récupérées",
+        "Le modèle s’exécute en mode système",
+        "Le Trust Layer accorde un accès temporaire",
+        "L’utilisateur reçoit une demande d’accès"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La récupération sécurisée du Trust Layer applique les permissions de l’utilisateur (objets, champs, partage) au moment de l’ancrage."
+    },
+    {
+      "id": "pr07",
+      "domain": "prompt",
+      "objective": 3,
+      "question": "L’ancrage doit filtrer les cinq derniers dossiers ouverts du compte et les mettre en forme, sans code. Quelle technique ?",
+      "options": [
+        "Un flux de type Template-Triggered Prompt Flow",
+        "Une classe Apex",
+        "Un champ de fusion simple",
+        "Un retriever d’ensemble"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un flux déclenché par le modèle peut requêter, filtrer et mettre en forme des données, puis renvoyer le texte d’ancrage. C’est l’option low-code pour une logique d’ancrage."
+    },
+    {
+      "id": "pr08",
+      "domain": "prompt",
+      "objective": 3,
+      "question": "Vous voulez inclure les contacts liés d’un compte dans l’invite, sans logique particulière. Quelle technique ?",
+      "options": [
+        "Une ressource de liste associée (related list) dans Prompt Builder",
+        "Une classe Apex invocable",
+        "Un flux d’écran",
+        "Un Data Library"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les champs de fusion et listes associées couvrent l’ancrage simple. On ne passe à Flow ou Apex que si une logique est nécessaire."
+    },
+    {
+      "id": "pr09",
+      "domain": "prompt",
+      "objective": 3,
+      "question": "L’ancrage exige une agrégation complexe et un appel à un système externe. Quelle technique ?",
+      "options": [
+        "Une classe Apex avec une méthode `@InvocableMethod` déclarée pour le type de modèle",
+        "Une liste associée",
+        "Un champ de fusion",
+        "Une description de classification"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Apex couvre les cas où Flow ne suffit pas (logique complexe, callouts). La méthode invocable renvoie le texte injecté dans l’invite."
+    },
+    {
+      "id": "pr10",
+      "domain": "prompt",
+      "objective": 3,
+      "question": "Les réponses doivent s’appuyer sur des PDF de politiques internes. Comment ancrer le modèle d’invite ?",
+      "options": [
+        "Ajouter un retriever Data 360 (par exemple celui d’un Data Library) comme ressource du modèle",
+        "Coller le texte des PDF dans l’invite",
+        "Utiliser un champ de fusion sur l’objet Fichier",
+        "Ajouter une liste associée Pièces jointes"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le retriever récupère seulement les passages pertinents de l’index au moment de l’exécution. On évite ainsi une invite énorme et figée."
+    },
+    {
+      "id": "pr11",
+      "domain": "prompt",
+      "objective": 4,
+      "question": "Vous modifiez un modèle d’invite déjà actif. Comment les utilisateurs obtiennent-ils la nouvelle version ?",
+      "options": [
+        "Enregistrer une nouvelle version, la tester avec l’aperçu, puis l’activer : une seule version est active à la fois",
+        "La modification s’applique dès l’enregistrement",
+        "Il faut supprimer l’ancien modèle",
+        "Il faut toujours redéployer depuis un sandbox"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les modèles sont versionnés. La version active continue de servir pendant que vous préparez et testez la suivante."
+    },
+    {
+      "id": "pr12",
+      "domain": "prompt",
+      "objective": 4,
+      "question": "Dans Prompt Builder, à quoi sert l’aperçu (preview) avec un enregistrement réel ?",
+      "options": [
+        "À voir l’invite résolue avec les données de l’enregistrement et la réponse générée, avant activation",
+        "À déployer le modèle en production",
+        "À estimer le coût mensuel",
+        "À entraîner le modèle sur vos données"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’aperçu montre l’invite résolue (ce qui part vers le LLM, après masquage) et la réponse. C’est le premier outil pour corriger un ancrage ou une consigne."
+    },
+    {
+      "id": "pr13",
+      "domain": "prompt",
+      "objective": 5,
+      "question": "Quelles pratiques améliorent un modèle d’invite ? (Choisissez 2)",
+      "options": [
+        "Préciser le rôle, la tâche, le format de sortie et le ton attendus",
+        "Ancrer l’invite avec des données pertinentes et dire quoi faire si une information manque",
+        "Écrire l’invite la plus courte possible, sans contexte",
+        "Mélanger plusieurs tâches sans rapport dans le même modèle"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une bonne invite est spécifique, ancrée, structurée, et prévoit les cas limites (« si l’information est absente, dis-le »). On teste ensuite sur plusieurs enregistrements."
+    },
+    {
+      "id": "pr14",
+      "domain": "prompt",
+      "objective": 6,
+      "question": "Que fait le masquage des données du Trust Layer ?",
+      "options": [
+        "Il remplace les données sensibles détectées par des jetons avant l’envoi au LLM, puis les restaure dans la réponse",
+        "Il chiffre les champs dans la base de données",
+        "Il supprime définitivement les données personnelles",
+        "Il empêche l’utilisateur de voir ses propres données"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le LLM ne voit que des jetons de substitution. Le démasquage a lieu côté Salesforce avant l’affichage de la réponse."
+    },
+    {
+      "id": "pr15",
+      "domain": "prompt",
+      "objective": 6,
+      "question": "Que garantit la rétention zéro des données (zero data retention) avec les fournisseurs de LLM ?",
+      "options": [
+        "Les fournisseurs tiers ne conservent ni les invites ni les réponses et ne les utilisent pas pour entraîner leurs modèles",
+        "Salesforce ne conserve aucun journal",
+        "Les réponses ne sont jamais affichées",
+        "Les données de l’org sont effacées après 24 h"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "C’est un engagement contractuel avec les fournisseurs de modèles. Salesforce peut, lui, conserver la piste d’audit dans Data 360."
+    },
+    {
+      "id": "pr16",
+      "domain": "prompt",
+      "objective": 6,
+      "question": "Quelles fonctions font partie de l’Einstein Trust Layer ? (Choisissez 2)",
+      "options": [
+        "La détection de toxicité",
+        "La piste d’audit (audit trail)",
+        "Le chiffrement Shield Platform Encryption",
+        "L’attribution automatique des licences"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Trust Layer : récupération sécurisée, ancrage dynamique, masquage, défense d’invite, rétention zéro, détection de toxicité, piste d’audit et feedback. Shield est un produit distinct."
+    },
+    {
+      "id": "pr17",
+      "domain": "prompt",
+      "objective": 7,
+      "question": "Une entreprise veut utiliser son propre LLM hébergé chez un fournisseur cloud dans ses modèles d’invite. Que faire ?",
+      "options": [
+        "Configurer le modèle dans Model Builder (Einstein Studio) en BYOLLM, puis le sélectionner dans le modèle d’invite",
+        "Le déclarer dans le Trust Layer comme fournisseur par défaut de l’org",
+        "Créer un agent Service dédié",
+        "Importer le modèle dans un Data Library"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Model Builder liste les modèles standards gérés par Salesforce et les modèles que vous connectez (BYOLLM). Chaque modèle d’invite indique le modèle qu’il utilise."
+    },
+    {
+      "id": "pr18",
+      "domain": "prompt",
+      "objective": 5,
+      "question": "Un modèle invente parfois des remises qui n’existent pas. Quelle correction de l’invite est la plus pertinente ?",
+      "options": [
+        "Ancrer la réponse sur les données de remise réelles et demander de ne citer que ce qui figure dans ces données",
+        "Augmenter la longueur maximale de la réponse",
+        "Supprimer toutes les instructions",
+        "Passer le modèle en type Sales Email"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les inventions viennent d’un manque d’ancrage ou de consignes floues. On fournit la source et on borne la réponse à cette source."
+    },
+    {
+      "id": "da01",
+      "domain": "data",
+      "objective": 0,
+      "question": "Que met en place Salesforce quand vous créez un Agentforce Data Library à partir de fichiers ?",
+      "options": [
+        "L’ingestion des fichiers, un index de recherche et un retriever, utilisables par Answer Questions with Knowledge ou un modèle d’invite",
+        "Un nouvel Agent User",
+        "Un tableau de bord CRM Analytics",
+        "Une rubrique Escalation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le Data Library automatise la chaîne RAG : ingestion, découpage, vectorisation, index de recherche et retriever par défaut."
+    },
+    {
+      "id": "da02",
+      "domain": "data",
+      "objective": 0,
+      "question": "Quelles sources peut-on utiliser pour un Agentforce Data Library ? (Choisissez 2)",
+      "options": [
+        "Les articles Salesforce Knowledge",
+        "Des fichiers téléversés (par exemple des PDF)",
+        "Les boîtes mail personnelles des utilisateurs",
+        "Les journaux de débogage Apex"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Knowledge et fichiers téléversés sont les sources classiques d’un Data Library."
+    },
+    {
+      "id": "da03",
+      "domain": "data",
+      "objective": 1,
+      "question": "Pourquoi découpe-t-on (chunking) les documents avant de les indexer ?",
+      "options": [
+        "Pour récupérer et envoyer au LLM uniquement les passages pertinents, plutôt que des documents entiers",
+        "Pour compresser les fichiers",
+        "Pour les chiffrer",
+        "Pour les traduire"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Chaque passage (chunk) est vectorisé et indexé séparément. La récupération renvoie les meilleurs passages, ce qui réduit le bruit, la taille de l’invite et le coût."
+    },
+    {
+      "id": "da04",
+      "domain": "data",
+      "objective": 1,
+      "question": "Les passages récupérés coupent les procédures en plein milieu et les réponses manquent de contexte. Quel réglage revoir ?",
+      "options": [
+        "La stratégie de découpage (taille des chunks, découpage par section)",
+        "La température du modèle",
+        "Le canal de l’agent",
+        "Le profil de l’Agent User"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Des chunks trop petits perdent le contexte ; trop grands, ils diluent la pertinence. Découper selon la structure du document aide souvent."
+    },
+    {
+      "id": "da05",
+      "domain": "data",
+      "objective": 1,
+      "question": "Qu’est-ce qu’un index de recherche vectorielle ?",
+      "options": [
+        "Un index où chaque passage est représenté par un vecteur (embedding), pour une recherche par proximité de sens",
+        "Un index alphabétique des titres",
+        "Une table de correspondance des ID",
+        "Un cache des réponses du LLM"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La requête est elle aussi vectorisée. On retrouve les passages au sens proche, même sans mots en commun."
+    },
+    {
+      "id": "da06",
+      "domain": "data",
+      "objective": 1,
+      "question": "Les utilisateurs cherchent par codes produit exacts (« XR-2041 ») et par questions en langage naturel. Quel type de recherche choisir ?",
+      "options": [
+        "Hybride (vectorielle et par mots-clés)",
+        "Vectorielle uniquement",
+        "Aucun index, requêtes SOQL",
+        "Recherche globale Salesforce"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le vectoriel capte le sens mais rate parfois les identifiants exacts ; le mot-clé fait l’inverse. L’hybride combine les deux."
+    },
+    {
+      "id": "da07",
+      "domain": "data",
+      "objective": 1,
+      "question": "Les réponses doivent combiner des résultats issus de deux index distincts (FAQ produits et conditions contractuelles). Quel retriever ?",
+      "options": [
+        "Un retriever d’ensemble, qui combine plusieurs retrievers",
+        "Un retriever individuel sur un seul index",
+        "Deux agents distincts",
+        "Une liste associée"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un retriever individuel interroge un index. Un retriever d’ensemble agrège les résultats de plusieurs retrievers."
+    },
+    {
+      "id": "da08",
+      "domain": "data",
+      "objective": 1,
+      "question": "L’agent ne doit récupérer que les documents correspondant à la langue et au produit du client. Que configurer ?",
+      "options": [
+        "Des filtres sur un retriever personnalisé, appliqués sur les champs de l’index (langue, produit)",
+        "Une règle de partage",
+        "Un Data Library par client",
+        "Un champ de fusion"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les filtres de retriever restreignent les passages candidats avant le classement, ce qui améliore la précision."
+    },
+    {
+      "id": "da09",
+      "domain": "data",
+      "objective": 1,
+      "question": "Où crée-t-on ou modifie-t-on un retriever personnalisé ?",
+      "options": [
+        "Dans Einstein Studio (retrievers), sur Data 360",
+        "Dans le gestionnaire d’objets",
+        "Dans Prompt Builder uniquement",
+        "Dans le Setup d’Omni-Channel"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Einstein Studio permet de définir l’index ciblé, les filtres, les champs renvoyés et le nombre de résultats. Le retriever est ensuite utilisable dans Prompt Builder et les actions d’agent."
+    },
+    {
+      "id": "da10",
+      "domain": "data",
+      "objective": 1,
+      "question": "Qu’est-ce que la génération augmentée par récupération (RAG) dans Agentforce ?",
+      "options": [
+        "Récupérer des passages pertinents via un retriever, puis les injecter dans l’invite pour ancrer la réponse",
+        "Ré-entraîner le LLM sur les données de l’org",
+        "Générer des données de test",
+        "Traduire automatiquement les articles"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le modèle n’apprend rien : il reçoit au moment de la requête le contexte à jour récupéré depuis vos données."
+    },
+    {
+      "id": "da11",
+      "domain": "data",
+      "objective": 1,
+      "question": "Sur quels objets Data 360 repose le contenu non structuré (fichiers, documents) ?",
+      "options": [
+        "Un Unstructured Data Lake Object (UDLO) mappé vers un Unstructured Data Model Object (UDMO)",
+        "Un Big Object",
+        "Un événement de plateforme",
+        "Un type de métadonnées personnalisées"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le contenu arrive dans un UDLO, est mappé vers un UDMO, puis découpé et indexé."
+    },
+    {
+      "id": "da12",
+      "domain": "data",
+      "objective": 1,
+      "question": "L’invite devient longue et coûteuse et les réponses se diluent. Quel réglage côté retriever ?",
+      "options": [
+        "Réduire le nombre de résultats renvoyés et affiner les filtres",
+        "Augmenter la taille des chunks au maximum",
+        "Passer en recherche par mot-clé uniquement",
+        "Supprimer l’index"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Moins de passages, mais plus pertinents : l’invite est plus courte, moins chère, et le LLM se concentre sur l’essentiel."
+    },
+    {
+      "id": "da13",
+      "domain": "data",
+      "objective": 0,
+      "question": "Pourquoi Data 360 est-il central pour Agentforce ? (Choisissez 2)",
+      "options": [
+        "Il unifie des données de plusieurs sources dans un modèle commun pour ancrer les agents",
+        "Il stocke et indexe le contenu non structuré pour la recherche sémantique",
+        "Il remplace les règles de partage Salesforce",
+        "Il exécute les déploiements entre orgs"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Data 360 fournit les données unifiées et la recherche vectorielle/hybride. Il héberge aussi la piste d’audit et les traces de session."
+    },
+    {
+      "id": "da14",
+      "domain": "data",
+      "objective": 1,
+      "question": "Quand privilégier une recherche par mots-clés plutôt que vectorielle ?",
+      "options": [
+        "Quand les requêtes portent surtout sur des termes exacts : références, codes d’erreur, noms propres",
+        "Quand les utilisateurs formulent des questions ouvertes",
+        "Quand les documents sont multilingues",
+        "Jamais, la recherche vectorielle est toujours meilleure"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le mot-clé excelle sur les correspondances exactes. Pour un mélange des deux usages, l’hybride est le choix sûr."
+    },
+    {
+      "id": "te01",
+      "domain": "test",
+      "objective": 0,
+      "question": "Vous voulez valider 200 énoncés contre la rubrique et les actions attendues avant la mise en production. Quel outil ?",
+      "options": [
+        "Agentforce Testing Center, avec un jeu de tests importé en CSV ou généré par IA",
+        "L’aperçu de conversation, énoncé par énoncé",
+        "Les journaux de débogage Apex",
+        "Un rapport personnalisé"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Testing Center exécute des tests en lot et compare les résultats aux attentes. L’aperçu reste utile pour explorer un cas, pas pour la régression."
+    },
+    {
+      "id": "te02",
+      "domain": "test",
+      "objective": 1,
+      "question": "Que peut vérifier un cas de test dans Testing Center ? (Choisissez 2)",
+      "options": [
+        "La rubrique (topic / subagent) attendue",
+        "Les actions attendues",
+        "Le nombre de licences consommées",
+        "La durée du déploiement"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un cas de test associe un énoncé à une rubrique attendue, des actions attendues et une réponse attendue."
+    },
+    {
+      "id": "te03",
+      "domain": "test",
+      "objective": 1,
+      "question": "Comment Testing Center évalue-t-il la réponse attendue ?",
+      "options": [
+        "Un LLM juge si la réponse obtenue correspond, sur le fond, à la réponse attendue",
+        "Comparaison caractère par caractère",
+        "Un humain valide chaque réponse",
+        "Il ne vérifie pas les réponses"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les réponses d’un LLM varient dans la forme. L’évaluation porte sur le sens, ce qui évite les faux échecs dus à une reformulation."
+    },
+    {
+      "id": "te04",
+      "domain": "test",
+      "objective": 0,
+      "question": "Pourquoi exécuter les tests Testing Center dans un sandbox ?",
+      "options": [
+        "Les tests exécutent réellement les actions, qui peuvent créer ou modifier des enregistrements",
+        "Testing Center n’existe qu’en sandbox",
+        "Les tests y sont plus rapides",
+        "Pour contourner le Trust Layer"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un test qui crée un dossier ou envoie un e-mail le fait vraiment. Isolez ces effets dans un sandbox."
+    },
+    {
+      "id": "te05",
+      "domain": "test",
+      "objective": 0,
+      "question": "Vous n’avez encore aucun jeu de tests. Quelle option offre Testing Center ?",
+      "options": [
+        "Générer des cas de test par IA à partir de la définition de l’agent, puis les relire et les compléter",
+        "Importer les conversations de production automatiquement",
+        "Tester uniquement en production",
+        "Aucune, il faut tout écrire à la main"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La génération donne une base rapide. Ajoutez ensuite les cas métier critiques et les cas limites."
+    },
+    {
+      "id": "te06",
+      "domain": "test",
+      "objective": 2,
+      "question": "Quelles considérations s’appliquent au déploiement d’un agent du sandbox vers la production ? (Choisissez 2)",
+      "options": [
+        "Déployer aussi ses dépendances : flux, classes Apex, modèles d’invite, ensembles d’autorisations",
+        "Vérifier que l’Agent User existe en production avec les bonnes permissions, puis activer l’agent",
+        "Les conversations de test sont migrées automatiquement",
+        "Le Data Library est copié automatiquement avec l’agent"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un agent dépend de ses actions et de leurs cibles. Les éléments Data 360 (flux de données, index, retrievers) se déplacent séparément, via des Data Kits."
+    },
+    {
+      "id": "te07",
+      "domain": "test",
+      "objective": 3,
+      "question": "Quel type de métadonnées représente un modèle d’invite lors d’un déploiement ?",
+      "options": [
+        "GenAiPromptTemplate",
+        "EmailTemplate",
+        "FlowDefinition",
+        "CustomMetadata"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "GenAiPromptTemplate se déploie avec la Metadata API, le CLI ou un ensemble de modifications, avec ses dépendances."
+    },
+    {
+      "id": "te08",
+      "domain": "test",
+      "objective": 3,
+      "question": "Un modèle d’invite déployé en production échoue à l’exécution. Que vérifier ?",
+      "options": [
+        "Que ses ressources d’ancrage (champs, flux, classes Apex, retrievers) existent dans l’org cible et qu’une version est activée",
+        "Que le modèle porte le même nom qu’en sandbox",
+        "Que l’org a un agent Employee",
+        "Que le Trust Layer est désactivé"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un modèle référence des champs, flux, classes et retrievers. S’il en manque un, ou si aucune version n’est active, l’exécution échoue."
+    },
+    {
+      "id": "te09",
+      "domain": "test",
+      "objective": 2,
+      "question": "Comment faire évoluer un agent actif sans interrompre le service ?",
+      "options": [
+        "Créer une nouvelle version, la tester, puis l’activer",
+        "Modifier directement la version active",
+        "Supprimer l’agent et le recréer",
+        "Désactiver le canal pendant une semaine"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La version active continue de servir pendant la préparation de la suivante. On active quand les tests sont concluants."
+    },
+    {
+      "id": "te10",
+      "domain": "test",
+      "objective": 2,
+      "question": "Comment déplacer des composants Data 360 (flux de données, index de recherche, retrievers) d’une org à l’autre ?",
+      "options": [
+        "Avec des Data Kits",
+        "Avec un export CSV",
+        "Ils suivent automatiquement l’agent",
+        "Ils ne peuvent pas être déplacés"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les Data Kits empaquettent les métadonnées Data 360 pour les installer dans l’org cible."
+    },
+    {
+      "id": "go01",
+      "domain": "gov",
+      "objective": 0,
+      "question": "Où sont stockées la piste d’audit et les retours (feedback) de l’IA générative ?",
+      "options": [
+        "Dans Data 360",
+        "Dans les journaux de débogage",
+        "Chez le fournisseur de LLM",
+        "Dans l’historique de configuration (Setup Audit Trail)"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Invites, réponses, scores de toxicité et feedback sont journalisés dans Data 360, où on peut les analyser."
+    },
+    {
+      "id": "go02",
+      "domain": "gov",
+      "objective": 0,
+      "question": "Quel outil centralise le suivi de la santé, de l’adoption et des performances des agents ?",
+      "options": [
+        "Agentforce Command Center",
+        "Setup Audit Trail",
+        "Les journaux de débogage",
+        "Le gestionnaire d’applications"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Command Center offre une vue d’ensemble pour piloter les agents en production : volumes, résultats, alertes, tendances."
+    },
+    {
+      "id": "go03",
+      "domain": "gov",
+      "objective": 0,
+      "question": "Vous voulez comprendre pourquoi une conversation précise a échoué : rubrique choisie, actions appelées, appels au LLM. Que consulter ?",
+      "options": [
+        "Les traces de session (session tracing), stockées dans Data 360",
+        "Le Setup Audit Trail",
+        "Le rapport de licences",
+        "Les règles de partage"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le traçage de session enregistre chaque étape du raisonnement. C’est la base du diagnostic d’une conversation."
+    },
+    {
+      "id": "go04",
+      "domain": "gov",
+      "objective": 1,
+      "question": "Quelle affirmation décrit l’optimisation des agents (agent optimization) ?",
+      "options": [
+        "Elle analyse les conversations pour regrouper les demandes, repérer les échecs (non traitées, mal routées) et orienter les améliorations",
+        "Elle remplace Testing Center",
+        "Elle augmente automatiquement les licences",
+        "Elle déploie les agents en production"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’analytique mesure (volumes, résolution, escalades) ; l’optimisation explique et oriente les corrections."
+    },
+    {
+      "id": "go05",
+      "domain": "gov",
+      "objective": 1,
+      "question": "Quels indicateurs suivre pour un agent Service en production ? (Choisissez 2)",
+      "options": [
+        "Le taux d’escalade vers un humain",
+        "Le taux de résolution sans intervention humaine",
+        "Le nombre de champs personnalisés de l’org",
+        "Le nombre de lignes de code Apex"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Résolution, escalade, satisfaction et volume par rubrique montrent si l’agent tient ses promesses."
+    },
+    {
+      "id": "go06",
+      "domain": "gov",
+      "objective": 0,
+      "question": "Après la mise en production, les utilisateurs signalent des réponses imprécises dans une rubrique. Quelle démarche ?",
+      "options": [
+        "Analyser les conversations (traces, feedback), ajuster instructions ou données, re-tester dans Testing Center, puis activer une nouvelle version",
+        "Désactiver le Trust Layer",
+        "Ajouter des permissions à l’Agent User",
+        "Augmenter le nombre de rubriques"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Observer, corriger, tester, déployer : la boucle d’amélioration continue d’un agent."
+    },
+    {
+      "id": "go07",
+      "domain": "gov",
+      "objective": 0,
+      "question": "Quelle permission utilisateur faut-il pour créer et gérer des agents ?",
+      "options": [
+        "Manage AI Agents",
+        "Modify All Data uniquement",
+        "Prompt Template User",
+        "View Setup uniquement"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Manage AI Agents s’attribue via un ensemble d’autorisations aux administrateurs et créateurs d’agents."
+    },
+    {
+      "id": "mu01",
+      "domain": "multi",
+      "objective": 0,
+      "question": "Quand une architecture multi-agents est-elle appropriée ?",
+      "options": [
+        "Quand le périmètre couvre des domaines distincts (équipes, sécurité, outils) qu’un seul agent route mal",
+        "Pour une FAQ de trois questions",
+        "Pour réduire systématiquement la latence",
+        "Pour éviter les tests"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Découper en agents spécialisés aide quand un agent unique devient trop large. Pour un cas simple, un seul agent reste préférable."
+    },
+    {
+      "id": "mu02",
+      "domain": "multi",
+      "objective": 0,
+      "question": "Quels inconvénients une architecture multi-agents introduit-elle ? (Choisissez 2)",
+      "options": [
+        "Plus de latence et de coût (appels et coordination supplémentaires)",
+        "Des tests et un suivi plus complexes",
+        "L’impossibilité d’utiliser Data 360",
+        "L’impossibilité d’utiliser des actions Flow"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Chaque délégation ajoute des appels. On choisit le multi-agents pour la scalabilité et le contrôle, pas par défaut."
+    },
+    {
+      "id": "mu03",
+      "domain": "multi",
+      "objective": 1,
+      "question": "À quoi sert le Model Context Protocol (MCP) ?",
+      "options": [
+        "C’est un standard ouvert pour connecter un agent à des outils et sources de données exposés par des serveurs MCP",
+        "C’est le protocole de communication entre agents de fournisseurs différents",
+        "C’est un format de métadonnées Salesforce",
+        "C’est le protocole de chiffrement du Trust Layer"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "MCP relie un agent à des outils et des données (agent ↔ outils). A2A relie des agents entre eux (agent ↔ agent)."
+    },
+    {
+      "id": "mu04",
+      "domain": "multi",
+      "objective": 1,
+      "question": "Un agent Agentforce doit déléguer une tâche à l’agent d’un autre éditeur et récupérer le résultat. Quel standard ?",
+      "options": [
+        "Agent2Agent (A2A)",
+        "MCP",
+        "OAuth 2.0",
+        "OpenAPI"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "A2A permet à des agents hétérogènes de se découvrir, de se déléguer des tâches et d’échanger du contexte."
+    },
+    {
+      "id": "mu05",
+      "domain": "multi",
+      "objective": 0,
+      "question": "Dans une architecture avec orchestrateur, quel est le rôle de l’agent orchestrateur ?",
+      "options": [
+        "Comprendre la demande, la confier au sous-agent spécialisé approprié et consolider la réponse",
+        "Exécuter seul toutes les actions",
+        "Stocker les données des sous-agents",
+        "Remplacer le Trust Layer"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’orchestrateur route et coordonne ; chaque sous-agent garde un périmètre, des outils et des permissions limités."
+    },
+    {
+      "id": "mu06",
+      "domain": "multi",
+      "objective": 1,
+      "question": "Dans le protocole A2A, comment un agent annonce-t-il ses capacités aux autres agents ?",
+      "options": [
+        "Avec une Agent Card qui décrit ses compétences et son point d’accès",
+        "Avec un fichier WSDL",
+        "Avec un package géré",
+        "Avec une description de classification"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L’Agent Card permet à un agent client de découvrir ce qu’un agent distant sait faire et comment l’appeler."
+    }
+  ]
+}

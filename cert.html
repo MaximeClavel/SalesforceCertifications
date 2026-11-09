@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Révision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/app.css">
+<script type="module" src="assets/js/cert-app.js"></script>
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar" id="topbar">
+    <a class="home-link" href="./" aria-label="Toutes les certifications">
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="home-text">Certifications</span>
+    </a>
+    <nav class="toptabs" id="toptabs" role="tablist" aria-label="Pages"></nav>
+    <button type="button" class="search-toggle" id="search-toggle" aria-label="Rechercher" aria-expanded="false" aria-controls="search">
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.6 12.6 17 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="search" id="search" role="search">
+      <label class="visually-hidden" for="site-search">Rechercher dans les révisions</label>
+      <svg class="search-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.6 12.6 17 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="search" id="site-search" class="search-input" placeholder="Rechercher un mot-clé" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="search-panel">
+      <kbd class="search-kbd" aria-hidden="true">/</kbd>
+      <button type="button" class="search-clear" id="search-clear" aria-label="Effacer la recherche" hidden>×</button>
+      <div class="search-panel" id="search-panel" hidden></div>
+    </div>
+    <span class="visually-hidden" id="search-live" role="status" aria-live="polite"></span>
+  </header>
+
+  <div id="views"><div class="app-status"><p>Chargement de la révision…</p></div></div>
+
+</div>
+<noscript><p style="padding:1rem">Cette page a besoin de JavaScript pour afficher la révision.</p></noscript>
+</body>
+</html>

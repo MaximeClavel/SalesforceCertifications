@@ -1,0 +1,650 @@
+  <header class="hero">
+    <div class="eyebrow">Salesforce Certification · Architect</div>
+    <h1>Development Lifecycle <span>&amp; Deployment Architect</span></h1>
+    <p class="sub">Fiche de révision alignée sur les objectifs officiels de l'examen Platform Development Lifecycle and Deployment Architect (Plat-Arch-202) : les huit sections notées, les tableaux à connaître et ce qui a changé jusqu'à Winter '27.</p>
+    <div class="facts">
+      <span class="chip">⏱ <b>105 min</b></span>
+      <span class="chip">📝 <b>60</b> questions notées + 5 non notées max</span>
+      <span class="chip">✅ seuil de réussite <b>65 %</b></span>
+      <span class="chip">🎓 <b>aucun</b> prérequis</span>
+      <span class="chip">💵 <b>400 $</b> · repassage <b>200 $</b></span>
+      <span class="chip">🏛 compte pour <b>System Architect</b></span>
+      <span class="chip">🔁 maintenance annuelle <b>Trailhead</b></span>
+    </div>
+    <p class="verified">Vérifié le 9 octobre 2026 avec les objectifs de l'examen, la documentation Salesforce (Metadata API, Salesforce DX, Code Analyzer, Lifecycle Center) et les nouveautés publiées jusqu'à Winter '27.</p>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="overall-bar"></div></div>
+      <span id="overall-progress">0 / 0 points revus</span>
+    </div>
+
+    <div class="blueprint">
+      <div class="blueprint-bar">
+        <a href="#alm" style="width:8%;background:#3450d6;">8%</a>
+        <a href="#plan" style="width:13%;background:#a65a00;">13%</a>
+        <a href="#design" style="width:15%;background:#187a4c;">15%</a>
+        <a href="#build" style="width:14%;background:#a13fc7;">14%</a>
+        <a href="#deploy" style="width:14%;background:#137a8c;">14%</a>
+        <a href="#test" style="width:13%;background:#b4325a;">13%</a>
+        <a href="#release" style="width:13%;background:#5f6b12;">13%</a>
+        <a href="#ops" style="width:10%;background:#4b5670;">10%</a>
+      </div>
+      <div class="blueprint-legend">
+        <span><i class="dot" style="background:#3450d6;"></i>ALM 8%</span>
+        <span><i class="dot" style="background:#a65a00;"></i>Planification 13%</span>
+        <span><i class="dot" style="background:#187a4c;"></i>Conception du système 15%</span>
+        <span><i class="dot" style="background:#a13fc7;"></i>Construction 14%</span>
+        <span><i class="dot" style="background:#137a8c;"></i>Déploiement 14%</span>
+        <span><i class="dot" style="background:#b4325a;"></i>Tests 13%</span>
+        <span><i class="dot" style="background:#5f6b12;"></i>Releases 13%</span>
+        <span><i class="dot" style="background:#4b5670;"></i>Exploitation 10%</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Sections">
+      <a href="#alm">ALM &amp; méthodes <span class="nav-count">0/0</span></a>
+      <a href="#plan">Planification <span class="nav-count">0/0</span></a>
+      <a href="#design">Conception <span class="nav-count">0/0</span></a>
+      <a href="#build">Construction <span class="nav-count">0/0</span></a>
+      <a href="#deploy">Déploiement <span class="nav-count">0/0</span></a>
+      <a href="#test">Tests <span class="nav-count">0/0</span></a>
+      <a href="#release">Releases <span class="nav-count">0/0</span></a>
+      <a href="#ops">Exploitation <span class="nav-count">0/0</span></a>
+      <a href="#ref">Repères &amp; changements <span class="nav-count">0/0</span></a>
+    </nav>
+
+    <main class="content">
+
+      <!-- ================= ALM ================= -->
+      <section class="domain" id="alm">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Application Lifecycle Management · 8 %</span>
+            <h2>ALM &amp; méthodologies</h2>
+            <p>Waterfall, agile ou hybride : bénéfices, risques, et une gouvernance à la mesure de la maturité du client.</p>
+          </div>
+          <span class="domain-count">0/2</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Évaluer les bénéfices et les risques des méthodologies de développement (waterfall, agile, hybride) et recommander une gouvernance adaptée à la maturité du client.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="alm-methods">
+          <div class="topic-head"><h3>Waterfall, Agile, hybride : choisir selon le contexte</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Cycle ALM Salesforce : <b>planifier</b> la release → <b>développer</b> → <b>tester</b> → <b>construire</b> la release → <b>tester</b> la release → <b>livrer</b>. Toutes les méthodologies le parcourent ; elles diffèrent par la fréquence des boucles.</li>
+            <li><b>Waterfall</b> : phases séquentielles, exigences figées et validées au départ, documentation formelle. Adapté aux périmètres stables, aux forfaits et aux contextes réglementés (validation, audit). Risque : les écarts se découvrent <mark class="hl">tard</mark>, et tout changement coûte cher.</li>
+            <li><b>Agile (Scrum)</b> : sprints de 1 à 4 semaines, backlog priorisé par le Product Owner, démonstration à chaque fin de sprint. Adapté aux besoins qui évoluent. Risques : dérive du périmètre sans PO fort, dette technique, documentation et standards négligés.</li>
+            <li><b>Kanban</b> : flux continu avec limites de travail en cours (WIP). Adapté au run, au support et aux demandes imprévisibles.</li>
+            <li><b>Hybride</b> (« water-scrum-fall ») : cadrage, architecture et plan de release en amont, construction en sprints, recette et mise en production planifiées. Fréquent dans les grandes organisations avec budget et date fixés.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Agile ne veut pas dire sans gouvernance : architecture, standards de code, source control et release management restent nécessaires.</div>
+        </article>
+
+        <article class="topic" data-topic="alm-governance">
+          <div class="topic-head"><h3>Gouvernance selon la maturité</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Center of Excellence (CoE)</b> : vision, priorisation entre métiers, standards, formation, adoption.</li>
+            <li><b>Design Authority</b> (ou Architecture Review Board) : valide les choix techniques et les écarts aux standards (déclaratif ou code, modèle de données, patterns d'intégration).</li>
+            <li><b>Change Advisory Board (CAB)</b> : approuve chaque mise en production, sa fenêtre, ses risques et son plan de retour arrière.</li>
+            <li><b>Release manager</b> : calendrier, contenu des releases, coordination des équipes et des environnements.</li>
+            <li>Maturité faible (petite équipe, change sets, pas de Git) : gouvernance légère et progressive. Maturité élevée (plusieurs équipes, CI/CD) : CoE, Design Authority, CAB et automatisation.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Ne pas imposer d'emblée packages, CI/CD complète et comités hebdomadaires à une organisation qui démarre : on part de sa maturité actuelle et on la fait progresser par étapes.</div>
+        </article>
+      </section>
+
+      <!-- ================= PLANIFICATION ================= -->
+      <section class="domain" id="plan">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Planning · 13 %</span>
+            <h2>Planification</h2>
+            <p>Mesurer la maturité, repérer les risques des environnements, préparer les releases Salesforce.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Évaluer la maturité ALM d'une organisation et identifier les personnes, les outils et les processus nécessaires.</li>
+            <li>Identifier les risques de l'environnement du client et leurs mesures d'atténuation.</li>
+            <li>Analyser un scénario et recommander un cadre de gouvernance.</li>
+            <li>Recommander une stratégie de réduction des risques avant une release Salesforce (Spring, Summer, Winter).</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="plan-maturity">
+          <div class="topic-head"><h3>Évaluer la maturité : personnes, processus, outils</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Personnes</b> : rôles (Product Owner, analyste, architecte, release manager, développeurs, admins, testeurs) et compétences (Git, Salesforce CLI, tests automatisés).</li>
+            <li><b>Processus</b> : user stories avec critères d'acceptation, Definition of Done, revue de code, stratégie de branches, gestion des environnements, calendrier de release.</li>
+            <li><b>Outils</b> : backlog (Jira, Azure Boards, Agile Accelerator), Git, CI/CD, Salesforce CLI, Lifecycle Center (ex-DevOps Center), outils tiers (Gearset, Copado, Flosum, AutoRabit…).</li>
+            <li>Signes de faible maturité : changements faits <mark class="hl">directement en production</mark>, pas de source control, change sets manuels, pas de tests automatisés, sandboxes jamais rafraîchies, personne ne coordonne les déploiements.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="plan-risks">
+          <div class="topic-head"><h3>Risques des environnements et mitigation</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Plusieurs personnes dans le même sandbox de développement : les changements s'écrasent. → Un environnement par développeur ou par feature, et Git comme référence.</li>
+            <li>Sandboxes désynchronisées de la production : tests trompeurs, déploiements qui échouent. → Rafraîchissements planifiés, alignés sur le calendrier de release.</li>
+            <li>Données personnelles copiées dans les sandboxes Partial et Full. → Masquage après chaque refresh (Data Mask &amp; Seed), accès restreints.</li>
+            <li>Intégrations qui pointent encore vers les systèmes de production après un refresh. → Runbook post-refresh, automatisé si possible (classe <code>SandboxPostCopy</code>).</li>
+            <li>E-mails envoyés à de vrais clients. → Une sandbox nouvelle ou rafraîchie démarre en <b>System email only</b> et les e-mails des <i>utilisateurs</i> reçoivent le suffixe <code>.invalid</code> ; les e-mails des contacts, eux, ne sont pas modifiés.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="plan-seasonal">
+          <div class="topic-head"><h3>Préparer une release Salesforce (Spring, Summer, Winter)</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Trois releases majeures par an. Les sandboxes sur une instance <b>preview</b> reçoivent la nouvelle version quelques semaines avant la production ; le Sandbox Preview Guide donne la date limite de refresh pour choisir preview ou non-preview.</li>
+            <li>Plan type : lire les release notes, repérer les <b>Release Updates</b> et leur date d'application, tester les processus critiques et la régression dans un sandbox preview, découvrir les nouveautés dans une pre-release org, former, suivre le calendrier de maintenance sur Trust.</li>
+            <li>Pendant la preview, le sandbox est en version N+1 et la production en N : un composant qui utilise une API ou une fonctionnalité de N+1 <mark class="hl">ne se déploie pas</mark> en production avant sa mise à jour. On fixe la version d'API du projet sur celle de la production et on évite les déploiements le week-end de la release.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Garder un sandbox non-preview pendant la preview (hotfix, par exemple) pour corriger la production dans la même version qu'elle.</div>
+        </article>
+      </section>
+
+      <!-- ================= CONCEPTION DU SYSTÈME ================= -->
+      <section class="domain" id="design">
+        <div class="domain-head">
+          <div>
+            <span class="weight">System Design · 15 % — la plus grosse section</span>
+            <h2>Conception du système</h2>
+            <p>Outils agiles, stratégie d'orgs, stratégie de sandboxes, outils de déploiement.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Expliquer les bénéfices des outils agiles pour le développement agile.</li>
+            <li>Évaluer les considérations métier, techniques et d'architecture d'une stratégie d'orgs.</li>
+            <li>Définir une stratégie de sandboxes avec les bons types de sandbox.</li>
+            <li>Comparer et recommander les composants et les outils d'une stratégie de déploiement.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="design-agile-tools">
+          <div class="topic-head"><h3>Les outils agiles</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Backlog unique et priorisé, user stories, estimation, sprints, tableaux et burndown : l'avancement est visible par tous.</li>
+            <li><b>Traçabilité</b> : chaque story se relie à ses commits, à ses pull requests et à ses déploiements. Utile pour l'audit et pour savoir ce que contient une release.</li>
+            <li>Exemples : Jira, Azure Boards, Agile Accelerator (application Salesforce gratuite sur l'AppExchange). Dans Lifecycle Center, le <b>work item</b> porte le changement de bout en bout.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="design-org">
+          <div class="topic-head"><h3>Une org ou plusieurs ?</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Single org</b> : vue 360° du client, processus et données partagés, reporting global, une seule surface d'intégration, coûts et administration moindres. En contrepartie : limites partagées (stockage, API, governor limits), calendrier de release commun, partage et sécurité plus complexes, gouvernance plus exigeante entre métiers.</li>
+            <li><b>Multi-org</b> : autonomie des entités, processus très différents, isolation juridique ou réglementaire, calendriers indépendants, acquisitions. En contrepartie : intégrations entre orgs, données dupliquées, pas de vue 360° native, artefacts communs à maintenir dans chaque org.</li>
+            <li>Modèles : <b>hub-and-spoke</b> (une org centrale et des orgs satellites), ou consolidation (fusion d'orgs), un projet lourd.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>La multi-org se justifie par l'autonomie, la réglementation ou l'isolation, rarement par la seule taille. Par défaut, viser une org unique bien gouvernée.</div>
+        </article>
+
+        <article class="topic" data-topic="design-sandbox">
+          <div class="topic-head"><h3>Types de sandbox et stratégie</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Developer</b> (200 Mo de données, refresh tous les jours) : métadonnées seules. Développement individuel.</li>
+            <li><b>Developer Pro</b> (1 Go, tous les jours) : métadonnées seules, plus de place pour des données de test. Intégration, QA, formation, hotfix.</li>
+            <li><b>Partial Copy</b> (5 Go, tous les 5 jours) : métadonnées + échantillon de données défini par un <b>sandbox template</b>, <mark class="hl">10 000 enregistrements max par objet</mark>. Tests, UAT, formation.</li>
+            <li><b>Full</b> (stockage de la production, tous les <mark class="hl">29 jours</mark>) : copie complète, template optionnel. Staging, préproduction, tests de performance, UAT finale.</li>
+            <li>Source tracking activable sur Developer et Developer Pro (réglage de la Dev Hub). Une sandbox peut être <b>clonée</b> à partir d'une autre plutôt que de la production.</li>
+          </ul>
+          <p>Tableau complet dans <a href="#ref-sandboxes">Repères</a>.</p>
+          <div class="trap"><b>Piège</b>Une Full ne se rafraîchit que tous les 29 jours : on n'en fait pas l'environnement d'intégration quotidien.</div>
+        </article>
+
+        <article class="topic" data-topic="design-deploy-tools">
+          <div class="topic-head"><h3>Outils de déploiement</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Change sets</b> : interface clic, entre orgs rattachées à la même production via une deployment connection. Ni suppression, ni versionnement, ni automatisation.</li>
+            <li><b>Salesforce CLI (<code>sf</code>) + Metadata API</b> : scriptable, branché sur Git et la CI/CD, suppressions par <code>destructiveChanges</code>, validation et quick deploy. L'Ant Migration Tool est retiré depuis Spring '24.</li>
+            <li><b>Lifecycle Center</b> (DevOps Center natif, activé dans Setup depuis Spring '26) : pipelines, work items, promotions en clics avec Git en dessous (GitHub ; Bitbucket Cloud en bêta), détection de conflits, DX Inspector dans les sandboxes.</li>
+            <li><b>Packages</b> (unlocked, 2GP managé) : modules versionnés avec dépendances explicites.</li>
+            <li><b>Outils tiers</b> (Gearset, Copado, Flosum, AutoRabit…) : comparaison d'orgs, rollback, backup, gouvernance avancée.</li>
+          </ul>
+          <p>Comparatif dans <a href="#ref-tools">Repères</a>.</p>
+        </article>
+      </section>
+
+      <!-- ================= CONSTRUCTION ================= -->
+      <section class="domain" id="build">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Building · 14 %</span>
+            <h2>Construction</h2>
+            <p>Branches et fusions, modèles de développement, tests unitaires, qualité du code.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Expliquer et recommander une stratégie de branches, de versions et de fusion.</li>
+            <li>Décrire les approches de données de test et de tests unitaires : cas positifs, négatifs, liés aux permissions et aux gros volumes.</li>
+            <li>Choisir entre développement org-based et package-based, et entre scratch orgs et sandboxes.</li>
+            <li>Décrire les moyens de produire du code de qualité : standards, pull requests, revue de code, analyse statique.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="build-branching">
+          <div class="topic-head"><h3>Branches, versions et fusions</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Le repo Git est la <b>source de vérité</b>. Dans Lifecycle Center, chaque étape du pipeline correspond à une branche et à une org.</li>
+            <li><b>Gitflow</b> : <code>main</code> (production), <code>develop</code> (intégration), <code>feature/*</code>, <code>release/*</code>, <code>hotfix/*</code>. Adapté aux releases planifiées.</li>
+            <li><b>Trunk-based</b> : branches courtes fusionnées souvent dans <code>main</code> ; le travail inachevé est masqué par des <b>feature flags</b> (Custom Metadata, Custom Permission). Demande une CI et des tests automatisés solides.</li>
+            <li><b>Branches par environnement</b> (dev → int → uat → main) : simple à comprendre, mais les branches divergent si on ne fusionne pas dans les deux sens.</li>
+            <li>Versions : un tag Git par release ; numéros <code>major.minor.patch.build</code> pour les packages.</li>
+            <li>Conflits fréquents sur les gros XML partagés (profils, layouts, labels) : fusions petites et fréquentes, permission sets plutôt que profils, format source (un fichier par champ).</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Un hotfix part de la branche de production (<code>main</code>), puis est fusionné dans <code>main</code> <b>et</b> dans <code>develop</code>, sinon la release suivante réintroduit le bug.</div>
+        </article>
+
+        <article class="topic" data-topic="build-models">
+          <div class="topic-head"><h3>Org-based ou package-based ? Scratch org ou sandbox ?</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Org development</b> : l'org fait référence, on déploie un ensemble de changements (change sets ou manifeste). Toute l'org forme un seul bloc (« happy soup »).</li>
+            <li><b>Source-driven</b> : le repo fait référence, on déploie avec la CLI ou Lifecycle Center.</li>
+            <li><b>Package development</b> : le code est découpé en packages (unlocked ou 2GP) versionnés, aux dépendances explicites. Demande un découpage modulaire et une Dev Hub.</li>
+            <li><b>Scratch org</b> : éphémère (<mark class="hl">7 jours par défaut, 30 max</mark>), créée depuis la Dev Hub avec un fichier de définition (édition, features, settings) ou Org Shape ; source tracking par défaut ; snapshots pour repartir d'un état configuré. Idéale pour le package development et la CI.</li>
+            <li><b>Sandbox</b> : copie de la production, avec des données et des intégrations. Indispensable pour l'intégration, l'UAT et les problèmes liés aux données.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Une scratch org ne contient ni les données ni la configuration complète de la production : un bug lié aux données se reproduit en sandbox Partial ou Full.</div>
+        </article>
+
+        <article class="topic" data-topic="build-unit">
+          <div class="topic-head"><h3>Tests unitaires et données de test</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Les tests Apex créent leurs propres données (<code>SeeAllData=false</code> par défaut) : <code>@TestSetup</code>, test data factory, <code>Test.loadData()</code> depuis une static resource CSV.</li>
+            <li>Quatre familles de cas : <b>positif</b> (le scénario nominal), <b>négatif</b> (erreur attendue, règle de validation, exception), <b>permissions</b> (<code>System.runAs()</code> avec un utilisateur restreint), <b>gros volumes</b> (200 enregistrements ou plus pour vérifier la bulkification).</li>
+            <li>Toujours des assertions (<code>Assert.areEqual</code>, <code>Assert.fail</code>) : de la couverture sans assertion ne vérifie rien.</li>
+            <li>Hors Apex : Jest pour les LWC, Flow tests, Agentforce Testing Center pour les agents.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="build-quality">
+          <div class="topic-head"><h3>Qualité du code</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Standards de code et de nommage écrits, Definition of Done partagée.</li>
+            <li><b>Pull requests</b> avec revue par un pair avant toute fusion ; branches protégées.</li>
+            <li><b>Analyse statique</b> : Salesforce Code Analyzer v5 (PMD, ESLint, RetireJS, Regex, Flow Scanner…) via <code>sf code-analyzer run</code>, l'extension VS Code ou une GitHub Action. La v4 est retirée depuis août 2025.</li>
+            <li><b>ApexGuru</b> (Scale Center, GA en Winter '26) repère les anti-patterns Apex observés à l'exécution : SOQL dans une boucle, filtres peu sélectifs, debug inutiles.</li>
+            <li><b>Quality gates</b> dans la CI : tests verts, couverture, seuil de sévérité de l'analyse statique.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= DÉPLOIEMENT ================= -->
+      <section class="domain" id="deploy">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Deploying · 14 %</span>
+            <h2>Déploiement</h2>
+            <p>Metadata API et Tooling API, étapes avant et après déploiement, données de référence.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Décrire les capacités, les limites et les points d'attention de la Metadata API et de la Tooling API pour le déploiement.</li>
+            <li>Gérer les étapes avant et après déploiement, y compris ce que les API ne prennent pas en charge.</li>
+            <li>Gérer et déployer les données de référence techniques.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="deploy-apis">
+          <div class="topic-head"><h3>Metadata API vs Tooling API</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Metadata API</b> : déplace la configuration d'une org à l'autre (deploy et retrieve de fichiers, manifeste <code>package.xml</code> ou format source). C'est elle qu'utilisent la CLI, les change sets, les IDE et les outils DevOps.</li>
+            <li>Limites par opération : <mark class="hl">10 000 fichiers</mark>, zip de <mark class="hl">39 Mo</mark> compressés (600 Mo décompressés).</li>
+            <li>En production, un déploiement est <b>tout ou rien</b> : la moindre erreur annule l'ensemble.</li>
+            <li><b>Tooling API</b> : objets fins pour les outils de développement (<code>ApexClass</code>, <code>TraceFlag</code>, <code>ApexCodeCoverageAggregate</code>…), SOQL sur les métadonnées, exécution des tests, logs. Elle n'est pas faite pour migrer une org.</li>
+            <li>Le <b>Metadata Coverage Report</b> dit quels types sont supportés par la Metadata API, les change sets et chaque type de package.</li>
+            <li><code>&lt;members&gt;*&lt;/members&gt;</code> ne renvoie pas tout : pour CustomObject, seulement les objets personnalisés ; un objet standard se nomme explicitement.</li>
+            <li>Un retrieve de profil ne renvoie que les permissions des composants présents dans le <b>même</b> retrieve.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Pour lire la couverture par classe depuis un pipeline : Tooling API (<code>ApexCodeCoverageAggregate</code>), pas Metadata API.</div>
+        </article>
+
+        <article class="topic" data-topic="deploy-steps">
+          <div class="topic-head"><h3>Étapes avant et après déploiement</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Valider</b> (check-only) avant la fenêtre, puis <b>quick deploy</b> dans les <mark class="hl">10 jours</mark> sans relancer les tests.</li>
+            <li><b>Suppressions</b> : <code>destructiveChangesPre.xml</code> (avant) ou <code>destructiveChangesPost.xml</code> (après le déploiement). Supprimer un champ référencé par du code : déployer la classe corrigée et supprimer le champ en <i>post</i>. <code>purgeOnDelete</code> est interdit en production.</li>
+            <li><b>Runbook des étapes manuelles</b> : réglages non couverts par la Metadata API, attributions de permission sets aux utilisateurs (ce sont des données), secrets des External Credentials, valeurs de Custom Settings, jobs Apex à planifier, données de référence.</li>
+            <li><b>Flows</b> : déployés inactifs, sauf si « Deploy processes and flows as active » est coché en production ; il faut alors que 75 % des processus et flows autolaunched actifs soient couverts par des tests Apex.</li>
+            <li><b>Jobs Apex en attente</b> : modifier une classe qu'un job planifié référence bloque le déploiement, sauf si le réglage de déploiement qui autorise les déploiements quand des jobs Apex sont en attente est activé.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Il n'existe pas de bouton de rollback : le retour arrière consiste à redéployer la version précédente depuis Git.</div>
+        </article>
+
+        <article class="topic" data-topic="deploy-data">
+          <div class="topic-head"><h3>Données de référence techniques</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Ce sont les enregistrements dont la configuration dépend : catalogues, règles de prix, tables de correspondance, configuration de packages stockée en données (CPQ, par exemple).</li>
+            <li>Quand c'est possible, en faire des <b>Custom Metadata Types</b> : déployés comme des métadonnées, versionnés dans Git.</li>
+            <li>Sinon : fichiers CSV ou JSON dans le repo, chargés par <b>upsert sur un External ID</b>, parents avant enfants. Outils : <code>sf data import tree</code>, <code>sf data upsert bulk</code>, Data Loader, outils tiers ; le déploiement de données de Lifecycle Center est en developer preview.</li>
+            <li>Jamais d'Id Salesforce codé en dur : ils diffèrent entre orgs indépendantes. Les record types se référencent par <code>DeveloperName</code>.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= TESTS ================= -->
+      <section class="domain" id="test">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Testing · 13 %</span>
+            <h2>Tests</h2>
+            <p>Méthodologie, exécution et couverture, stratégie de données de test.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Décrire et recommander une méthodologie de test.</li>
+            <li>Décrire les méthodes d'exécution des tests et les exigences de couverture.</li>
+            <li>Recommander une stratégie unifiée et sécurisée de données de test, avec des données représentatives.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="test-method">
+          <div class="topic-head"><h3>Méthodologie de test</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Types : unitaires (Apex, Jest, Flow tests), intégration, régression (automatisée de préférence), <b>UAT</b> par les métiers, performance et charge, sécurité, smoke test après déploiement.</li>
+            <li>Où : unitaires en scratch org ou Developer ; intégration en Developer Pro ou Partial ; UAT en Partial ou Full avec des données représentatives ; performance en <b>Full</b>, avec un créneau Scale Test pour la charge.</li>
+            <li>Automatisation de l'interface : <b>UTAM</b> (UI Test Automation Model, avec WebdriverIO ou Selenium) ou outils partenaires (Provar, Tricentis…).</li>
+            <li><b>DevOps Testing</b> (GA en Winter '26) réunit les suites de tests natives et partenaires et définit des quality gates par étape du pipeline.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="test-exec">
+          <div class="topic-head"><h3>Exécution des tests et couverture</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Production : tous les tests exécutés passent, <mark class="hl">75 %</mark> de couverture globale, et chaque trigger a au moins une ligne couverte.</li>
+            <li><b>RunSpecifiedTests</b> : seules les classes listées s'exécutent, mais chaque classe et trigger déployé doit être couvert à 75 % par ces tests.</li>
+            <li><b>RunLocalTests</b> : tous les tests sauf ceux des packages managés ; défaut en production quand le déploiement contient de l'Apex.</li>
+            <li><b>RunAllTestsInOrg</b> : y compris les tests des packages managés. <b>NoTestRun</b> : environnements de développement seulement. <b>RunRelevantTests</b> : en bêta.</li>
+            <li>Packages : 75 % de couverture pour promouvoir une version (créée avec <code>--code-coverage</code>).</li>
+            <li>Les tests s'exécutent en parallèle ; « Disable Parallel Apex Testing » évite les erreurs <code>UNABLE_TO_LOCK_ROW</code> entre tests.</li>
+          </ul>
+          <p>Tableau des niveaux dans <a href="#ref-tests">Repères</a>.</p>
+        </article>
+
+        <article class="topic" data-topic="test-data">
+          <div class="topic-head"><h3>Stratégie de données de test</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Unifiée</b> : les mêmes jeux de données de référence pour tous les environnements, versionnés et rechargeables (plans <code>sf data import tree</code>, templates de seeding).</li>
+            <li><b>Représentative</b> : volumes réalistes, cas limites, relations complètes, profils d'utilisateurs variés.</li>
+            <li><b>Sécurisée</b> : pas de données personnelles réelles hors production. <b>Data Mask &amp; Seed</b> masque (anonymisation, pseudonymisation, suppression) et alimente les sandboxes avec des templates.</li>
+            <li>Après le refresh d'une Partial ou d'une Full, masquer avant d'ouvrir l'accès ; <code>SandboxPostCopy</code> automatise les corrections post-refresh.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Un test Apex ne dépend jamais des données de l'org : il crée les siennes, sinon il échoue dans une sandbox vide ou une scratch org.</div>
+        </article>
+      </section>
+
+      <!-- ================= RELEASES ================= -->
+      <section class="domain" id="release">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Releasing · 13 %</span>
+            <h2>Releases</h2>
+            <p>Types de packages, sandboxes du plan de release, release management.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Analyser les cas d'usage et les points d'attention des packages managés, non managés et unlocked.</li>
+            <li>Faire correspondre une stratégie de sandboxes à un plan de release : plusieurs streams de projet, formation, staging et hotfix.</li>
+            <li>Recommander une stratégie de release management.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="release-packages">
+          <div class="topic-head"><h3>Managé, non managé ou unlocked ?</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Non managé</b> : distribuer un modèle ou un exemple. Aucune mise à jour possible ; une fois installés, les composants appartiennent à l'org et sont modifiables.</li>
+            <li><b>Unlocked</b> : développement interne modulaire. Versions, dépendances, mise à jour par installation d'une nouvelle version, namespace facultatif, code visible et modifiable dans l'org (mais écrasé à la mise à jour suivante). Variante <b>org-dependent</b> pour découper une org dont le code dépend de métadonnées non packagées.</li>
+            <li><b>Managé 2GP</b> (ou 1GP historique) : distribution par un éditeur, AppExchange. Namespace obligatoire, code Apex masqué, composants verrouillés, <b>push upgrades</b>.</li>
+            <li>Cycle 2GP et unlocked : <code>sf package version create</code> crée une version bêta, installable seulement en scratch org et en sandbox ; <code>sf package version promote</code> la rend installable en production, avec 75 % de couverture.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Pour une entreprise qui modularise ses propres développements, la bonne réponse est presque toujours unlocked, pas managé.</div>
+        </article>
+
+        <article class="topic" data-topic="release-envs">
+          <div class="topic-head"><h3>Plan de release et sandboxes</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ol class="steps">
+            <li><b>Développement</b> : sandbox Developer ou scratch org, une par développeur ou par feature.</li>
+            <li><b>Intégration</b> : Developer Pro où la CI fusionne et déploie le travail de l'équipe.</li>
+            <li><b>QA</b> : Developer Pro ou Partial Copy, tests fonctionnels et régression.</li>
+            <li><b>UAT</b> : Partial Copy ou Full, recette par les métiers sur des données représentatives.</li>
+            <li><b>Staging</b> : Full, miroir de la production, répétition du déploiement et tests de performance.</li>
+            <li><b>Production</b>.</li>
+          </ol>
+          <p>À côté : une sandbox de <b>formation</b> (Partial Copy ou Developer Pro avec données, rafraîchie à chaque release) et une sandbox de <b>hotfix</b> (Developer Pro alignée sur la production). Plusieurs streams : un développement et une intégration par stream, qui convergent dans un environnement commun avant l'UAT.</p>
+        </article>
+
+        <article class="topic" data-topic="release-mgmt">
+          <div class="topic-head"><h3>Stratégie de release management</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Cadence : releases majeures planifiées, mineures régulières, hotfix d'urgence ; livraison continue seulement avec beaucoup d'automatisation.</li>
+            <li>Calendrier aligné sur les releases Salesforce : pas de mise en production le week-end de la mise à jour de l'instance.</li>
+            <li>Rituels : go/no-go et CAB, release notes internes, communication et formation, plan de retour arrière (redéploiement depuis un tag Git, feature flags).</li>
+            <li>Réduire la fenêtre : validation la veille, quick deploy le jour J, smoke test juste après.</li>
+            <li>Traçabilité story → commit → release dans l'outil de backlog.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= EXPLOITATION ================= -->
+      <section class="domain" id="ops">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Operating · 10 %</span>
+            <h2>Exploitation</h2>
+            <p>Changements faits en production, hotfix, artefacts partagés entre plusieurs orgs.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Expliquer les implications d'une demande ajoutée directement en production.</li>
+            <li>Expliquer l'impact des changements faits en production sur le cycle de vie, et comment les réintégrer dans l'ALM.</li>
+            <li>Comparer les approches pour gérer des artefacts de release communs à plusieurs orgs.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="ops-prod-change">
+          <div class="topic-head"><h3>Changer directement en production</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Risques : pas de test, pas de traçabilité, <b>dérive</b> entre la production et le repo, conflits avec les travaux en cours, et changement <mark class="hl">écrasé</mark> au prochain déploiement depuis Git.</li>
+            <li>À n'autoriser que pour une liste explicite de changements à faible risque, ou en urgence avec un processus défini et approuvé.</li>
+            <li>Réintégrer : retrieve du changement (CLI, ou back-sync dans Lifecycle Center), commit dans <code>main</code>, fusion dans les branches de développement, mise à jour des sandboxes.</li>
+            <li><b>Setup Audit Trail</b> (180 jours) montre qui a changé quoi, et quand, dans la configuration.</li>
+            <li>L'Apex ne s'écrit pas directement en production : il est toujours déployé, avec ses tests.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ops-hotfix">
+          <div class="topic-head"><h3>Hotfix, refresh et supervision</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Hotfix : branche depuis <code>main</code>, correction dans la sandbox de hotfix alignée sur la production, tests ciblés, approbation accélérée (CAB d'urgence), déploiement, puis fusion dans <code>main</code> et <code>develop</code>.</li>
+            <li>Après un refresh : masquage, intégrations redirigées vers les systèmes de test, e-mails et utilisateurs à ajuster. <code>SandboxPostCopy</code> exécute une classe Apex automatiquement à la fin de la création ou du refresh.</li>
+            <li>Supervision : Setup Audit Trail, e-mails d'exception Apex, debug logs, Event Monitoring, Scale Center (performance de l'org, erreurs de verrouillage).</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ops-multi-org">
+          <div class="topic-head"><h3>Artefacts communs à plusieurs orgs</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Un repo, un manifeste ou une branche par org</b> : simple, mais les copies divergent vite.</li>
+            <li><b>Packages unlocked communs</b> : un package « core » (framework, utilitaires, intégrations) installé dans chaque org, plus des packages ou de la configuration propres à chaque org. Versions et dépendances explicites, mises à jour progressives.</li>
+            <li><b>Package managé</b> : seulement pour une diffusion large, avec protection du code.</li>
+            <li>Les différences entre orgs passent par la configuration : Custom Metadata, Named Credentials propres à chaque org, feature flags.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= REPÈRES ================= -->
+      <section class="domain" id="ref">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Transversal — à connaître par cœur</span>
+            <h2>Repères &amp; changements</h2>
+            <p>Les sandboxes, les packages, les niveaux de test, les outils, les commandes, et ce qui a changé récemment.</p>
+          </div>
+          <span class="domain-count">0/6</span>
+        </div>
+
+        <article class="topic" data-topic="ref-changes" id="ref-changes">
+          <div class="topic-head"><h3>Ce qui a changé : retiré, renommé, nouveau</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Élément</th><th>Statut</th><th class="wrap">À utiliser ou à retenir</th><th>Quand</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Ant Migration Tool</td><td><span class="pill retired">Retiré</span></td><td class="wrap">Salesforce CLI (<code>sf</code> v2)</td><td>Spring '24</td></tr>
+                <tr><td class="wrap">Code Analyzer v4</td><td><span class="pill retired">Retiré</span></td><td class="wrap">Code Analyzer v5 : <code>sf code-analyzer run</code></td><td>Août 2025</td></tr>
+                <tr><td class="wrap">Workflow Rules, Process Builder</td><td><span class="pill retired">Fin de support</span></td><td class="wrap">Flow</td><td>31/12/2025</td></tr>
+                <tr><td class="wrap">DevOps Center (managed package)</td><td><span class="pill legacy">Remplacé</span></td><td class="wrap">Version native activée dans Setup, sans package ; les deux ne peuvent pas être actives ensemble</td><td>Spring '26</td></tr>
+                <tr><td class="wrap">DevOps Center</td><td><span class="pill changed">Renommé</span></td><td class="wrap">Lifecycle Center dans l'aide Salesforce ; les questions peuvent encore dire DevOps Center</td><td>2026</td></tr>
+                <tr><td class="wrap">Commandes <code>sfdx force:*</code></td><td><span class="pill legacy">Legacy</span></td><td class="wrap"><code>sf project deploy start</code>, <code>sf org create scratch</code>…</td><td>—</td></tr>
+                <tr><td class="wrap">DevOps Testing</td><td><span class="pill new">GA</span></td><td class="wrap">Suites de tests natives et partenaires, quality gates par étape</td><td>Winter '26</td></tr>
+                <tr><td class="wrap">ApexGuru</td><td><span class="pill new">GA</span></td><td class="wrap">Scale Center → Scale Insights : anti-patterns Apex</td><td>Winter '26</td></tr>
+                <tr><td class="wrap">Tests de Flow en CLI</td><td><span class="pill new">Nouveau</span></td><td class="wrap"><code>sf logic run test</code> exécute tests Apex et Flow ensemble</td><td>Winter '26</td></tr>
+                <tr><td class="wrap">DX Inspector</td><td><span class="pill new">Nouveau</span></td><td class="wrap">Suivi des changements et commit depuis la sandbox ou la scratch org</td><td>2026</td></tr>
+                <tr><td class="wrap">Déploiement de données (Lifecycle Center)</td><td><span class="pill changed">Developer preview</span></td><td class="wrap">Données de configuration promues avec les métadonnées</td><td>2026</td></tr>
+                <tr><td class="wrap">RunRelevantTests</td><td><span class="pill new">Bêta</span></td><td class="wrap">Sélection automatique des tests utiles au déploiement</td><td>Spring '26</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="ref-sandboxes" id="ref-sandboxes">
+          <div class="topic-head"><h3>Types de sandbox</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Type</th><th class="num">Données</th><th class="num">Fichiers</th><th class="num">Refresh</th><th class="wrap">Contenu</th><th class="wrap">Usage type</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Developer</b></td><td class="num">200 Mo</td><td class="num">200 Mo</td><td class="num">1 jour</td><td class="wrap">Métadonnées</td><td class="wrap">Développement individuel</td></tr>
+                <tr><td class="wrap"><b>Developer Pro</b></td><td class="num">1 Go</td><td class="num">1 Go</td><td class="num">1 jour</td><td class="wrap">Métadonnées</td><td class="wrap">Intégration, QA, formation, hotfix</td></tr>
+                <tr><td class="wrap"><b>Partial Copy</b></td><td class="num">5 Go</td><td class="num">= production</td><td class="num">5 jours</td><td class="wrap">Métadonnées + échantillon (template, 10 000 enreg. max par objet)</td><td class="wrap">Tests, UAT, formation</td></tr>
+                <tr><td class="wrap"><b>Full</b></td><td class="num">= production</td><td class="num">= production</td><td class="num">29 jours</td><td class="wrap">Métadonnées + toutes les données (template optionnel)</td><td class="wrap">Staging, performance, UAT finale</td></tr>
+                <tr><td class="wrap"><b>Scratch org</b></td><td class="num">—</td><td class="num">—</td><td class="num">jetable</td><td class="wrap">Fichier de définition ou Org Shape, aucune donnée</td><td class="wrap">Package development, CI</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="ref-packages" id="ref-packages">
+          <div class="topic-head"><h3>Comparatif des packages</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">&nbsp;</th><th class="wrap">Non managé</th><th class="wrap">Unlocked</th><th class="wrap">Managé 2GP</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Pour qui</b></td><td class="wrap">Modèles, exemples, projets open source</td><td class="wrap">Équipes internes qui modularisent leur org</td><td class="wrap">Éditeurs (ISV), AppExchange</td></tr>
+                <tr><td class="wrap"><b>Mises à jour</b></td><td class="wrap">Aucune</td><td class="wrap">Installation d'une nouvelle version</td><td class="wrap">Nouvelle version, ou push upgrade</td></tr>
+                <tr><td class="wrap"><b>Namespace</b></td><td class="wrap">Non</td><td class="wrap">Facultatif</td><td class="wrap">Obligatoire</td></tr>
+                <tr><td class="wrap"><b>Code Apex dans l'org</b></td><td class="wrap">Visible et modifiable</td><td class="wrap">Visible, modifiable mais écrasé à la mise à jour</td><td class="wrap">Masqué, verrouillé</td></tr>
+                <tr><td class="wrap"><b>Dépendances</b></td><td class="wrap">—</td><td class="wrap">Déclarées dans <code>sfdx-project.json</code></td><td class="wrap">Déclarées dans <code>sfdx-project.json</code></td></tr>
+                <tr><td class="wrap"><b>Promotion en released</b></td><td class="wrap">—</td><td class="wrap">75 % de couverture</td><td class="wrap">75 % de couverture</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="ref-tests" id="ref-tests">
+          <div class="topic-head"><h3>Niveaux de test d'un déploiement</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Niveau</th><th class="wrap">Ce qui s'exécute</th><th class="wrap">Couverture exigée en production</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><code>NoTestRun</code></td><td class="wrap">Rien ; environnements de développement seulement</td><td class="wrap">—</td></tr>
+                <tr><td class="wrap"><code>RunSpecifiedTests</code></td><td class="wrap">Les classes de test listées</td><td class="wrap">75 % pour <b>chaque</b> classe et trigger déployé</td></tr>
+                <tr><td class="wrap"><code>RunLocalTests</code></td><td class="wrap">Tous les tests, sauf ceux des packages managés ; défaut en production avec de l'Apex</td><td class="wrap">75 % global, chaque trigger couvert</td></tr>
+                <tr><td class="wrap"><code>RunAllTestsInOrg</code></td><td class="wrap">Tous les tests, packages managés compris</td><td class="wrap">75 % global, chaque trigger couvert</td></tr>
+                <tr><td class="wrap"><code>RunRelevantTests</code></td><td class="wrap">Les tests jugés concernés par le changement (bêta)</td><td class="wrap">Selon la documentation de la bêta</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Quick deploy : validation réussie dans les 10 derniers jours, tests passés et couverture atteinte pendant la validation ; les tests ne sont pas relancés.</p>
+        </article>
+
+        <article class="topic" data-topic="ref-tools" id="ref-tools">
+          <div class="topic-head"><h3>Outils de déploiement comparés</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">&nbsp;</th><th class="wrap">Change sets</th><th class="wrap">CLI + Metadata API</th><th class="wrap">Lifecycle Center</th><th class="wrap">Packages</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Source control</b></td><td class="wrap">Non</td><td class="wrap">Oui, à brancher</td><td class="wrap">Oui, intégré (GitHub, Bitbucket Cloud en bêta)</td><td class="wrap">Oui</td></tr>
+                <tr><td class="wrap"><b>Suppressions</b></td><td class="wrap">Non</td><td class="wrap"><code>destructiveChanges</code></td><td class="wrap">Oui</td><td class="wrap">Selon le type de composant</td></tr>
+                <tr><td class="wrap"><b>Automatisation</b></td><td class="wrap">Non</td><td class="wrap">Totale (CI/CD)</td><td class="wrap">Promotions en clics, outils MCP</td><td class="wrap">Totale (CLI)</td></tr>
+                <tr><td class="wrap"><b>Portée</b></td><td class="wrap">Orgs liées à la même production</td><td class="wrap">Toute org</td><td class="wrap">Les orgs du pipeline</td><td class="wrap">Toute org, y compris d'autres clients</td></tr>
+                <tr><td class="wrap"><b>Profil d'équipe</b></td><td class="wrap">Petite, peu mature</td><td class="wrap">Développeurs à l'aise avec Git</td><td class="wrap">Admins et équipes mixtes</td><td class="wrap">Équipes modulaires, éditeurs</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="ref-cli" id="ref-cli">
+          <div class="topic-head"><h3>Commandes CLI à reconnaître</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <pre><span class="c"># Scratch org à partir d'un fichier de définition (7 jours par défaut, 30 max)</span>
+sf org create scratch --definition-file config/project-scratch-def.json --alias feature-x --duration-days 7
+
+<span class="c"># Valider sans déployer, puis quick deploy dans les 10 jours</span>
+sf project deploy validate --manifest manifest/package.xml --test-level RunLocalTests --target-org prod
+sf project deploy quick --job-id 0AfXXXXXXXXXXXXXXX --target-org prod
+
+<span class="c"># Déployer avec des suppressions après le déploiement</span>
+sf project deploy start --manifest manifest/package.xml --post-destructive-changes manifest/destructiveChangesPost.xml --target-org uat
+
+<span class="c"># Packages : version bêta, promotion, installation</span>
+sf package version create --package Core --code-coverage --installation-key-bypass --wait 20
+sf package version promote --package "Core@1.4.0-2"
+sf package install --package "Core@1.4.0-2" --target-org prod --wait 20
+
+<span class="c"># Tests, analyse statique, données de référence</span>
+sf apex run test --test-level RunLocalTests --code-coverage --target-org qa
+sf code-analyzer run --rule-selector Recommended
+sf data upsert bulk --sobject Product2 --file data/products.csv --external-id Code_Externe__c --target-org uat</pre>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <div>
+      <strong>Le jour de l'examen</strong>
+      <ul>
+        <li>105 minutes pour 60 questions notées et jusqu'à 5 non notées : environ 1 min 40 par question.</li>
+        <li>Aucune section ne domine : Conception du système pèse 15 %, et six autres sections entre 13 et 14 %. Il faut tout couvrir.</li>
+        <li>Questions à scénario : repérer d'abord la contrainte décisive (maturité de l'équipe, réglementation, données, délai) avant de choisir l'outil.</li>
+        <li>La bonne réponse est souvent la plus simple qui passe par le source control et respecte la maturité du client.</li>
+        <li>Lire combien de réponses sont attendues : une question à réponses multiples n'est juste que si tout est correct.</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Sources officielles</strong>
+      <ul class="src-list">
+        <li><a href="https://trailhead.salesforce.com/en/credentials/developmentlifecycledeploymentarchitect" target="_blank" rel="noopener">Page de la certification</a> · <a href="https://trailhead.salesforce.com/users/strailhead/trailmixes/architect-dev-lifecycle-and-deployment" target="_blank" rel="noopener">Trailmix Architect Journey</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/file_based_zip_file.htm" target="_blank" rel="noopener">Limites de la Metadata API</a> · <a href="https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_deployRecentValidation.htm" target="_blank" rel="noopener">Quick deploy</a></li>
+        <li><a href="https://developer.salesforce.com/docs/platform/sfdx-dev/guide/sfdx-dev-scratch-orgs.html" target="_blank" rel="noopener">Scratch orgs</a> · <a href="https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apex/apex_interface_System_SandboxPostCopy.htm" target="_blank" rel="noopener">SandboxPostCopy</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=platform.next_generation_devops_center.htm&amp;language=en_US" target="_blank" rel="noopener">Lifecycle Center</a> · <a href="https://admin.salesforce.com/blog/2026/the-future-of-salesforce-devops-is-here-whats-new-for-admins" target="_blank" rel="noopener">DevOps Center nouvelle génération</a></li>
+        <li><a href="https://trailhead.salesforce.com/content/learn/modules/salesforce-architect-certification-maintenance-winter-26/discover-whats-new-with-development-lifecycles-for-winter-26" target="_blank" rel="noopener">Nouveautés Winter '26 (DevOps Testing, ApexGuru)</a></li>
+        <li><a href="https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/code-analyzer.html" target="_blank" rel="noopener">Code Analyzer v5</a> · <a href="https://developer.salesforce.com/blogs/2024/01/moving-on-from-the-ant-migration-tool-to-sf-cli-v2" target="_blank" rel="noopener">Retrait de l'Ant Migration Tool</a></li>
+        <li><a href="https://developer.salesforce.com/blogs/2025/02/load-test-on-the-salesforce-platform-using-scalability-tools" target="_blank" rel="noopener">Tests de charge avec Scale Test et Scale Center</a></li>
+      </ul>
+    </div>
+  </footer>

@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "cards": [
+    { "id": "c1", "domain": "domaine-a", "front": "Question ou notion au recto", "back": "Réponse au verso, avec du **gras** ou du `code` si besoin." },
+    { "id": "c2", "domain": "domaine-b", "front": "Autre notion", "back": "Sa définition." }
+  ]
+}

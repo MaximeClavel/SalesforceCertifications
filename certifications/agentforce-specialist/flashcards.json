@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "c01",
+      "domain": "agents",
+      "front": "Agent User",
+      "back": "Utilisateur dédié sous lequel s’exécute un agent Service. Ses ensembles d’autorisations fixent ce que les actions peuvent lire et modifier. Règle : moindre privilège."
+    },
+    {
+      "id": "c02",
+      "domain": "agents",
+      "front": "Agent Employee ou agent Service ?",
+      "back": "Employee : utilisateurs internes, s’exécute avec les permissions de l’utilisateur connecté (Lightning, mobile, Slack). Service : clients externes, 24 h/24, s’exécute en tant qu’Agent User (messagerie, voix, e-mail)."
+    },
+    {
+      "id": "c03",
+      "domain": "agents",
+      "front": "Rubrique (topic) / subagent",
+      "back": "Ensemble cohérent de tâches : nom, description de classification, portée, instructions, actions. Dans Agent Script, le mot-clé `subagent` remplace `topic`, déprécié."
+    },
+    {
+      "id": "c04",
+      "domain": "agents",
+      "front": "Description de classification",
+      "back": "Texte que le sélecteur compare à la demande pour choisir la rubrique. Doit être précis et distinct des autres rubriques."
+    },
+    {
+      "id": "c05",
+      "domain": "agents",
+      "front": "Moteur de raisonnement Atlas",
+      "back": "Boucle : comprendre la demande et choisir la rubrique → planifier et choisir les actions → exécuter → évaluer → répondre ou recommencer."
+    },
+    {
+      "id": "c06",
+      "domain": "agents",
+      "front": "Raisonnement hybride",
+      "back": "Mélange étapes déterministes (if/else, run, set, transition) et raisonnement du LLM. Prévisible là où il faut, souple ailleurs."
+    },
+    {
+      "id": "c07",
+      "domain": "agents",
+      "front": "Vue Canvas / vue Script",
+      "back": "Deux vues d’un même agent dans le nouvel Agentforce Builder. Canvas : édition visuelle. Script : texte Agent Script. Synchronisées."
+    },
+    {
+      "id": "c08",
+      "domain": "agents",
+      "front": "`->` et `|`",
+      "back": "`->` ouvre des instructions logiques, exécutées de façon déterministe. `|` ouvre des instructions de prompt, envoyées au LLM."
+    },
+    {
+      "id": "c09",
+      "domain": "agents",
+      "front": "Blocs de premier niveau d’Agent Script",
+      "back": "`system` (instructions et messages globaux), `config`, `variables`, `start_agent` (classification et routage), `subagent`, plus `connection` et `language`."
+    },
+    {
+      "id": "c10",
+      "domain": "agents",
+      "front": "`run`, `with`, `set`",
+      "back": "`run @actions.x` exécute une action de façon déterministe ; `with` lie ses entrées ; `set` stocke une sortie (`@outputs.nom`) dans une variable."
+    },
+    {
+      "id": "c11",
+      "domain": "agents",
+      "front": "`available when`",
+      "back": "Condition qui affiche ou masque un outil (action) au LLM. L’équivalent Agent Script des filtres de l’ancien builder."
+    },
+    {
+      "id": "c12",
+      "domain": "agents",
+      "front": "Variable mutable / linked",
+      "back": "`mutable` : modifiable pendant la conversation. `linked` : valeur fournie par une source externe, par exemple la session."
+    },
+    {
+      "id": "c13",
+      "domain": "agents",
+      "front": "Expression de modèle",
+      "back": "`{!@variables.nom}` insère la valeur d’une variable ou d’une ressource dans une instruction de prompt."
+    },
+    {
+      "id": "c14",
+      "domain": "agents",
+      "front": "`transition to`",
+      "back": "`transition to @subagent.x` déplace la conversation vers un autre subagent depuis la logique. `@utils.transition to` l’expose comme outil au LLM."
+    },
+    {
+      "id": "c15",
+      "domain": "agents",
+      "front": "Jeton `...`",
+      "back": "Remplissage par le LLM : `with order_id = ...` laisse le modèle extraire la valeur de la conversation."
+    },
+    {
+      "id": "c16",
+      "domain": "agents",
+      "front": "Rubriques système",
+      "back": "Escalation (transfert à un humain via Omni-Channel), Off Topic (hors périmètre), Ambiguous Question (demande trop vague)."
+    },
+    {
+      "id": "c17",
+      "domain": "agents",
+      "front": "Escalade en messagerie",
+      "back": "Exige une route sortante Omni-Channel (flux) dans la connexion messagerie de l’agent, vers une file d’humains."
+    },
+    {
+      "id": "c18",
+      "domain": "agents",
+      "front": "Agent API",
+      "back": "API REST : démarrer une session, envoyer des messages, terminer. Pour une app, un site ou un système externe avec sa propre interface. Authentification OAuth client credentials via une application connectée."
+    },
+    {
+      "id": "c19",
+      "domain": "agents",
+      "front": "Réglages d’une action",
+      "back": "Instructions d’entrée et de sortie lues par le LLM, entrée obligatoire, confirmation utilisateur avant exécution, affichage de la sortie dans la conversation."
+    },
+    {
+      "id": "c20",
+      "domain": "prompt",
+      "front": "Types de modèles d’invite",
+      "back": "Sales Email (compositeur d’e-mails), Field Generation (remplit un champ, Dynamic Forms), Record Summary (synthèse d’enregistrement), Flex (jusqu’à 5 entrées, appelé par Flow, Apex ou une action d’agent)."
+    },
+    {
+      "id": "c21",
+      "domain": "prompt",
+      "front": "Permissions Prompt Builder",
+      "back": "Prompt Template Manager : créer et gérer. Prompt Template User : exécuter."
+    },
+    {
+      "id": "c22",
+      "domain": "prompt",
+      "front": "Techniques d’ancrage",
+      "back": "Champs de fusion, listes associées, flux Template-Triggered Prompt Flow, Apex `@InvocableMethod`, retrievers Data 360. Du plus simple au plus puissant."
+    },
+    {
+      "id": "c23",
+      "domain": "prompt",
+      "front": "Cycle de vie d’un modèle",
+      "back": "Créer → ancrer → aperçu (invite résolue et réponse) → enregistrer une version → activer (une seule active) → exécuter depuis la page, Flow, Apex ou un agent."
+    },
+    {
+      "id": "c24",
+      "domain": "prompt",
+      "front": "Einstein Trust Layer",
+      "back": "Récupération sécurisée selon les permissions, ancrage dynamique, masquage des données, défense d’invite, rétention zéro chez le fournisseur, détection de toxicité, piste d’audit et feedback dans Data 360."
+    },
+    {
+      "id": "c25",
+      "domain": "prompt",
+      "front": "Model Builder (Einstein Studio)",
+      "back": "Catalogue des modèles : standards gérés par Salesforce et BYOLLM (vos propres modèles). Chaque modèle d’invite précise le modèle utilisé."
+    },
+    {
+      "id": "c26",
+      "domain": "prompt",
+      "front": "Bonne invite",
+      "back": "Rôle, tâche, contexte ancré, format de sortie, ton, contraintes, et la conduite à tenir si une information manque. Tester sur plusieurs enregistrements."
+    },
+    {
+      "id": "c27",
+      "domain": "data",
+      "front": "Agentforce Data Library",
+      "back": "Bibliothèque (Knowledge, fichiers) qui crée l’ingestion, l’index de recherche et un retriever. Utilisée par Answer Questions with Knowledge ou un modèle d’invite."
+    },
+    {
+      "id": "c28",
+      "domain": "data",
+      "front": "Chunking",
+      "back": "Découpage des documents en passages. Trop petits : perte de contexte. Trop grands : bruit et coût."
+    },
+    {
+      "id": "c29",
+      "domain": "data",
+      "front": "Vectoriel, mot-clé, hybride",
+      "back": "Vectoriel : proximité de sens. Mot-clé : termes exacts (codes, références). Hybride : les deux, pour des requêtes mixtes."
+    },
+    {
+      "id": "c30",
+      "domain": "data",
+      "front": "Retriever individuel / d’ensemble",
+      "back": "Individuel : un index, des filtres, un nombre de résultats. Ensemble : combine plusieurs retrievers et fusionne leurs résultats."
+    },
+    {
+      "id": "c31",
+      "domain": "data",
+      "front": "UDLO / UDMO",
+      "back": "Objets Data 360 du contenu non structuré : Unstructured Data Lake Object, mappé vers un Unstructured Data Model Object, puis découpé et indexé."
+    },
+    {
+      "id": "c32",
+      "domain": "data",
+      "front": "RAG",
+      "back": "Retrieval Augmented Generation : récupérer les passages pertinents et les injecter dans l’invite. Le modèle n’est pas ré-entraîné."
+    },
+    {
+      "id": "c33",
+      "domain": "test",
+      "front": "Testing Center",
+      "back": "Tests en lot : énoncé, rubrique attendue, actions attendues, réponse attendue. Import CSV ou génération par IA. À lancer en sandbox : les actions s’exécutent vraiment."
+    },
+    {
+      "id": "c34",
+      "domain": "test",
+      "front": "Évaluation de la réponse",
+      "back": "Un LLM juge si la réponse obtenue correspond sur le fond à la réponse attendue. Pas de comparaison mot à mot."
+    },
+    {
+      "id": "c35",
+      "domain": "test",
+      "front": "Déployer un agent",
+      "back": "Métadonnées de l’agent et dépendances (flux, Apex, modèles, ensembles d’autorisations), Agent User en production, Data 360 via Data Kits, puis activation de la version."
+    },
+    {
+      "id": "c36",
+      "domain": "test",
+      "front": "Déployer un modèle d’invite",
+      "back": "Métadonnée GenAiPromptTemplate. Les champs, flux, classes et retrievers d’ancrage doivent exister dans la cible ; activer une version."
+    },
+    {
+      "id": "c37",
+      "domain": "gov",
+      "front": "Agentforce Command Center",
+      "back": "Vue centrale de la santé, de l’adoption et des performances des agents en production."
+    },
+    {
+      "id": "c38",
+      "domain": "gov",
+      "front": "Traçage de session",
+      "back": "Journal pas à pas : rubrique choisie, actions, appels au LLM, garde-fous. Stocké dans Data 360."
+    },
+    {
+      "id": "c39",
+      "domain": "gov",
+      "front": "Analytique et optimisation",
+      "back": "Analytique : mesurer (volume, résolution, escalade, satisfaction). Optimisation : regrouper les demandes, repérer les échecs et orienter les corrections."
+    },
+    {
+      "id": "c40",
+      "domain": "multi",
+      "front": "MCP",
+      "back": "Model Context Protocol : standard ouvert pour connecter un agent à des outils et données via des serveurs MCP. Agent ↔ outils."
+    },
+    {
+      "id": "c41",
+      "domain": "multi",
+      "front": "A2A",
+      "back": "Agent2Agent : standard ouvert pour que des agents de fournisseurs différents se découvrent (Agent Card), se délèguent des tâches et échangent. Agent ↔ agent."
+    },
+    {
+      "id": "c42",
+      "domain": "multi",
+      "front": "Orchestrateur",
+      "back": "Agent superviseur qui route vers des sous-agents spécialisés et consolide. Utile pour des périmètres larges ; ajoute latence et complexité."
+    }
+  ]
+}
