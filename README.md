@@ -9,7 +9,7 @@ Le moteur est commun : chaque certification n'est qu'un dossier de données. Le 
 | Certification | Contenu |
 | --- | --- |
 | Salesforce Platform App Builder | Fiche, En détail, 40 questions de quiz, examen blanc de 60 questions |
-| Salesforce Platform Developer II | Fiche, En détail, 40 questions de quiz, examen blanc de 60 questions |
+| Salesforce Platform Developer II | Fiche, En détail, 40 questions de quiz, examen blanc de 60 questions (38 questions avec un extrait de code Apex, LWC ou Visualforce) |
 | Salesforce Development Lifecycle and Deployment Architect | Fiche, En détail, 40 questions de quiz, examen blanc de 60 questions |
 | Salesforce Agentforce Specialist | Fiche par objectif, Schéma, 84 questions, examen complet et mini-examen, 42 fiches mémo |
 | Claude Certified Architect – Professional (Anthropic) | Fiche par objectif, Aide-mémoire, 28 questions, mini-examen, 43 fiches mémo |

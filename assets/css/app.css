@@ -858,6 +858,7 @@
   .src-list{margin:.3rem 0 0;padding-left:1.1rem;}
   .src-list li{margin-bottom:.3rem;overflow-wrap:anywhere;}
   .qopt .otext{white-space:normal;}
+  .otext, .qprompt, .exam-prompt, .qexplain{overflow-wrap:anywhere;}
   .btn-reveal{background:var(--accent-soft);border-color:var(--accent-soft);color:var(--accent-ink);}
   .exam-opt.revealed{cursor:default;}
   .exam-opt.revealed:hover{border-color:var(--border);}

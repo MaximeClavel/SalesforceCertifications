@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "questions": [
     {
       "id": "x-a1",
@@ -51,19 +51,20 @@
     {
       "id": "x-a4",
       "domain": "adf",
-      "question": "A developer at Universal Containers builds a List<Invoice> from the response of an external billing API. Invoice is a custom Apex class, and the invoices aren't stored in Salesforce. The list must be sorted by due date before it's displayed. Which two approaches should the developer use?",
+      "question": "A developer at Universal Containers builds a list of invoices from the response of an external billing API. The invoices aren't stored in Salesforce, and the list must be sorted by due date before it's displayed. The last line throws a System.ListException. Which two changes sort the list by due date?",
+      "code": "public class Invoice {\n    public String invoiceNumber;\n    public Date dueDate;\n    public Decimal amount;\n}\n\nList<Invoice> invoices = BillingClient.fetchInvoices();\ninvoices.sort();",
       "options": [
-        "Implement the Comparable interface in Invoice, with a compareTo() method that compares the due dates",
-        "Write a class that implements Comparator<Invoice>, and pass an instance of it to invoices.sort()",
-        "Query the invoices with ORDER BY DueDate__c",
-        "Call invoices.sort() without other changes, because Apex sorts custom objects by their first field",
+        "Declare that Invoice implements Comparable, with a compareTo(Object other) method that compares the due dates",
+        "Write a class that implements Comparator<Invoice>, and call invoices.sort(new InvoiceDueDateComparator())",
+        "Add ORDER BY dueDate to the query that builds the list",
+        "Replace List<Invoice> with Set<Invoice>, which keeps its elements sorted",
         "Annotate the dueDate field with @SortKey"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Pour trier des objets d'une classe Apex, la classe implémente Comparable (compareTo), ou une classe séparée implémente Comparator<T> (compare) et se passe à List.sort(). ORDER BY trierait bien, mais les factures ne sont pas en base (piège plausible). Appeler sort() sans rien implémenter lève une ListException, car Apex ne sait pas comparer ces objets (inversion). @SortKey n'existe pas (faux terme)."
+      "explanation": "List.sort() ne sait trier un type Apex personnalisé que s'il implémente Comparable : sinon, il lève une ListException. Deux solutions : implémenter Comparable et sa méthode compareTo(), ou passer à sort() une instance de Comparator<Invoice> (API 59.0 et plus), utile pour proposer plusieurs ordres de tri. ORDER BY ne s'applique qu'à une requête SOQL, or les factures viennent d'une API externe (piège plausible). Un Set n'est pas ordonné, c'est l'inverse du besoin (inversion). @SortKey n'existe pas (faux terme)."
     },
     {
       "id": "x-a5",
@@ -84,32 +85,34 @@
     {
       "id": "x-a6",
       "domain": "adf",
-      "question": "Admins at Universal Containers want a custom setup page to update the records of the Discount_Rule__mdt custom metadata type. The values must stay in the custom metadata type so that they can still be deployed between orgs. How should the developer update the records from Apex?",
+      "question": "Admins at Universal Containers use a custom setup page to change the rate of a Discount_Rule__mdt record. The values must stay in the custom metadata type so that they can still be deployed between orgs. This code doesn't work, because DML operations aren't allowed on custom metadata records. What should the developer change?",
+      "code": "Discount_Rule__mdt rule = Discount_Rule__mdt.getInstance('Gold');\nrule.Rate__c = 15;\nupdate rule;",
       "options": [
-        "Build Metadata.CustomMetadata objects and deploy them with Metadata.Operations.enqueueDeployment()",
-        "Move the values to a hierarchy custom setting and update it with DML",
-        "Run an update DML statement on the Discount_Rule__mdt records",
-        "Call Metadata.CustomMetadata.saveImmediate() on each record"
+        "Build a Metadata.CustomMetadata record with the new value, add it to a Metadata.DeployContainer, and call Metadata.Operations.enqueueDeployment()",
+        "Replace update rule with Database.update(rule, false)",
+        "Move the rates to a list custom setting and update them with DML",
+        "Call rule.saveImmediate() instead of update rule"
       ],
       "answer": [
         0
       ],
-      "explanation": "Les enregistrements de Custom Metadata se modifient en Apex par la Metadata API : Metadata.Operations.enqueueDeployment() déploie les changements de façon asynchrone, avec un callback pour connaître le résultat. Un Custom Setting se modifie en DML, mais ses valeurs ne se déploient plus (piège plausible). Le DML n'est pas supporté sur les enregistrements __mdt (idée reçue). saveImmediate() n'existe pas (faux terme)."
+      "explanation": "Les enregistrements d'un type de métadonnées personnalisé se lisent en Apex sans requête SOQL (getInstance(), getAll()), mais ne s'enregistrent pas par DML. Pour les modifier depuis Apex, on passe par l'API Metadata en Apex : un Metadata.CustomMetadata avec ses Metadata.CustomMetadataValue, placé dans un Metadata.DeployContainer, puis Metadata.Operations.enqueueDeployment(), qui déploie de façon asynchrone. Database.update(rule, false) reste un DML, simplement sans exception (piège plausible). Les valeurs d'un paramètre personnalisé de type liste ne se déploient pas comme des métadonnées, ce qui casse l'exigence (inversion). saveImmediate() n'existe pas (faux terme)."
     },
     {
       "id": "x-a7",
       "domain": "adf",
-      "question": "At Universal Containers, the controller public with sharing class OrderController calls a method of public without sharing class PricingHelper, which reads discount records. Both classes are saved with API version 66.0. A security reviewer asks how record access is enforced while the PricingHelper method runs. What should the developer answer?",
+      "question": "At Universal Containers, a Lightning web component calls OrderController.getDiscounts(). Both classes are saved with API version 66.0. Through sharing, a sales user can see 10 of the 50 Discount__c records. How many records does getDiscounts() return to this user?",
+      "code": "public with sharing class OrderController {\n    @AuraEnabled(cacheable=true)\n    public static List<Discount__c> getDiscounts() {\n        return PricingHelper.loadDiscounts();\n    }\n}\n\npublic without sharing class PricingHelper {\n    public static List<Discount__c> loadDiscounts() {\n        return [SELECT Id, Rate__c FROM Discount__c];\n    }\n}",
       "options": [
-        "The method runs without sharing, because an explicit sharing keyword always applies to the code of its own class",
-        "The method runs with sharing, inherited from OrderController",
-        "The method enforces the user's field-level security, because OrderController is declared with sharing",
-        "The code doesn't compile, because a with sharing class can't call a without sharing class"
+        "50, because the query runs in PricingHelper, which is declared without sharing",
+        "10, because PricingHelper inherits the with sharing mode of OrderController",
+        "10, because a method called from a Lightning web component always enforces sharing",
+        "None, because a with sharing class can't call a without sharing class"
       ],
       "answer": [
         0
       ],
-      "explanation": "Un mot-clé explicite s'applique toujours au code de sa propre classe, quel que soit l'appelant ; seules les classes sans mot-clé ou en inherited sharing prennent le mode de l'appelant. Croire que le mode se transmet à la classe appelée est le piège classique (piège plausible). with sharing ne gère que la visibilité des enregistrements, pas la FLS (confusion de notions). Rien n'interdit cet appel (faux énoncé)."
+      "explanation": "Un mot-clé de partage explicite s'applique au code de la classe où il est déclaré, quel que soit l'appelant : la requête s'exécute dans PricingHelper, donc sans partage, et renvoie les 50 enregistrements. Seules une classe sans mot-clé et une classe inherited sharing prennent le mode de l'appelant. Croire que with sharing se transmet à la classe appelée est le piège classique (piège plausible). Le point d'entrée Lightning ne change pas le mot-clé explicite de la classe appelée (confusion de notions). Rien n'interdit d'appeler une classe without sharing depuis une classe with sharing (faux énoncé)."
     },
     {
       "id": "x-a8",
@@ -129,47 +132,50 @@
     {
       "id": "x-a9",
       "domain": "adf",
-      "question": "A developer at Universal Containers maintains a class saved with API version 60.0. A SOQL query in the class must enforce the current user's object permissions, field-level security, and sharing, and the class's sharing keyword must not change. Which clause should the developer add to the query?",
+      "question": "This class at Universal Containers is saved with API version 60.0. A user who can see the account's invoices through sharing, but who has no read access to the Margin__c field, calls byAccount(). What does the method return?",
+      "code": "public with sharing class InvoiceSelector {\n    public static List<Invoice__c> byAccount(Id accountId) {\n        return [\n            SELECT Id, Amount__c, Margin__c\n            FROM Invoice__c\n            WHERE Account__c = :accountId\n        ];\n    }\n}",
       "options": [
-        "WITH USER_MODE",
-        "WITH SECURITY_ENFORCED",
-        "WITH SYSTEM_MODE",
-        "WITH SHARING_ENFORCED"
+        "The invoices that the user can see, with Margin__c populated",
+        "A QueryException, because the user can't read Margin__c",
+        "The invoices that the user can see, with Margin__c set to null",
+        "All the invoices of the account, including those that the user can't see"
       ],
       "answer": [
         0
       ],
-      "explanation": "WITH USER_MODE applique les droits d'objet, la FLS et le partage de l'utilisateur. WITH SECURITY_ENFORCED vérifiait les droits d'objet et la FLS, mais pas le partage, et il est supprimé depuis l'API 67.0 (piège plausible). WITH SYSTEM_MODE fait l'inverse (inversion). WITH SHARING_ENFORCED n'existe pas (faux terme). Depuis l'API 67.0, le mode utilisateur est le comportement par défaut de SOQL."
+      "explanation": "Jusqu'à l'API 66.0, une requête SOQL s'exécute en mode système pour les droits d'objet et la FLS ; with sharing ne règle que la visibilité des enregistrements. La méthode renvoie donc les factures visibles, Margin__c compris. Pour appliquer la FLS, il faut WITH USER_MODE, qui lève alors une QueryException (piège plausible), ou Security.stripInaccessible(), qui retire le champ sans erreur (confusion de deux outils). Renvoyer toutes les factures reviendrait à ignorer with sharing (inversion). Depuis l'API 67.0, les requêtes s'exécutent par défaut en mode utilisateur."
     },
     {
       "id": "x-p1",
       "domain": "pali",
-      "question": "Universal Containers wants a Number_of_Products__c field on Opportunity that counts the opportunity's product lines. The solution must use clicks, not code, and admins must be able to maintain it without a developer. What should the developer recommend?",
+      "question": "At Universal Containers, an Apex method updates 400 accounts with a single update statement. Only the first 200 accounts get a follow-up task. What causes the problem?",
+      "code": "trigger AccountTrigger on Account (after update) {\n    AccountHandler.afterUpdate(Trigger.new);\n}\n\npublic class AccountHandler {\n    private static Boolean hasRun = false;\n\n    public static void afterUpdate(List<Account> accounts) {\n        if (hasRun) {\n            return;\n        }\n        hasRun = true;\n        List<Task> tasks = new List<Task>();\n        for (Account a : accounts) {\n            tasks.add(new Task(WhatId = a.Id, Subject = 'Review account'));\n        }\n        insert tasks;\n    }\n}",
       "options": [
-        "A roll-up summary field on Opportunity that counts the opportunity products",
-        "An Apex trigger on OpportunityLineItem that updates the opportunity",
-        "A formula field on Opportunity that adds up the product lines",
-        "A Process Builder process on OpportunityLineItem"
+        "The trigger runs twice in the same transaction, once for each chunk of 200 records, and the static flag stops the second run",
+        "Trigger.new contains at most 200 records, and the other records of the update are ignored",
+        "A single insert statement can't save more than 200 records",
+        "hasRun is reset for each chunk of records, so only one chunk is processed"
       ],
       "answer": [
         0
       ],
-      "explanation": "OpportunityLineItem est en master-detail avec Opportunity : un roll-up summary COUNT fait le calcul sans code. Un trigger fonctionne, mais c'est du code (piège plausible). Une formule ne peut pas agréger des enregistrements enfants (fonction mal appliquée). Process Builder n'est plus supporté depuis fin 2025 (outil retiré)."
+      "explanation": "Une instruction DML sur plus de 200 enregistrements déclenche le trigger plusieurs fois, par lots de 200, dans la même transaction. Les variables statiques vivent pendant toute la transaction : après le premier lot, hasRun vaut true et le second lot est ignoré. Pour éviter la récursivité sans perdre de lots, on mémorise plutôt les Id déjà traités dans un Set<Id> statique. Trigger.new ne contient que 200 enregistrements à la fois, mais les autres ne sont pas ignorés : ils arrivent dans l'exécution suivante (piège plausible). Une instruction DML traite jusqu'à 10 000 enregistrements (faux énoncé). Une variable statique n'est pas réinitialisée entre les lots d'une même transaction (inversion)."
     },
     {
       "id": "x-p2",
       "domain": "pali",
-      "question": "Admins at Universal Containers build a screen flow that must get a shipping quote from an external carrier API through an Apex action. The Apex method must be available in Flow Builder and must process several requests in one call. How should the developer declare the method?",
+      "question": "Admins at Universal Containers build a screen flow that gets a shipping quote from a carrier API through this Apex action. The class can't be saved, and the action must be available in Flow Builder. What should the developer change?",
+      "code": "public class ShippingQuoteAction {\n    @InvocableMethod(label='Get Shipping Quote' callout=true)\n    public static Decimal getQuote(String postalCode) {\n        HttpRequest req = new HttpRequest();\n        req.setEndpoint('callout:Carrier_API/quotes?zip=' + postalCode);\n        req.setMethod('GET');\n        HttpResponse res = new Http().send(req);\n        return Decimal.valueOf(res.getBody());\n    }\n}",
       "options": [
-        "@InvocableMethod(callout=true) on a public static method that accepts a List",
-        "@AuraEnabled on a public static method",
-        "@InvocableMethod on an instance method that accepts a single String",
-        "@FlowAction(callout=true) on a global static method"
+        "Accept a List<String> and return a List<Decimal>, with one quote for each postal code",
+        "Remove callout=true, because invocable methods can't make callouts",
+        "Replace @InvocableMethod with @AuraEnabled",
+        "Declare the class global and implement Database.AllowsCallouts"
       ],
       "answer": [
         0
       ],
-      "explanation": "Une méthode @InvocableMethod est statique, public ou global, et reçoit une List pour traiter plusieurs demandes en un appel ; callout=true signale au Flow qu'elle fait un callout. @AuraEnabled sert aux composants Lightning, pas à Flow Builder (piège plausible). Une méthode d'instance qui reçoit une seule valeur va à l'inverse des règles d'@InvocableMethod (inversion). @FlowAction n'existe pas (faux terme)."
+      "explanation": "Une méthode invocable est statique, publique ou globale, et prend un seul paramètre de type List : Flow regroupe les interviews et lui passe toutes les entrées en une fois. Son type de retour, s'il y en a un, est aussi une List, avec une valeur par entrée. callout=true est permis : il indique que l'action fait un appel externe, ce que Flow utilise pour gérer la transaction. Le retirer va à l'inverse du besoin (inversion). @AuraEnabled expose la méthode aux composants Lightning, pas à Flow Builder (piège plausible). Database.AllowsCallouts concerne Batch Apex et Queueable, et global n'est pas requis (confusion de notions)."
     },
     {
       "id": "x-p3",
@@ -273,17 +279,19 @@
     {
       "id": "x-p9",
       "domain": "pali",
-      "question": "A platform event trigger at Universal Containers updates inventory records. Sometimes the update fails because another process locks the records. The events must be processed again later, without being lost and without being published again. What should the developer do?",
+      "question": "This platform event trigger at Universal Containers updates inventory records. The update sometimes fails with UNABLE_TO_LOCK_ROW when another process locks the records. The events must be processed again later, without being lost and without being published again. Which statement should the developer add in the catch block?",
+      "code": "trigger InventoryUpdateTrigger on Inventory_Update__e (after insert) {\n    List<Inventory__c> items = InventoryService.buildUpdates(Trigger.new);\n    try {\n        update items;\n    } catch (DmlException e) {\n        // handle the lock error\n    }\n}",
+      "codeOptions": true,
       "options": [
-        "Throw an EventBus.RetryableException in the trigger",
-        "Catch the exception and publish the same events again with EventBus.publish()",
-        "Catch the exception and ignore it, because the event bus redelivers failed events automatically",
-        "Call EventBus.retry() on each event"
+        "throw new EventBus.RetryableException('Lock error: ' + e.getMessage());",
+        "EventBus.publish(Trigger.new);",
+        "System.debug(LoggingLevel.ERROR, e.getMessage());",
+        "EventBus.retry(Trigger.new);"
       ],
       "answer": [
         0
       ],
-      "explanation": "Lever EventBus.RetryableException fait relancer le trigger avec le même lot d'événements, jusqu'à 9 fois. Republier fonctionne, mais crée de nouveaux événements, contrairement à la contrainte (piège plausible). Ignorer l'exception perd les événements : le bus ne redélivre rien de lui-même (inversion). EventBus.retry() n'existe pas (faux terme)."
+      "explanation": "Lever EventBus.RetryableException dans un trigger d'événement de plateforme annule la transaction et demande au bus de renvoyer le même lot d'événements plus tard, jusqu'à neuf fois ; EventBus.TriggerContext.currentContext().retries donne le numéro de la tentative. Republier Trigger.new crée de nouveaux événements, ce que l'énoncé interdit (inversion). Journaliser l'erreur sans relancer d'exception marque les événements comme traités : ils sont perdus (piège plausible). EventBus.retry() n'existe pas (faux terme)."
     },
     {
       "id": "x-p10",
@@ -387,17 +395,18 @@
     {
       "id": "x-p16",
       "domain": "pali",
-      "question": "A Queueable job at Universal Containers calls an external service. If the job fails for any reason, including a limit exception, the team wants to log the error and enqueue the job again. What should the developer use?",
+      "question": "This Queueable job at Universal Containers syncs orders with an ERP. During a large sync, ErpClient.pushOrders() exceeds the Apex CPU time limit. What happens?",
+      "code": "public class ErpSyncJob implements Queueable, Database.AllowsCallouts {\n    public void execute(QueueableContext ctx) {\n        System.attachFinalizer(new ErpSyncFinalizer());\n        ErpClient.pushOrders();\n    }\n}\n\npublic class ErpSyncFinalizer implements Finalizer {\n    public void execute(FinalizerContext ctx) {\n        if (ctx.getResult() == ParentJobResult.UNHANDLED_EXCEPTION) {\n            insert new Error_Log__c(Message__c = ctx.getException().getMessage());\n            System.enqueueJob(new ErpSyncJob());\n        }\n    }\n}",
       "options": [
-        "A transaction finalizer attached with System.attachFinalizer()",
-        "A try/catch block around the code in execute()",
-        "A finish() method in the Queueable class",
-        "An after insert trigger on AsyncApexJob"
+        "The finalizer runs in its own transaction after the job fails, saves the error log, and enqueues a new ErpSyncJob",
+        "Nothing is logged, because a limit exception can't be caught in Apex",
+        "The finalizer runs, but the error log is rolled back with the failed job",
+        "The platform runs the job again automatically, up to three times, before the finalizer is called"
       ],
       "answer": [
         0
       ],
-      "explanation": "Un Finalizer s'exécute après le Queueable, qu'il ait réussi ou échoué : FinalizerContext.getResult() et getException() permettent de journaliser et de relancer le job. Un try/catch gère les erreurs ordinaires, mais n'intercepte pas une LimitException (piège plausible). finish() appartient à Batch Apex, pas à Queueable (fonction mal appliquée). AsyncApexJob ne supporte pas de trigger (faux énoncé)."
+      "explanation": "Un finalizer attaché par System.attachFinalizer() s'exécute après la fin du job Queueable, réussie ou non, dans une transaction distincte qui a ses propres limites. Il s'exécute même après une exception de limite, que try/catch ne peut pas intercepter (piège plausible). Son DML est donc conservé, contrairement à celui du job en échec (inversion). getResult() renvoie SUCCESS ou UNHANDLED_EXCEPTION, et un finalizer peut mettre en file un seul job Queueable. La plateforme ne relance pas un Queueable en échec d'elle-même (faux énoncé)."
     },
     {
       "id": "x-u1",
@@ -418,17 +427,18 @@
     {
       "id": "x-u2",
       "domain": "ui",
-      "question": "A Lightning web component at Universal Containers displays open cases from a cacheable Apex method through @wire. When the user closes a case with an imperative Apex call, the list must show the change without reloading the page. What should the developer do after the imperative call succeeds?",
+      "question": "This Lightning web component at Universal Containers lists open cases. After the user closes a case, the list still shows it until the page is reloaded. What should the developer change?",
+      "code": "import { LightningElement, wire } from 'lwc';\nimport { refreshApex } from '@salesforce/apex';\nimport getOpenCases from '@salesforce/apex/CaseController.getOpenCases';\nimport closeCase from '@salesforce/apex/CaseController.closeCase';\n\nexport default class OpenCases extends LightningElement {\n    cases;\n\n    @wire(getOpenCases)\n    wiredCases({ data, error }) {\n        if (data) {\n            this.cases = data;\n        }\n    }\n\n    async handleClose(event) {\n        await closeCase({ caseId: event.target.dataset.id });\n        await refreshApex(this.cases);\n    }\n}",
       "options": [
-        "Call refreshApex() with the value provisioned by the wire",
-        "Call notifyRecordUpdateAvailable() with the case ID",
-        "Remove cacheable=true from the Apex method",
-        "Call this.wiredCases.reload()"
+        "Store the whole value provisioned to wiredCases() in a property, and pass that property to refreshApex()",
+        "Remove cacheable=true from getOpenCases so that the wire always calls the server",
+        "Call notifyRecordUpdateAvailable() instead of refreshApex()",
+        "Call this.cases.refresh() after closeCase()"
       ],
       "answer": [
         0
       ],
-      "explanation": "refreshApex() fait relire au serveur les données du wire Apex et met à jour le cache. notifyRecordUpdateAvailable() rafraîchit les enregistrements de Lightning Data Service, pas le résultat d'une méthode Apex (piège plausible). Sans cacheable=true, la méthode ne serait plus utilisable avec @wire (inversion). Un résultat de wire n'a pas de méthode reload() (faux terme)."
+      "explanation": "refreshApex() attend la valeur provisionnée par le wire, c'est-à-dire l'objet complet reçu par la fonction (avec data et error), pas les données qu'on en a extraites : on écrit wiredCases(result) { this.wiredResult = result; … } puis refreshApex(this.wiredResult). Une méthode Apex appelée par @wire doit être cacheable=true : retirer l'option empêche le wire (inversion). notifyRecordUpdateAvailable() signale un changement à Lightning Data Service, sans rafraîchir les résultats d'une méthode Apex câblée (piège plausible). Les données provisionnées n'ont pas de méthode refresh() (faux terme)."
     },
     {
       "id": "x-u3",
@@ -465,62 +475,69 @@
     {
       "id": "x-u5",
       "domain": "ui",
-      "question": "In a Universal Containers app, a child component dispatches new CustomEvent('select', { detail: id }). The grandparent component listens for the event on the parent component's tag, and it doesn't receive the event. The parent component must not be changed. Which configuration should the developer use for the event in the child?",
+      "question": "At Universal Containers, c-order-page contains c-order-list, which renders several c-order-tile components. The handleSelect() handler of c-order-page never runs, and c-order-list must not be changed. Which code should the developer use to create the event in c-order-tile?",
+      "code": "<!-- orderPage.html -->\n<template>\n    <c-order-list onselect={handleSelect}></c-order-list>\n</template>\n\n<!-- orderList.html -->\n<template>\n    <template for:each={orders} for:item=\"order\">\n        <c-order-tile key={order.Id} order={order}></c-order-tile>\n    </template>\n</template>\n\n// orderTile.js\nhandleClick() {\n    this.dispatchEvent(new CustomEvent('select', { detail: this.order.Id }));\n}",
+      "codeOptions": true,
       "options": [
-        "bubbles: true and composed: true",
-        "bubbles: true only",
-        "bubbles: false and composed: false, with event.stopPropagation()",
-        "propagate: 'grandparent'"
+        "new CustomEvent('select', { detail: this.order.Id, bubbles: true, composed: true })",
+        "new CustomEvent('select', { detail: this.order.Id, bubbles: true })",
+        "new CustomEvent('onselect', { detail: this.order.Id, bubbles: true, composed: true })",
+        "new CustomEvent('select', { detail: this.order.Id, propagate: 'grandparent' })"
       ],
       "answer": [
         0
       ],
-      "explanation": "bubbles: true fait remonter l'événement, composed: true lui fait franchir la frontière du shadow DOM du parent : le grand-parent le reçoit sur la balise du parent. bubbles seul le fait remonter, mais il reste dans le shadow DOM du parent (piège plausible). stopPropagation() bloque l'événement, l'inverse du besoin (inversion). L'option propagate n'existe pas (faux terme). Si le parent pouvait changer, il pourrait aussi relancer son propre événement."
+      "explanation": "L'écouteur de c-order-page est posé sur la balise c-order-list, en dehors de l'ombre (shadow tree) de c-order-list, où c-order-tile déclenche l'événement. Avec bubbles: true seul, l'événement remonte jusqu'à la racine de cette ombre sans en franchir la limite (piège plausible). composed: true lui fait traverser la limite, et onselect le reçoit. Le nom d'un événement ne commence pas par « on » : ce préfixe sert seulement à l'attribut de l'écouteur dans le template (confusion de nom). propagate n'est pas une option de CustomEvent (faux terme)."
     },
     {
       "id": "x-u6",
       "domain": "ui",
-      "question": "Admins at Universal Containers must be able to set the title of a Lightning web component when they add it to a record page in Lightning App Builder, without a developer. What should the developer do?",
+      "question": "Admins at Universal Containers must be able to set the title of this Lightning web component when they add it to a record page in Lightning App Builder. The component's JavaScript declares @api title. Which element should the developer add to the targetConfig?",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>67.0</apiVersion>\n    <isExposed>true</isExposed>\n    <targets>\n        <target>lightning__RecordPage</target>\n    </targets>\n    <targetConfigs>\n        <targetConfig targets=\"lightning__RecordPage\">\n            <!-- element to add -->\n        </targetConfig>\n    </targetConfigs>\n</LightningComponentBundle>",
+      "codeOptions": true,
       "options": [
-        "Declare an @api title property, and expose it with a <property> element in the targetConfig of the .js-meta.xml file",
-        "Declare an @api title property without changing the .js-meta.xml file",
-        "Declare a private title property and set its value in connectedCallback()",
-        "Annotate the title property with @builder"
+        "<property name=\"title\" type=\"String\" label=\"Title\"/>",
+        "<design:attribute name=\"title\" label=\"Title\"/>",
+        "<objects><object>Account</object></objects>",
+        "<api name=\"title\" type=\"String\"/>"
       ],
       "answer": [
         0
       ],
-      "explanation": "Une propriété @api déclarée avec un élément <property> dans le targetConfig du .js-meta.xml devient configurable dans App Builder. @api seul rend la propriété publique pour un composant parent, mais App Builder ne l'affiche pas (piège plausible). Une propriété privée fixée dans le code fait l'inverse du besoin (inversion). @builder n'existe pas (faux terme)."
+      "explanation": "Une propriété publique (@api) devient configurable dans Lightning App Builder quand un élément property du même nom est déclaré dans le targetConfig du fichier .js-meta.xml ; label, default et required complètent la déclaration. design:attribute est la syntaxe du fichier design d'un composant Aura (piège plausible). objects restreint les objets dont les pages peuvent accueillir le composant, sans rien exposer (confusion de notions). Il n'existe pas d'élément api (faux terme)."
     },
     {
       "id": "x-u7",
       "domain": "ui",
-      "question": "An Apex controller at Universal Containers returns accounts to a Lightning web component. The fields that the current user can't read must be removed from the results, and the method must not throw an exception when such a field is queried. What should the developer use?",
+      "question": "This Apex controller at Universal Containers is saved with API version 66.0. A user who can't read the AnnualRevenue field opens the Lightning web component and still sees the revenue of each account. The component must keep showing the other fields, without an error. What should the developer change?",
+      "code": "public with sharing class AccountController {\n    @AuraEnabled(cacheable=true)\n    public static List<Account> getAccounts() {\n        List<Account> accounts = [\n            SELECT Name, Rating, AnnualRevenue FROM Account LIMIT 50\n        ];\n        SObjectAccessDecision decision =\n            Security.stripInaccessible(AccessType.READABLE, accounts);\n        return accounts;\n    }\n}",
       "options": [
-        "Security.stripInaccessible(AccessType.READABLE, accounts)",
-        "WITH USER_MODE in the query",
-        "WITH SYSTEM_MODE in the query",
-        "Security.removeHiddenFields(accounts)"
+        "Return decision.getRecords() instead of accounts",
+        "Add WITH SECURITY_ENFORCED to the query",
+        "Call decision.getRemovedFields() before returning accounts",
+        "Replace AccessType.READABLE with AccessType.VISIBLE"
       ],
       "answer": [
         0
       ],
-      "explanation": "stripInaccessible renvoie des copies des enregistrements sans les champs inaccessibles, et getRemovedFields() indique ce qui a été retiré. WITH USER_MODE applique la FLS, mais lève une exception si un champ demandé est inaccessible (piège plausible). WITH SYSTEM_MODE ignore la FLS, l'inverse du besoin (inversion). removeHiddenFields() n'existe pas (faux terme)."
+      "explanation": "Security.stripInaccessible() ne modifie pas la liste qu'on lui passe : il renvoie une copie nettoyée, que donne decision.getRecords(). En renvoyant accounts, la méthode envoie les valeurs d'origine. WITH SECURITY_ENFORCED lèverait une exception dès qu'un champ est inaccessible, ce que l'énoncé interdit, et la clause est supprimée depuis l'API 67.0 (piège plausible). getRemovedFields() indique seulement quels champs ont été retirés (confusion de notions). AccessType.VISIBLE n'existe pas : les valeurs sont READABLE, CREATABLE, UPDATABLE et UPSERTABLE (faux terme)."
     },
     {
       "id": "x-u8",
       "domain": "ui",
-      "question": "On a Visualforce page at Universal Containers, a JavaScript function that validates a form must call a controller method and then refresh only the summary panel. The developer must not write JavaScript Remoting code. Which component should the developer use?",
+      "question": "On this Visualforce page at Universal Containers, validateAndSave() must call the saveDraft() controller method when the form is valid, and then refresh only the summary panel. The developer must not write JavaScript Remoting code. Which component should the developer add to the form?",
+      "code": "<apex:page controller=\"DraftController\">\n    <apex:form>\n        <!-- component to add -->\n        <apex:outputPanel id=\"summary\">\n            Total: {!total}\n        </apex:outputPanel>\n        <button type=\"button\" onclick=\"validateAndSave()\">Save</button>\n    </apex:form>\n    <script>\n        function validateAndSave() {\n            if (isValid()) {\n                saveDraft();\n            }\n        }\n    </script>\n</apex:page>",
+      "codeOptions": true,
       "options": [
-        "apex:actionFunction, with the rerender attribute",
-        "apex:actionSupport, with the rerender attribute",
-        "apex:commandButton, without the rerender attribute",
-        "apex:remoteAction"
+        "<apex:actionFunction name=\"saveDraft\" action=\"{!saveDraft}\" rerender=\"summary\"/>",
+        "<apex:actionSupport event=\"onclick\" action=\"{!saveDraft}\" rerender=\"summary\"/>",
+        "<apex:actionPoller action=\"{!saveDraft}\" interval=\"5\" rerender=\"summary\"/>",
+        "<apex:remoteAction name=\"saveDraft\" action=\"{!saveDraft}\"/>"
       ],
       "answer": [
         0
       ],
-      "explanation": "apex:actionFunction crée une fonction JavaScript qui appelle une action du contrôleur, et rerender liste les zones à rafraîchir. apex:actionSupport rafraîchit aussi une zone, mais il se déclenche sur un événement d'un composant, pas depuis une fonction JavaScript (piège plausible). Un commandButton sans rerender recharge toute la page (inversion). Il n'existe pas de composant apex:remoteAction ; JavaScript Remoting utilise l'annotation @RemoteAction (faux terme)."
+      "explanation": "apex:actionFunction génère une fonction JavaScript du nom indiqué, qui appelle l'action du contrôleur en AJAX ; rerender limite le rafraîchissement au panneau summary. apex:actionSupport s'attache à un événement DOM de son composant parent : il ne crée pas de fonction qu'un script peut appeler (piège plausible). apex:actionPoller appelle l'action à intervalle régulier, pas à la demande (confusion de notions). apex:remoteAction n'existe pas : JavaScript Remoting passe par @RemoteAction dans le contrôleur (faux terme)."
     },
     {
       "id": "x-u9",
@@ -586,19 +603,20 @@
     {
       "id": "x-t1",
       "domain": "tdd",
-      "question": "A developer at Universal Containers writes a unit test for a batch Apex class that updates accounts. The assertions must check the values written by the execute() and finish() methods. Which two practices should the developer follow?",
+      "question": "This test at Universal Containers checks RatingBatch, a batch class that sets Rating to Hot on every account. The test fails. Which two changes make the test pass?",
+      "code": "@isTest\nstatic void setsRatingToHot() {\n    insert TestDataFactory.buildAccounts(300);\n\n    Test.startTest();\n    Database.executeBatch(new RatingBatch());\n    Assert.areEqual(300, [SELECT COUNT() FROM Account WHERE Rating = 'Hot']);\n    Test.stopTest();\n}",
       "options": [
-        "Call Database.executeBatch() between Test.startTest() and Test.stopTest(), and assert after Test.stopTest()",
-        "Insert no more test records than the batch scope size, because a test can run only one execute() call",
-        "Annotate the test with @isTest(SeeAllData=true) so that the batch can query the org's accounts",
-        "Assert before Test.stopTest(), while the job is still running",
-        "Call Test.waitForBatch() before the assertions"
+        "Move the assertion after Test.stopTest()",
+        "Call Database.executeBatch(new RatingBatch(), 300) so that a single execute() call processes all the test accounts",
+        "Insert the accounts between Test.startTest() and Test.stopTest()",
+        "Annotate the test with @isTest(SeeAllData=true) so that the batch can query the test accounts",
+        "Call Test.waitForBatch() before the assertion"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Test.stopTest() exécute de façon synchrone le code asynchrone lancé depuis Test.startTest(), batch compris (start, execute, finish). En test, un seul appel à execute() est possible : avec plus d'enregistrements que la taille du lot, le test échoue. SeeAllData=true fonctionne, mais rend le test dépendant des données de l'org (piège plausible). Vérifier avant stopTest() lit les données avant l'exécution du batch (inversion). Test.waitForBatch() n'existe pas (faux terme)."
+      "explanation": "Test.stopTest() exécute de façon synchrone le travail asynchrone lancé depuis Test.startTest() : le batch (start, execute, finish) ne tourne qu'à cet appel, et l'assertion doit donc le suivre. En test, un batch ne peut faire qu'un seul appel à execute() : avec 300 comptes et la taille de lot par défaut de 200, le test échoue. Une taille de lot de 300, ou 200 comptes de test au plus, règle le problème. Insérer les comptes après startTest() ne change pas le moment où le batch s'exécute (piège plausible). Les données créées par le test sont déjà visibles du batch : SeeAllData=true ne sert qu'à lire les données de l'org (inversion). Test.waitForBatch() n'existe pas (faux terme)."
     },
     {
       "id": "x-t2",
@@ -620,34 +638,35 @@
     {
       "id": "x-t3",
       "domain": "tdd",
-      "question": "A test class at Universal Containers has 10 test methods that each need the same 200 accounts. The tests must run quickly, and each method must start from the same data. Which two statements about a @testSetup method are true?",
+      "question": "A developer at Universal Containers writes this test class. Whatever the order in which the test methods run, what does reads() write to the debug log?",
+      "code": "@isTest\nprivate class AccountNameTest {\n    static Integer counter = 0;\n\n    @testSetup\n    static void setup() {\n        insert new Account(Name = 'Acme');\n        counter = 5;\n    }\n\n    @isTest\n    static void renames() {\n        Account a = [SELECT Name FROM Account];\n        a.Name = 'Globex';\n        update a;\n    }\n\n    @isTest\n    static void reads() {\n        Account a = [SELECT Name FROM Account];\n        System.debug(a.Name + ' ' + counter);\n    }\n}",
       "options": [
-        "Each test method gets the records created in @testSetup, without the changes made by other test methods",
-        "It isn't supported in a test class annotated with @isTest(SeeAllData=true)",
-        "Static variables set in the @testSetup method keep their values in each test method",
-        "It runs again after each test method to restore the data",
-        "A test class can contain several @testSetup methods, one for each test method"
-      ],
-      "answer": [
-        0,
-        1
-      ],
-      "explanation": "La méthode @testSetup s'exécute une fois, puis les modifications de chaque méthode de test sont annulées avant la suivante. Elle n'est pas supportée avec SeeAllData=true. Les variables static ne sont pas conservées : seules les données en base le sont (piège plausible). Elle s'exécute une seule fois, avant les méthodes de test (inversion). Une classe ne contient qu'une méthode @testSetup (faux énoncé)."
-    },
-    {
-      "id": "x-t4",
-      "domain": "tdd",
-      "question": "A developer at Universal Containers tests a method that searches accounts with a SOSL query. The test inserts matching accounts, but the search returns no results. The test must not depend on the org's data. What should the developer do?",
-      "options": [
-        "Call Test.setFixedSearchResults() with the IDs of the records that the search must return",
-        "Insert the accounts in a @testSetup method before the search",
-        "Annotate the test with @isTest(SeeAllData=true)",
-        "Call Test.indexRecords() after the insert"
+        "Acme 0",
+        "Acme 5",
+        "Globex 5",
+        "Globex 0 or Acme 0, depending on the order of the test methods"
       ],
       "answer": [
         0
       ],
-      "explanation": "Dans un test, une recherche SOSL renvoie une liste vide ; Test.setFixedSearchResults() définit les Id qu'elle pourra renvoyer. Insérer les données dans @testSetup ne change rien : elles ne sont pas indexées pour la recherche (piège plausible). SeeAllData=true rend le test dépendant des données de l'org, l'inverse de la contrainte (inversion). Test.indexRecords() n'existe pas (faux terme)."
+      "explanation": "Chaque méthode de test reçoit les enregistrements créés par @testSetup dans leur état d'origine : les modifications faites par renames() sont annulées avant la méthode suivante, quel que soit l'ordre. Les variables statiques, elles, ne sont pas conservées : la valeur affectée dans la méthode @testSetup est perdue, et counter repart de sa valeur initiale, 0. Acme 5 suppose que counter garde sa valeur (piège plausible). Globex 5 suppose que tout est conservé d'une méthode à l'autre (inversion). L'ordre d'exécution des méthodes n'a pas d'effet sur les données (idée reçue)."
+    },
+    {
+      "id": "x-t4",
+      "domain": "tdd",
+      "question": "This test at Universal Containers covers AccountSearch.byKeyword(), which runs a SOSL query. The assertion fails because the search returns no accounts, and the test must not depend on the org's data. Which line should the developer add before Test.startTest()?",
+      "code": "@isTest\nstatic void findsAccountByKeyword() {\n    Account acme = new Account(Name = 'Acme Corp');\n    insert acme;\n\n    Test.startTest();\n    List<Account> found = AccountSearch.byKeyword('Acme');\n    Test.stopTest();\n\n    Assert.areEqual(1, found.size());\n}",
+      "codeOptions": true,
+      "options": [
+        "Test.setFixedSearchResults(new List<Id>{ acme.Id });",
+        "Test.loadData(Account.sObjectType, 'AcmeAccounts');",
+        "Test.setMock(SearchMock.class, new List<Id>{ acme.Id });",
+        "Test.indexRecords(new List<Id>{ acme.Id });"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "En test, une recherche SOSL renvoie un résultat vide, même pour les enregistrements créés par le test, car ils ne sont pas indexés. Test.setFixedSearchResults() définit les Id que renverra la prochaine recherche SOSL, toujours filtrés par ses clauses RETURNING et WHERE. Test.loadData() crée des enregistrements, qui ne sont pas plus indexés (piège plausible). Test.setMock() sert aux appels externes (confusion de notions). Test.indexRecords() n'existe pas (faux terme)."
     },
     {
       "id": "x-t5",
@@ -744,65 +763,71 @@
     {
       "id": "x-t11",
       "domain": "tdd",
-      "question": "A test at Universal Containers publishes an Order_Shipped__e platform event, and the event's trigger creates a task. The assertion on the task must run after the trigger has processed the event. What should the developer do?",
+      "question": "This test at Universal Containers publishes an Order_Shipped__e platform event, whose trigger creates a task. The assertion fails because no task is found. Which two changes make the trigger run before the assertion?",
+      "code": "@isTest\nstatic void createsFollowUpTask() {\n    EventBus.publish(new Order_Shipped__e(Order_Number__c = 'O-1042'));\n\n    Assert.areEqual(1, [SELECT COUNT() FROM Task WHERE Subject LIKE '%O-1042%']);\n}",
       "options": [
-        "Call Test.getEventBus().deliver() before the assertion",
+        "Call Test.getEventBus().deliver() after the EventBus.publish() call",
+        "Publish the event between Test.startTest() and Test.stopTest(), and assert after Test.stopTest()",
         "Publish the event between Test.startTest() and Test.stopTest(), and assert before Test.stopTest()",
         "Annotate the test with @isTest(SeeAllData=true)",
         "Call EventBus.flush() before the assertion"
       ],
       "answer": [
-        0
+        0,
+        1
       ],
-      "explanation": "En test, les événements publiés sont délivrés à l'appel de Test.getEventBus().deliver() ou au Test.stopTest(). Publier entre startTest() et stopTest() est le bon cadre, mais vérifier avant stopTest() lit les données avant la livraison (piège plausible). SeeAllData=true ne délivre pas les événements et rend le test dépendant des données de l'org (inversion). EventBus.flush() n'existe pas (faux terme)."
+      "explanation": "En test, EventBus.publish() met la publication en attente : les événements ne sont livrés au trigger qu'à Test.stopTest() ou à l'appel de Test.getEventBus().deliver(), qu'on peut appeler plusieurs fois pour livrer les événements par étapes. Vérifier avant stopTest() lit les tâches avant la livraison (piège plausible). SeeAllData=true ne concerne que l'accès aux données de l'org (confusion de notions). EventBus.flush() n'existe pas (faux terme)."
     },
     {
       "id": "x-t12",
       "domain": "tdd",
-      "question": "A developer at Universal Containers must test a Visualforce controller extension used by the OrderPage page. The extension reads the record ID from the URL, and the test must not depend on the org's data. What should the developer do?",
+      "question": "This test at Universal Containers covers OrderExtension, the controller extension of the OrderPage Visualforce page. The extension's constructor reads the order ID with ApexPages.currentPage().getParameters().get('id'), and the test fails with a System.NullPointerException. What should the developer add before the extension is created?",
+      "code": "@isTest\nstatic void loadsOrderName() {\n    Order__c ord = new Order__c(Name = 'O-1042');\n    insert ord;\n\n    OrderExtension ext = new OrderExtension(new ApexPages.StandardController(ord));\n\n    Assert.areEqual('O-1042', ext.orderName);\n}",
+      "codeOptions": true,
       "options": [
-        "Call Test.setCurrentPage(Page.OrderPage), add the id parameter with ApexPages.currentPage().getParameters().put(), and then build the extension with new ApexPages.StandardController(record)",
-        "Write a Jest test that mounts the Visualforce page",
-        "Query an existing order in a test annotated with @isTest(SeeAllData=true), and open the page URL",
-        "Call Test.setCurrentRecord(record) before building the extension"
+        "Test.setCurrentPage(Page.OrderPage); ApexPages.currentPage().getParameters().put('id', ord.Id);",
+        "ApexPages.currentPage().getParameters().put('id', ord.Id);",
+        "PageReference p = Page.OrderPage; p.getParameters().put('id', ord.Id);",
+        "Test.setCurrentRecord(ord);"
       ],
       "answer": [
         0
       ],
-      "explanation": "On simule la page courante et ses paramètres, on construit l'extension avec un StandardController sur un enregistrement créé par le test, puis on appelle ses méthodes et on vérifie les PageReference renvoyées. Jest teste des composants LWC, pas des pages Visualforce (piège plausible : outil réel, mauvais contexte). SeeAllData=true dépend des données de l'org (inversion). Test.setCurrentRecord() n'existe pas (faux terme)."
+      "explanation": "En test, aucune page n'est en cours tant que Test.setCurrentPage() n'a pas été appelé : ApexPages.currentPage() renvoie null, d'où l'exception. On déclare la page courante, on y ajoute le paramètre id, puis on construit l'extension. Ajouter le paramètre sans déclarer la page appelle toujours une méthode sur null (piège plausible). Une PageReference qui n'est pas passée à Test.setCurrentPage() ne devient pas la page courante (presque juste). Test.setCurrentRecord() n'existe pas (faux terme)."
     },
     {
       "id": "x-r1",
       "domain": "perf",
-      "question": "This trigger at Universal Containers works when a user creates a contact manually. A Data Loader import of 500 contacts, in batches of 200, fails. What causes the failure?",
-      "code": "trigger ContactTrigger on Contact (before insert) {\n    for (Contact c : Trigger.new) {\n        Account a = [SELECT Industry FROM Account WHERE Id = :c.AccountId];\n        c.Description = a.Industry;\n    }\n}",
+      "question": "A Data Loader import at Universal Containers inserts 200 leads in one batch, and none of them has a LeadSource value. What is the result of this trigger?",
+      "code": "trigger LeadTrigger on Lead (before insert) {\n    Lead l = Trigger.new[0];\n    if (l.LeadSource == null) {\n        l.LeadSource = 'Web';\n    }\n}",
       "options": [
-        "The SOQL query inside the loop exceeds the limit of 100 SOQL queries per transaction",
-        "The SOQL query inside the loop exceeds the limit of 50,000 rows retrieved",
-        "Trigger.new can't be modified in a before insert trigger",
-        "Data Loader runs triggers in bulk mode, which doesn't allow SOQL queries"
+        "Only the first lead of the batch gets LeadSource set to Web",
+        "All 200 leads get LeadSource set to Web, because the trigger runs once for each lead",
+        "The import fails, because Trigger.new can't be read by index",
+        "No lead gets LeadSource set, because changes to Trigger.new in a before trigger aren't saved"
       ],
       "answer": [
         0
       ],
-      "explanation": "Chaque lot de 200 contacts exécute 200 requêtes, au-delà des 100 autorisées en synchrone : System.LimitException. Chaque requête ne renvoie qu'une ligne, la limite de 50 000 lignes n'est pas en cause (piège plausible). En before insert, on modifie justement Trigger.new, sans DML (inversion). Il n'existe pas de « bulk mode » qui interdit le SOQL (faux terme)."
+      "explanation": "Un trigger s'exécute une fois par lot de 200 enregistrements au plus, pas une fois par enregistrement. Trigger.new[0] ne lit que le premier : les 199 autres pistes sont enregistrées sans LeadSource. Il faut parcourir Trigger.new avec une boucle for. Croire que le trigger s'exécute pour chaque enregistrement est l'erreur classique (piège plausible). Trigger.new est une liste ordinaire, lisible par index (faux énoncé). Dans un trigger before, les valeurs modifiées dans Trigger.new sont enregistrées sans DML (inversion)."
     },
     {
       "id": "x-r2",
       "domain": "perf",
-      "question": "A developer at Universal Containers must bulkify a before insert trigger that runs one SOQL query per contact, inside its loop, to read the parent account's industry. The trigger must keep setting the field on the contacts. Which two changes should the developer make?",
+      "question": "A Data Loader import at Universal Containers inserts cases in batches of 200, and it fails because of this trigger. Which two lines must the developer move out of the loop so that the trigger handles a full batch?",
+      "code": "01 trigger CaseTrigger on Case (after insert) {\n02     for (Case c : Trigger.new) {\n03         Account a = [SELECT Id, Open_Cases__c FROM Account WHERE Id = :c.AccountId];\n04         a.Open_Cases__c = (a.Open_Cases__c == null ? 0 : a.Open_Cases__c) + 1;\n05         update a;\n06     }\n07 }",
       "options": [
-        "Collect the AccountId values in a Set, and then run a single query with WHERE Id IN :accountIds",
-        "Put the queried accounts in a Map<Id, Account>, and read each contact's account from the map inside the loop",
-        "Move the query to an @future method called once for each contact",
-        "Add LIMIT 1 to the query inside the loop",
-        "Replace the query with Database.queryBulk()"
+        "Line 03, the SOQL query, because a transaction can run at most 100 SOQL queries",
+        "Line 05, the update statement, because a transaction can run at most 150 DML statements",
+        "Line 04, the field assignment, because it uses CPU time for each case",
+        "Line 01, the after insert event, because the trigger must run before insert to update the account",
+        "Line 02, the loop over Trigger.new, which must be replaced with a loop over Trigger.newMap"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Le pattern standard : une boucle pour collecter les Id, une seule requête avec IN, puis une Map pour retrouver chaque parent. Une méthode @future sort la requête de la transaction, mais elle ne pourrait plus modifier Trigger.new et dépasserait 50 appels pour 200 contacts (piège plausible). LIMIT 1 ne réduit pas le nombre de requêtes (idée reçue). Database.queryBulk() n'existe pas (faux terme)."
+      "explanation": "Dans une boucle sur 200 cas, la requête de la ligne 03 atteint la limite de 100 requêtes SOQL synchrones, et l'update de la ligne 05 dépasserait ensuite celle de 150 instructions DML. On collecte les AccountId dans un Set, on lit les comptes en une seule requête dans une Map<Id, Account>, puis on met à jour la liste en un seul update après la boucle, ce qui gère aussi plusieurs cas d'un même compte. L'affectation de la ligne 04 ne consomme ni requête ni DML (piège plausible). Un trigger before insert sur Case ne met pas à jour le compte sans DML (confusion de notions). Parcourir Trigger.new est la bonne pratique : le problème vient de ce que contient la boucle (faux énoncé)."
     },
     {
       "id": "x-r3",
@@ -839,19 +864,20 @@
     {
       "id": "x-r5",
       "domain": "perf",
-      "question": "A Visualforce page at Universal Containers exceeds the view state limit of 170 KB. The page must keep all its features. Which two actions reduce the view state?",
+      "question": "This Visualforce controller at Universal Containers makes its page exceed the view state limit of 170 KB. The page must keep all its features. Which two changes reduce the view state?",
+      "code": "public with sharing class CatalogController {\n    public List<Product2> products { get; set; }   // 5,000 read-only rows\n    public Order__c draftOrder { get; set; }       // edited by the user\n    public Map<Id, PricebookEntry> prices {\n        get {\n            if (prices == null) {\n                prices = PriceService.load();      // one SOQL query\n            }\n            return prices;\n        }\n        set;\n    }\n\n    public CatalogController() {\n        products = [SELECT Id, Name, Description FROM Product2 LIMIT 5000];\n        draftOrder = new Order__c();\n    }\n}",
       "options": [
-        "Declare as transient the controller variables that don't need to be kept between requests",
-        "Load the read-only data with JavaScript Remoting instead of controller properties",
-        "Keep large query results in controller variables to avoid querying them again",
-        "Raise the view state limit in Session Settings",
+        "Declare prices as transient",
+        "Load the read-only product list with JavaScript Remoting instead of keeping it in the products property",
+        "Declare draftOrder as transient",
+        "Move the three properties into an inner wrapper class",
         "Add <apex:viewState compress=\"true\"/> to the page"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Les variables transient ne sont pas sérialisées dans le view state, et JavaScript Remoting n'en utilise pas. Garder de gros résultats dans le contrôleur évite des requêtes, mais grossit le view state (inversion). La limite de 170 Ko n'est pas configurable (réglage inexistant). apex:viewState n'existe pas (faux terme)."
+      "explanation": "L'état d'affichage sérialise, à chaque requête, les variables d'instance du contrôleur qui ne sont pas transient. prices est rechargé par son getter quand il est vide : déclaré transient, il n'est plus sérialisé et se reconstruit après chaque postback. Les 5 000 produits en lecture seule peuvent être chargés par JavaScript Remoting (@RemoteAction), qui n'utilise pas l'état d'affichage. draftOrder doit être conservé entre les requêtes : transient effacerait la saisie de l'utilisateur (inversion). Une classe wrapper est sérialisée comme le reste (piège plausible). apex:viewState n'existe pas (faux terme)."
     },
     {
       "id": "x-r6",
@@ -899,7 +925,7 @@
         0,
         1
       ],
-      "explanation": "Un joker en début de LIKE et les opérateurs négatifs (!=, NOT, NOT IN) empêchent l'usage de l'index. Les filtres sur Id, sur un champ External ID ou sur CreatedDate avec une plage étroite restent sélectifs. À vérifier avec le Query Plan."
+      "explanation": "Un joker en début de LIKE et les opérateurs négatifs (!=, NOT, NOT IN) empêchent l'usage de l'index. Les trois autres filtres portent sur des champs indexés (Id, champ External ID, CreatedDate) et restent sélectifs tant qu'ils ciblent peu d'enregistrements (pièges plausibles). À vérifier avec le Query Plan."
     },
     {
       "id": "x-r9",

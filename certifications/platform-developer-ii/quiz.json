@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "questions": [
     {
       "id": "q-adf1",
@@ -35,19 +35,20 @@
     {
       "id": "q-adf3",
       "domain": "adf",
-      "question": "Universal Containers has a custom object, Project__c, with a Private organization-wide default. Each project has a Reviewer__c lookup to User. The reviewer must automatically get Read access to the project, and that access must be kept when the project owner changes. A sharing rule can't meet this requirement. Which two actions should the developer take?",
+      "question": "At Universal Containers, Project__c has a Private organization-wide default. This trigger gives each project's reviewer Read access, but the reviewer loses the access when the project owner changes. The access must be kept. Which two changes should the developer make?",
+      "code": "trigger ProjectTrigger on Project__c (after insert, after update) {\n    List<Project__Share> shares = new List<Project__Share>();\n    for (Project__c p : Trigger.new) {\n        shares.add(new Project__Share(\n            ParentId = p.Id,\n            UserOrGroupId = p.Reviewer__c,\n            AccessLevel = 'Read',\n            RowCause = Schema.Project__Share.RowCause.Manual\n        ));\n    }\n    Database.insert(shares, false);\n}",
       "options": [
-        "Create an Apex sharing reason on Project__c",
-        "Insert Project__Share records with RowCause set to the Apex sharing reason in an after insert and after update trigger",
-        "Insert Project__Share records with RowCause set to Manual",
-        "Change the organization-wide default of Project__c to Public Read Only",
-        "Enable reviewer sharing on the Reviewer__c lookup field"
+        "Create an Apex sharing reason, such as Reviewer__c, on Project__c",
+        "Set RowCause to Schema.Project__Share.RowCause.Reviewer__c",
+        "Set AccessLevel to Edit so that the share is kept",
+        "Move the code to a before insert trigger",
+        "Set RowCause to Schema.Project__Share.RowCause.Owner"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Une Apex Sharing Reason, utilisée comme RowCause des enregistrements Project__Share, crée un partage qui survit au changement de propriétaire ; on l'insère une fois l'enregistrement créé, donc dans un trigger after. Un partage Manual fonctionne, mais disparaît quand le propriétaire change (piège plausible). Passer l'OWD en Public Read Only ouvre le projet à tout le monde au lieu du seul réviseur (inversion du moindre privilège). Une option « reviewer sharing » sur un lookup n'existe pas (faux terme)."
+      "explanation": "Un partage dont le RowCause est Manual est supprimé quand le propriétaire de l'enregistrement change. Un partage créé avec une raison de partage Apex (Apex sharing reason, disponible sur les objets personnalisés) est conservé. On crée la raison sur Project__c, puis on l'utilise dans RowCause : Schema.Project__Share.RowCause.Reviewer__c. Le niveau d'accès n'a aucun effet sur la conservation du partage (piège plausible). En before insert, l'enregistrement n'a pas encore d'Id à placer dans ParentId (inversion). Le RowCause Owner désigne l'accès du propriétaire, géré par la plateforme (confusion de notions)."
     },
     {
       "id": "q-adf4",
@@ -114,19 +115,20 @@
     {
       "id": "q-pali2",
       "domain": "pali",
-      "question": "After an opportunity is closed, a developer must send its data to an ERP with a REST callout. If the ERP returns an order number, a second asynchronous job must update related records. The team needs a job ID to monitor each step. Which two actions should the developer take?",
+      "question": "After an opportunity is closed at Universal Containers, this job sends it to an ERP. When the ERP returns an order number, a second job updates the related records, and the team must be able to monitor each step. Which two statements about this code are true?",
+      "code": "public class ErpOrderJob implements Queueable, Database.AllowsCallouts {\n    private Id oppId;\n\n    public ErpOrderJob(Id oppId) {\n        this.oppId = oppId;\n    }\n\n    public void execute(QueueableContext ctx) {\n        String orderNumber = ErpClient.sendOpportunity(oppId);   // REST callout\n        if (orderNumber != null) {\n            System.enqueueJob(new RelatedRecordsJob(oppId, orderNumber));\n        }\n    }\n}",
       "options": [
-        "Implement Queueable and Database.AllowsCallouts in the class that makes the callout",
-        "Start the second job by calling System.enqueueJob() in the execute() method of the first job",
-        "Make the callout in an @future(callout=true) method called from the trigger",
-        "Make the callout synchronously in the after update trigger",
-        "Annotate the execute() method with @Callout(chain=true)"
+        "The callout is allowed because the class implements Database.AllowsCallouts",
+        "Each job has its own ID and AsyncApexJob record, so both steps can be monitored",
+        "RelatedRecordsJob runs in the same transaction as ErpOrderJob and shares its governor limits",
+        "The class must also implement Database.Stateful to pass oppId to RelatedRecordsJob",
+        "A Queueable job that makes a callout can't enqueue another job"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Un Queueable qui implémente Database.AllowsCallouts peut faire le callout, renvoie un Id de job et lance le job suivant avec System.enqueueJob() depuis execute(). Une méthode @future(callout=true) fait bien le callout, mais ne renvoie pas d'Id de job et ne peut pas lancer d'autre méthode future (piège plausible). Un callout synchrone dans un trigger est interdit (inversion). L'annotation @Callout n'existe pas (faux terme)."
+      "explanation": "Un Queueable qui fait un appel externe doit implémenter Database.AllowsCallouts. System.enqueueJob() renvoie l'Id du job, et chaque job a son enregistrement AsyncApexJob : chaque étape se suit séparément. Le job chaîné démarre après la fin du premier, dans sa propre transaction et avec ses propres limites (inversion). L'état passe simplement par le constructeur du job suivant ; Database.Stateful ne concerne que Batch Apex (piège plausible). Le chaînage est permis depuis un Queueable qui fait un appel externe (faux énoncé)."
     },
     {
       "id": "q-pali3",
@@ -221,7 +223,8 @@
     {
       "id": "q-pali9",
       "domain": "pali",
-      "question": "A developer adds code to an after insert trigger on Lead to call an external enrichment API. The API accepts up to 200 leads per request. During testing, the insert fails with \"Callout from triggers are currently not supported.\" The enrichment must still run automatically for every lead, including leads loaded in bulk. What should the developer do?",
+      "question": "A developer at Universal Containers adds this after insert trigger on Lead to call an external enrichment API, which accepts up to 200 leads per request. The insert fails with \"Callout from triggers are currently not supported.\" The enrichment must still run automatically for every lead, including leads loaded in bulk. What should the developer do?",
+      "code": "trigger LeadTrigger on Lead (after insert) {\n    EnrichmentClient.enrich(Trigger.newMap.keySet());   // HTTP callout\n}",
       "options": [
         "Move the callout to a Queueable class that implements Database.AllowsCallouts, and enqueue one job per trigger execution with the lead IDs",
         "Move the callout to an @future(callout=true) method, and call it once per lead in a loop",
@@ -266,49 +269,52 @@
     {
       "id": "q-ui1",
       "domain": "ui",
-      "question": "A Lightning web component loads a charting library from a static resource. The chart must be initialized once, after the component's template has rendered, and must not be initialized again on later renders. What should the developer do?",
+      "question": "This Lightning web component at Universal Containers draws a chart with a library stored as a static resource. The chart is created again each time the component renders. The chart must be initialized only once, after the template has rendered. What should the developer change?",
+      "code": "import { LightningElement } from 'lwc';\nimport { loadScript } from 'lightning/platformResourceLoader';\nimport CHART_JS from '@salesforce/resourceUrl/chartjs';\n\nexport default class SalesChart extends LightningElement {\n    renderedCallback() {\n        loadScript(this, CHART_JS).then(() => {\n            this.initializeChart();\n        });\n    }\n}",
       "options": [
-        "Call loadScript() in renderedCallback() and use a flag so that the initialization runs only once",
-        "Call loadScript() and initialize the chart in connectedCallback()",
-        "Initialize the chart in disconnectedCallback()",
-        "Use the @afterRender decorator on an init() method"
+        "Add a private flag, return from renderedCallback() when it's set, and set it before calling loadScript()",
+        "Move the code to connectedCallback(), which runs only once",
+        "Move the code to disconnectedCallback()",
+        "Annotate renderedCallback() with @once"
       ],
       "answer": [
         0
       ],
-      "explanation": "renderedCallback() s'exécute après le rendu, quand les éléments du template existent ; comme il s'exécute après chaque rendu, un drapeau limite l'initialisation à une fois. connectedCallback() s'exécute avant le rendu : le template n'est pas encore disponible (piège plausible). disconnectedCallback() s'exécute au retrait du composant, l'inverse du besoin (inversion). Le décorateur @afterRender n'existe pas (faux terme)."
+      "explanation": "renderedCallback() s'exécute après chaque rendu du composant : sans garde, la bibliothèque et le graphique sont réinitialisés à chaque nouveau rendu. Le modèle courant est un booléen privé, par exemple chartInitialized, testé au début de renderedCallback() et positionné avant loadScript(). connectedCallback() s'exécute avant le rendu du template, donc avant que l'élément du graphique existe, et à nouveau si le composant est retiré puis réinséré (piège plausible). disconnectedCallback() s'exécute quand le composant est retiré du DOM (inversion). @once n'existe pas (faux terme)."
     },
     {
       "id": "q-ui2",
       "domain": "ui",
-      "question": "A developer exposes an Apex method that returns open cases to a Lightning web component. The component must get the data with @wire, and the results can be cached on the client. Which two requirements must the Apex method meet?",
+      "question": "A developer at Universal Containers must get open cases in a Lightning web component with @wire, and the results can be cached on the client. The component can't use this method yet. Which two changes should the developer make to the method?",
+      "code": "public with sharing class CaseController {\n    @AuraEnabled\n    public List<Case> getOpenCases() {\n        List<Case> cases = [SELECT Id, Subject FROM Case WHERE IsClosed = false];\n        insert new Log__c(Message__c = 'Open cases loaded');\n        return cases;\n    }\n}",
       "options": [
-        "It's static and annotated with @AuraEnabled(cacheable=true)",
-        "It doesn't perform any DML operations",
-        "It's annotated with @AuraEnabled(continuation=true) only",
-        "It's an instance method, so that each component gets its own copy",
-        "It's annotated with @WireEnabled"
+        "Declare the method static and annotate it with @AuraEnabled(cacheable=true)",
+        "Remove the insert statement, because a cacheable method can't perform DML",
+        "Annotate the method with @AuraEnabled(continuation=true)",
+        "Declare the class global so that the component can import the method",
+        "Annotate the method with @WireEnabled"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "@wire exige une méthode statique @AuraEnabled(cacheable=true), et une méthode cacheable ne doit pas faire de DML. continuation=true sert aux callouts longs : seul, il ne rend pas la méthode utilisable par @wire (piège plausible). Une méthode d'instance est l'inverse de l'exigence : les méthodes appelées depuis un LWC sont statiques (inversion). @WireEnabled n'existe pas (faux terme)."
+      "explanation": "Pour @wire, la méthode Apex doit être statique et annotée @AuraEnabled(cacheable=true). Une méthode cacheable ne doit pas modifier de données : un DML y lève une LimitException. continuation=true sert aux appels externes longs, pas au cache (confusion de notions). Une classe public suffit pour importer une méthode @AuraEnabled dans un composant (piège plausible). @WireEnabled n'existe pas (faux terme)."
     },
     {
       "id": "q-ui3",
       "domain": "ui",
-      "question": "A child component in a list must tell its parent which item the user selected. The components must stay loosely coupled, and the event must not travel beyond the parent. What should the developer do?",
+      "question": "A developer at Universal Containers can't save this Lightning web component template. Which line causes the error?",
+      "code": "01 <template>\n02     <template lwc:if={hasOrders}>\n03         <ul>\n04             <template for:each={orders} for:item=\"order\">\n05                 <li>{order.Name}</li>\n06             </template>\n07         </ul>\n08     </template>\n09     <template lwc:else>\n10         <p>No orders</p>\n11     </template>\n12 </template>",
       "options": [
-        "Dispatch a CustomEvent with the item ID in detail, leave bubbles and composed set to false, and handle the event on the child's tag in the parent's template",
-        "Publish a message on a Lightning Message Service channel",
-        "Have the parent call an @api method on the child to read the selected item",
-        "Call this.notifyParent() with the item ID"
+        "Line 05, because each element in a for:each iteration needs a key attribute",
+        "Line 09, because lwc:else must be placed inside the lwc:if template",
+        "Line 02, because lwc:if accepts only a getter, not a property",
+        "Line 04, because for:item must be replaced with for:index"
       ],
       "answer": [
         0
       ],
-      "explanation": "Un CustomEvent sans bubbles ni composed ne quitte pas l'enfant : seul le parent, qui l'écoute sur la balise de l'enfant (onselect), le reçoit. Lightning Message Service fonctionne, mais diffuse le message dans toute l'application (piège plausible). Faire lire la sélection par le parent inverse le sens de la communication et couple les composants (inversion). this.notifyParent() n'existe pas (faux terme)."
+      "explanation": "Dans une itération for:each, le premier élément de chaque itération doit avoir un attribut key unique, par exemple key={order.Id} : sans lui, le template ne compile pas. lwc:else se place sur le template frère qui suit immédiatement le lwc:if, ce qui est le cas ici (piège plausible). lwc:if accepte une propriété comme un getter (faux énoncé). for:item nomme l'élément courant et for:index sa position : les deux sont permis (confusion de notions)."
     },
     {
       "id": "q-ui4",
@@ -343,17 +349,19 @@
     {
       "id": "q-ui6",
       "domain": "ui",
-      "question": "A Lightning web component calls an Apex method imperatively to save an order. When a validation rule fails, users see a generic error. Users must see the validation rule's message, without the Apex stack trace. What should the developer do?",
+      "question": "This Apex method at Universal Containers saves an order from a Lightning web component. When a validation rule fails, the component must show the rule's message in a toast, without technical details. Which expression should the developer use in the catch handler of the component?",
+      "code": "@AuraEnabled\npublic static void saveOrder(Order__c ord) {\n    try {\n        update ord;\n    } catch (DmlException e) {\n        throw new AuraHandledException(e.getDmlMessage(0));\n    }\n}\n\n// orderForm.js\nsaveOrder({ ord: this.order })\n    .then(() => this.showToast('success', 'Order saved'))\n    .catch(error => this.showToast('error', /* message */));",
+      "codeOptions": true,
       "options": [
-        "Catch the DmlException in Apex, throw an AuraHandledException with e.getDmlMessage(0), and show error.body.message in a toast",
-        "Let the DmlException propagate and show JSON.stringify(error) in the component",
-        "Catch the exception in Apex and return null so that no error is shown",
-        "Annotate the method with @AuraEnabled(showErrors=true)"
+        "error.body.message",
+        "error.message",
+        "JSON.stringify(error)",
+        "error.getMessage()"
       ],
       "answer": [
         0
       ],
-      "explanation": "AuraHandledException renvoie au composant un message choisi, sans trace de pile ; getDmlMessage(0) donne le message de la règle de validation, affiché avec lightning/toast. Afficher l'erreur brute montre le message, mais aussi les détails techniques (piège plausible). Renvoyer null cache l'erreur au lieu de l'expliquer (inversion). L'attribut showErrors n'existe pas (faux terme)."
+      "explanation": "Une erreur Apex renvoyée à un appel impératif arrive sous la forme d'un objet dont body.message contient le message de l'AuraHandledException, ici celui de la règle de validation obtenu par getDmlMessage(0). message est la propriété d'une erreur JavaScript ; une erreur Apex place son message dans body (piège plausible). JSON.stringify(error) afficherait l'objet brut avec ses détails techniques, l'inverse du besoin (inversion). getMessage() est une méthode Apex, pas JavaScript (faux terme)."
     },
     {
       "id": "q-ui7",
@@ -390,17 +398,18 @@
     {
       "id": "q-tdd1",
       "domain": "tdd",
-      "question": "A developer tests a method that enqueues a Queueable job, and the job updates account records. The test must assert the values that the job writes. What should the developer do?",
+      "question": "This test at Universal Containers covers AccountService.scheduleRatingUpdate(), which enqueues a Queueable job that sets Rating to Hot on the accounts. The assertion fails. What should the developer change?",
+      "code": "@isTest\nstatic void updatesRating() {\n    List<Account> accounts = TestDataFactory.insertAccounts(5);\n\n    AccountService.scheduleRatingUpdate(accounts);\n\n    Assert.areEqual(5, [SELECT COUNT() FROM Account WHERE Rating = 'Hot']);\n}",
       "options": [
-        "Call the method between Test.startTest() and Test.stopTest(), and then query the accounts and assert after Test.stopTest()",
-        "Call the method, and then query the accounts and assert before Test.stopTest()",
-        "Annotate the test with @isTest(SeeAllData=true) so that the job runs against the org's data",
+        "Call the method between Test.startTest() and Test.stopTest(), and assert after Test.stopTest()",
+        "Call the method between Test.startTest() and Test.stopTest(), and assert before Test.stopTest()",
+        "Annotate the test with @isTest(SeeAllData=true) so that the job can read the accounts",
         "Call Test.runQueueableJobs() after the method"
       ],
       "answer": [
         0
       ],
-      "explanation": "Test.stopTest() exécute de façon synchrone tout le code asynchrone lancé depuis Test.startTest() : les assertions placées après voient les mises à jour du job. Vérifier avant stopTest() lit les données avant l'exécution du job (piège plausible). SeeAllData=true expose le test aux données de l'org, l'inverse de l'isolation recommandée (inversion). Test.runQueueableJobs() n'existe pas (faux terme)."
+      "explanation": "Le job Queueable ne s'exécute pas tant que le test n'appelle pas Test.stopTest() : tout le travail asynchrone lancé après Test.startTest() est alors exécuté de façon synchrone. L'assertion doit donc suivre stopTest(). Vérifier avant stopTest() lit les comptes avant l'exécution du job (piège plausible). Les comptes créés par le test sont déjà visibles du job : SeeAllData=true ne sert qu'aux données de l'org (confusion de notions). Test.runQueueableJobs() n'existe pas (faux terme)."
     },
     {
       "id": "q-tdd2",
@@ -422,17 +431,18 @@
     {
       "id": "q-tdd3",
       "domain": "tdd",
-      "question": "The organization-wide default for Account at Universal Containers is Private. A developer must write a test that proves a sales rep can't see accounts owned by another team. What should the developer do?",
+      "question": "The organization-wide default for Account at Universal Containers is Private, and sales reps see only the accounts that they own. This test must prove that a rep can't see another rep's account, but the assertion fails because visible.size() is 1. What should the developer change?",
+      "code": "@isTest\nstatic void repCantSeeOtherAccounts() {\n    User rep = TestUsers.salesRep('rep1@uc.test');\n    User otherRep = TestUsers.salesRep('rep2@uc.test');\n    insert new List<User>{ rep, otherRep };\n    insert new Account(Name = 'West Co', OwnerId = otherRep.Id);\n\n    List<Account> visible = AccountSelector.visibleAccounts();   // with sharing\n\n    Assert.areEqual(0, visible.size());\n}",
       "options": [
-        "Create a user with the sales rep's profile and role, and run the query inside System.runAs()",
-        "Run the query as the test's default running user and assert the number of records",
-        "Declare the test class without sharing",
-        "Call Test.setRunningUser() before the query"
+        "Call AccountSelector.visibleAccounts() inside a System.runAs(rep) block",
+        "Declare the test class with sharing",
+        "Annotate the test with @isTest(SeeAllData=true)",
+        "Call Test.setRunningUser(rep) before the query"
       ],
       "answer": [
         0
       ],
-      "explanation": "System.runAs() exécute le bloc en tant que l'utilisateur créé et applique son partage d'enregistrements ; il n'applique pas sa FLS. L'utilisateur par défaut du test est celui qui lance les tests, souvent un administrateur qui voit tout (piège plausible). without sharing ignore justement le partage à vérifier (inversion). Test.setRunningUser() n'existe pas (faux terme)."
+      "explanation": "Un test s'exécute avec l'utilisateur qui lance les tests, souvent un administrateur qui voit tous les comptes. System.runAs() exécute le bloc avec le partage de l'utilisateur indiqué (pas ses droits d'objet ni sa FLS) : le rep ne possède pas le compte, le sélecteur with sharing ne le renvoie donc pas. Déclarer la classe de test with sharing applique le partage de l'utilisateur courant, toujours l'administrateur (piège plausible). SeeAllData=true donne accès aux données de l'org sans rien changer au partage (confusion de notions). Test.setRunningUser() n'existe pas (faux terme)."
     },
     {
       "id": "q-tdd4",
@@ -546,7 +556,8 @@
     {
       "id": "q-perf3",
       "domain": "perf",
-      "question": "A Lightning web component lists 200,000 accounts sorted by name, 50 at a time. Users get an error when they go past page 41. The component must support every page with minimal Apex changes. What should the developer do?",
+      "question": "This Apex method at Universal Containers returns 200,000 accounts sorted by name, 50 per page, to a Lightning web component. Users get an error when they open page 42 or a later page. The component must support every page with minimal Apex changes. What should the developer do?",
+      "code": "@AuraEnabled(cacheable=true)\npublic static List<Account> getPage(Integer pageNumber) {\n    Integer offsetRows = (pageNumber - 1) * 50;\n    return [\n        SELECT Id, Name FROM Account\n        ORDER BY Name\n        LIMIT 50 OFFSET :offsetRows\n    ];\n}",
       "options": [
         "Replace OFFSET with keyset pagination, for example WHERE Name > :lastName ORDER BY Name LIMIT 50",
         "Increase the page size to 500 rows so that fewer pages are needed",
