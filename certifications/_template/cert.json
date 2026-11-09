@@ -1,0 +1,54 @@
+{
+  "id": "ma-certification",
+  "title": "Nom complet de la certification",
+  "shortTitle": "Nom court",
+  "vendor": "Salesforce",
+  "track": "Administrator",
+  "code": "Code-Examen-101",
+  "summary": "Une ou deux phrases affichées dans le catalogue et en tête de la fiche.",
+  "verified": "Vérifié le JJ mois AAAA avec le guide d'examen officiel.",
+  "language": { "content": "fr", "questions": "fr" },
+  "exam": {
+    "durationMinutes": 105,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.65,
+    "passingLabel": "seuil 65 %",
+    "price": "200 USD · repassage 100 USD"
+  },
+  "facts": ["**60** questions", "**105** min", "seuil **65 %**"],
+  "domains": [
+    {
+      "id": "domaine-a",
+      "label": "Premier domaine",
+      "short": "Domaine A",
+      "name": "Official Section Name A",
+      "weight": 60,
+      "color": "#3450d6",
+      "objectives": [
+        "Premier objectif officiel du domaine.",
+        "Deuxième objectif officiel, avec du `code` si besoin."
+      ]
+    },
+    {
+      "id": "domaine-b",
+      "label": "Second domaine",
+      "short": "Domaine B",
+      "name": "Official Section Name B",
+      "weight": 40,
+      "color": "#a65a00",
+      "objectives": ["Objectif officiel du second domaine."]
+    }
+  ],
+  "content": {
+    "pages": [],
+    "quiz": "quiz.json",
+    "flashcards": "flashcards.json"
+  },
+  "mockExams": [
+    { "id": "mini", "label": "Mini-examen", "source": "quiz", "durationMinutes": 5, "allocation": { "domaine-a": 2, "domaine-b": 1 } }
+  ],
+  "notes": ["Les questions sont rédigées pour l'entraînement, elles ne proviennent pas de l'examen."],
+  "sources": [{ "label": "Guide d'examen officiel", "url": "https://trailhead.salesforce.com/credentials" }],
+  "searchExamples": ["Premier", "Second"]
+}

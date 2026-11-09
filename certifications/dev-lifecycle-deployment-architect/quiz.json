@@ -1,0 +1,627 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "q-alm1",
+      "domain": "alm",
+      "question": "The pharmaceutical division of Universal Containers must deliver an app that tracks clinical trials. A specification signed off by the quality department fixes the requirements, and an auditor must approve each phase before the next one starts. Which methodology should the architect recommend?",
+      "options": [
+        "Waterfall, with documented approval gates between phases",
+        "Scrum with two-week sprints and a demo at each sprint review",
+        "Continuous delivery, where each team releases a feature as soon as it's ready",
+        "The Phase-Gate methodology built into Lifecycle Center"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Exigences figées, validation formelle et approbation de chaque phase : c'est le terrain du waterfall. Scrum apporte des retours rapides, mais multiplie les changements à revalider dans un contexte réglementé (piège plausible). Livrer dès qu'une fonctionnalité est prête supprime les jalons d'approbation exigés (inversion). Lifecycle Center ne contient pas de méthodologie « Phase-Gate » (faux terme)."
+    },
+    {
+      "id": "q-alm2",
+      "domain": "alm",
+      "question": "Universal Containers moved to Scrum six months ago. The team has no Product Owner and no coding standards. Which two risks should the architect raise?",
+      "options": [
+        "Scope creep, because nobody prioritizes the backlog",
+        "Technical debt that builds up under the pressure to deliver every sprint",
+        "Late discovery of requirement gaps, because users see the product only at the end",
+        "Requirements that can't change once the project has started",
+        "A sprint lock that blocks deployments until the backlog is empty"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Sans Product Owner, personne ne trie les demandes et le périmètre dérive ; sans standards, la dette technique s'accumule. Découvrir les écarts à la fin est un vrai risque, mais celui du waterfall (piège plausible). Des exigences figées sont l'inverse de Scrum (inversion). Le « sprint lock » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-alm3",
+      "domain": "alm",
+      "question": "A small Universal Containers subsidiary has two admins and no source control, and it deploys with change sets. It had two production incidents this quarter. The architect must improve governance without adding more process than the team can sustain. What should the architect recommend first?",
+      "options": [
+        "A lightweight process: Git as the source of truth, one sandbox per person, and a validation and a peer review before each production release",
+        "A Center of Excellence, a weekly CAB, and an Architecture Review Board",
+        "Allowing changes directly in production so that fixes reach users faster",
+        "The Governance Starter Kit setting in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La gouvernance se calibre sur la maturité : une petite équipe commence par le source control, des environnements séparés et une validation. CoE, CAB et ARB sont de vrais organes, mais trop lourds pour deux admins (piège plausible). Autoriser les changements en production aggrave la cause des incidents (inversion). Le réglage « Governance Starter Kit » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-plan1",
+      "domain": "plan",
+      "question": "During the preview window, a Universal Containers developer builds a feature in a sandbox that is already on the next release, and the project's sourceApiVersion follows that sandbox. The deployment to production, which is still on the current release, fails. How should the team avoid this during future preview windows?",
+      "options": [
+        "Keep the project's sourceApiVersion on the production version, and avoid new-release features until production is upgraded",
+        "Deploy with RunAllTestsInOrg so that production accepts the new API version",
+        "Set sourceApiVersion to the highest API version available in the sandbox",
+        "Request an early production upgrade on the Preview Opt-In page"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pendant la preview, la sandbox est en version N+1 et la production en N : un composant qui utilise l'API ou une fonctionnalité de N+1 ne se déploie pas. RunAllTestsInOrg change les tests exécutés, pas la version acceptée (piège plausible). Monter la sourceApiVersion au maximum reproduit la cause (inversion). Une production ne peut pas demander sa mise à jour en avance (faux terme)."
+    },
+    {
+      "id": "q-plan2",
+      "domain": "plan",
+      "question": "Universal Containers has a lot of custom Apex and five integrations. The next Salesforce release arrives in six weeks. Which two actions reduce the upgrade risk?",
+      "options": [
+        "Run the regression and integration tests in a sandbox on a preview instance",
+        "Review the release notes and the Release Updates, and test the updates in a sandbox before their enforcement date",
+        "Refresh the Full sandbox every day during the preview to stay current",
+        "Wait until production is upgraded, and then fix what breaks",
+        "Ask Salesforce to postpone the release for the org"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "La fenêtre de preview sert à tester la nouvelle version avant la production, et les Release Updates se testent en sandbox avant leur date d'application. Une Full ne se rafraîchit que tous les 29 jours (piège plausible). Attendre la mise à jour de la production fait l'inverse d'une préparation (inversion). Une release Salesforce ne se reporte pas (faux énoncé)."
+    },
+    {
+      "id": "q-plan3",
+      "domain": "plan",
+      "question": "During the preview window, Universal Containers must keep one sandbox on the same release as production to build urgent fixes. Which approach should the architect recommend?",
+      "options": [
+        "Create or refresh the hotfix sandbox before the Sandbox Preview Guide deadline so that it lands on a non-preview instance",
+        "Use the Full sandbox, because Full sandboxes never get the preview release",
+        "Build the urgent fixes in a preview sandbox so that they're tested on the next release",
+        "Select Stay on Current Release in the sandbox's Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "C'est l'instance d'une sandbox qui décide de sa version pendant la preview, et le Sandbox Preview Guide donne la date limite de refresh. Le type ne décide rien : une Full peut être en preview comme les autres (idée reçue). Corriger dans une sandbox preview fait l'inverse du besoin, aligné sur la production (inversion). « Stay on Current Release » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-plan4",
+      "domain": "plan",
+      "question": "Three Universal Containers teams deliver to the same org. Nobody owns the deployment calendar or the content of each release, and two teams deployed changes to the same objects on the same evening. Which role should the architect recommend adding?",
+      "options": [
+        "A release manager who owns the release calendar and freezes the content of each release",
+        "A Product Owner for each team",
+        "No role: each team deploys whenever its own work is ready",
+        "A Deployment Steward permission set for one admin"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le release manager tient le calendrier, fige le contenu et coordonne équipes et environnements. Un Product Owner priorise le backlog de son équipe, mais ne coordonne pas les mises en production entre équipes (piège plausible). Laisser chaque équipe déployer à sa guise reproduit le problème (inversion). Il n'existe pas de permission « Deployment Steward » (faux terme)."
+    },
+    {
+      "id": "q-plan5",
+      "domain": "plan",
+      "question": "After each refresh of its Full sandbox, Universal Containers must make sure that the sandbox doesn't call the production ERP and doesn't email real customers. The steps must be repeatable and part of the refresh process. Which two actions should the architect recommend?",
+      "options": [
+        "An Apex class that implements SandboxPostCopy, selected for the refresh, that redirects the endpoints and turns off the outbound integrations",
+        "Masking or clearing contact and lead email addresses with Data Mask & Seed after the refresh",
+        "Relying on the .invalid suffix that Salesforce adds to contact and lead email addresses",
+        "Restoring the production endpoints in the sandbox after each refresh so that the integrations keep working",
+        "Enabling Sandbox Safe Mode on the Full sandbox"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "SandboxPostCopy exécute une classe Apex à la fin de la copie, et le masquage protège les adresses des clients. Le suffixe .invalid existe, mais seulement sur les e-mails des utilisateurs, pas des contacts ni des leads (piège plausible). Remettre les endpoints de production reproduit le problème (inversion). « Sandbox Safe Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-des1",
+      "domain": "design",
+      "question": "Universal Containers needs a UAT environment with about 3,000 representative accounts and their opportunities. The environment must be refreshed every week. Which sandbox should the architect recommend?",
+      "options": [
+        "A Partial Copy sandbox with a sandbox template that includes Account, Opportunity, and their related objects",
+        "A Full sandbox with a sandbox template",
+        "A Developer Pro sandbox, refreshed every day",
+        "A Partial Copy sandbox with the Weekly Data Sync option"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La Partial Copy se rafraîchit tous les 5 jours et copie un échantillon défini par un template (jusqu'à 10 000 enregistrements par objet). Une Full copie les données, mais ne se rafraîchit que tous les 29 jours (piège plausible). Une Developer Pro se rafraîchit chaque jour, mais ne copie aucune donnée (fonction mal appliquée). L'option « Weekly Data Sync » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-des2",
+      "domain": "design",
+      "question": "Before a major release, Universal Containers must run a load test with production-like data volumes, without affecting production users. Which environment should the architect recommend?",
+      "options": [
+        "A Full sandbox refreshed from production, with a Scale Test slot",
+        "A Partial Copy sandbox loaded with generated data",
+        "Production, during a weekend with few users",
+        "A scratch org created with the LoadTest feature"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Seule une Full reproduit les volumes et la configuration de la production ; Scale Test réserve un créneau qui ajoute de la capacité à la sandbox. Une Partial Copy plafonne à 5 Go et 10 000 enregistrements par objet (piège plausible). Tester en production contredit la contrainte (inversion). La feature « LoadTest » n'existe pas pour les scratch orgs (faux terme)."
+    },
+    {
+      "id": "q-des3",
+      "domain": "design",
+      "question": "Universal Containers acquires a subsidiary, and the architect must decide whether the subsidiary gets its own org. Which two factors support a separate org?",
+      "options": [
+        "The subsidiary must stay legally isolated under a different regulator",
+        "The subsidiary needs its own administrators and its own release schedule",
+        "The subsidiary has more users than the other business units",
+        "The subsidiary shares most of its customers with the group, which needs a 360-degree view",
+        "The Multi-Org License Pooling feature requires one org per legal entity"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Isolation juridique ou réglementaire et autonomie (administration, calendrier) justifient une org séparée. La taille seule ne le justifie pas (piège plausible : idée reçue). Des clients partagés et une vue 360° poussent vers l'org unique (inversion). « Multi-Org License Pooling » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-des4",
+      "domain": "design",
+      "question": "A Universal Containers team of admins and developers has no Git experience. It wants traceable promotions from its sandboxes to production, in clicks, without buying a third-party tool. Which tool should the architect recommend?",
+      "options": [
+        "Lifecycle Center (native DevOps Center), with work items and a pipeline",
+        "Salesforce CLI in a GitHub Actions pipeline",
+        "Change sets, with a spreadsheet to track what was deployed",
+        "The Ant Migration Tool"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Lifecycle Center gère Git en arrière-plan : work items, pipeline d'étapes, promotions en clics. La CLI dans une CI est traçable, mais demande de maîtriser Git et les scripts (piège plausible). Les change sets n'ont ni historique ni source control, l'inverse du besoin (inversion). L'Ant Migration Tool est retiré depuis Spring '24 (outil retiré)."
+    },
+    {
+      "id": "q-des5",
+      "domain": "design",
+      "question": "Universal Containers deploys with change sets. The next release must delete a custom field in production, and the deletion must be repeatable in every environment. What should the architect recommend?",
+      "options": [
+        "Deploy a destructiveChanges manifest with Salesforce CLI",
+        "Delete the field manually in each org, and record it in the runbook",
+        "Keep the field and remove it from all page layouts",
+        "Select Delete Component in the outbound change set"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La Metadata API supprime des composants avec destructiveChanges, et le manifeste se rejoue dans chaque environnement. La suppression manuelle fonctionne, mais n'est ni automatisée ni rejouable (piège plausible). Garder le champ fait l'inverse de la demande (inversion). Un change set ne sait pas supprimer : « Delete Component » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-des6",
+      "domain": "design",
+      "question": "An auditor asks Universal Containers which user stories went to production on March 3 and who approved them. The architect must be able to answer for every future release with minimal manual effort. What should the architect recommend?",
+      "options": [
+        "An agile tool connected to source control, so that each story links to its commits, pull request, approval, and deployment",
+        "Setup Audit Trail exports after each release",
+        "A spreadsheet that the release manager updates by hand after each deployment",
+        "The Release Contents report in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Relier stories, commits, pull requests et déploiements dit ce que contient chaque release et qui l'a approuvée. Setup Audit Trail trace les changements de configuration, mais ni les stories ni les approbations (piège plausible). Un tableur tenu à la main est l'inverse de « minimal manual effort » (inversion). Le rapport « Release Contents » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-bld1",
+      "domain": "build",
+      "question": "Universal Containers uses Gitflow. A blocking bug appears in production while develop contains unfinished features for the next release. Which two steps should the team follow?",
+      "options": [
+        "Create the hotfix branch from main",
+        "After the fix is deployed, merge the hotfix branch into main and into develop",
+        "Merge the hotfix branch only into main, because develop gets it at the next release",
+        "Create the hotfix branch from develop, which has the latest code",
+        "Run git hotfix --auto-merge to update every branch"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Partir de main garantit de ne livrer que le correctif ; le fusionner aussi dans develop évite de réintroduire le bug. Fusionner seulement dans main paraît suffire, mais la release suivante écrase le correctif (piège plausible). Partir de develop embarque les fonctionnalités inachevées (inversion). « git hotfix --auto-merge » n'existe pas ; l'extension git-flow propose « git flow hotfix finish » (faux terme)."
+    },
+    {
+      "id": "q-bld2",
+      "domain": "build",
+      "question": "Universal Containers uses trunk-based development and merges into main several times a day. A feature won't be finished for three weeks, but the team must keep deploying main to production. What should the architect recommend?",
+      "options": [
+        "Hide the feature behind a feature flag, such as a custom permission checked with FeatureManagement.checkPermission() or a custom metadata record",
+        "Keep the feature on a long-lived branch until it's finished",
+        "Deploy the feature as active and ask users not to use it",
+        "Annotate the feature's classes with @Hidden until the release"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le code inachevé est livré mais désactivé par un interrupteur de configuration, activé le jour venu sans redéploiement. Une branche longue fonctionne, mais contredit le trunk-based et rend la fusion douloureuse (piège plausible). Livrer la fonctionnalité active l'expose, l'inverse du besoin (inversion). L'annotation @Hidden n'existe pas en Apex (faux terme)."
+    },
+    {
+      "id": "q-bld3",
+      "domain": "build",
+      "question": "Universal Containers uses package development. Its CI pipeline needs a new, identical, disposable org for each run, created from configuration stored in the repository. What should the architect recommend?",
+      "options": [
+        "Scratch orgs created from the Dev Hub with a definition file",
+        "A Developer sandbox refreshed before each run",
+        "A single Full sandbox shared by every run",
+        "Ephemeral orgs created with sf org create ephemeral"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une scratch org se crée depuis un fichier de définition versionné, en quelques minutes, puis se jette : c'est l'environnement type de la CI. Une Developer sandbox copie la configuration de la production et ne se rafraîchit qu'une fois par jour (piège plausible). Une Full partagée est l'inverse d'un environnement neuf et jetable (inversion). « sf org create ephemeral » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-bld4",
+      "domain": "build",
+      "question": "A bug at Universal Containers occurs only for some production accounts and their related records. The team must reproduce it with the same data, without working in production. Where should the team reproduce the bug?",
+      "options": [
+        "In a Full sandbox, or in a Partial Copy sandbox whose template includes these objects",
+        "In a scratch org created with Org Shape from production",
+        "In production, with a debug log on the affected user",
+        "In a Developer sandbox created with the Copy Records option"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un bug lié aux données se reproduit dans une sandbox qui copie ces données. Org Shape reproduit l'édition, les licences et les réglages, mais aucune donnée (piège plausible). Travailler en production contredit la contrainte (inversion). Une Developer sandbox ne copie pas de données, et l'option « Copy Records » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-bld5",
+      "domain": "build",
+      "question": "A Universal Containers developer writes Apex tests for discount logic. The tests must not depend on org data, and they must cover permissions and bulk processing. Which two practices should the architect require?",
+      "options": [
+        "Create test users with the right profile or permission set, and run the logic in System.runAs()",
+        "Insert at least 200 records in one operation to check that the logic is bulkified",
+        "Use @IsTest(SeeAllData=true) to test with real users and records",
+        "Run the tests as the administrator who launches them, who has every permission",
+        "Use Test.loadOrgData() to copy production records into the test"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "System.runAs() vérifie le partage selon un utilisateur restreint, et 200 enregistrements révèlent les SOQL ou DML dans une boucle. SeeAllData=true marche, mais dépend des données de l'org (piège plausible). Un administrateur a tous les droits : l'inverse d'un test de permissions (inversion). Test.loadOrgData() n'existe pas ; Test.loadData() charge un CSV de static resource (faux terme)."
+    },
+    {
+      "id": "q-bld6",
+      "domain": "build",
+      "question": "Universal Containers wants to block pull requests that add SOQL queries inside loops or known security issues. The check must run automatically in the CI pipeline, before code reaches develop. Which tool should the architect recommend?",
+      "options": [
+        "Salesforce Code Analyzer v5 (sf code-analyzer run), with a severity threshold that fails the build",
+        "ApexGuru in Scale Center",
+        "A manual code review after each production release",
+        "Salesforce Code Analyzer v4 (sf scanner run)"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Code Analyzer v5 (PMD, ESLint, RetireJS, Flow Scanner…) s'exécute dans la CI, et un seuil de sévérité en fait une quality gate. ApexGuru repère des anti-patterns, mais à partir de l'exécution en production, donc après le déploiement (piège plausible). Une revue après la mise en production arrive trop tard (inversion). La v4 est retirée depuis août 2025 (outil retiré)."
+    },
+    {
+      "id": "q-dep1",
+      "domain": "deploy",
+      "question": "On Monday, Universal Containers validated a production deployment with RunLocalTests: all tests passed and code coverage was met. The release window on Thursday is too short to run all the tests again. What should the release manager do?",
+      "options": [
+        "Run a quick deploy with the validated job ID",
+        "Deploy on Thursday with RunSpecifiedTests and only the new test classes",
+        "Deploy on Thursday with NoTestRun",
+        "Run sf project deploy start --reuse-validation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le quick deploy réutilise une validation réussie de moins de 10 jours, sans relancer les tests. RunSpecifiedTests réduit le nombre de tests, mais en exécute encore pendant la fenêtre et exige 75 % par composant (piège plausible). NoTestRun n'est pas autorisé en production quand il y a de l'Apex (inversion). Le flag --reuse-validation n'existe pas ; c'est sf project deploy quick (faux terme)."
+    },
+    {
+      "id": "q-dep2",
+      "domain": "deploy",
+      "question": "A Universal Containers release removes the Old_Status__c field, which the OrderService class still references. The release must be deployed in a single deployment. How should the team organize it?",
+      "options": [
+        "Deploy OrderService without the reference, and delete the field in destructiveChangesPost.xml",
+        "Deploy the OrderService change and the field deletion in two separate releases",
+        "Delete the field in destructiveChangesPre.xml, and then deploy OrderService",
+        "List the field in destructiveChangesManual.xml"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les suppressions « post » s'appliquent après le reste du déploiement : la classe ne référence plus le champ quand il disparaît. Deux releases fonctionnent, mais contredisent la contrainte (piège plausible). En « pre », le champ disparaît alors que la classe en production l'utilise encore (inversion). destructiveChangesManual.xml n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-dep3",
+      "domain": "deploy",
+      "question": "A Universal Containers pipeline must deploy configuration between orgs and, after the tests run, read the code coverage of each Apex class. Which two APIs should the architect recommend?",
+      "options": [
+        "The Metadata API, to deploy the configuration",
+        "The Tooling API, to query ApexCodeCoverageAggregate",
+        "The Tooling API, to migrate all the org's configuration",
+        "The Metadata API, to retrieve the coverage of each class",
+        "The Coverage API, to export coverage reports"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "La Metadata API déplace la configuration ; la Tooling API expose des objets fins comme la couverture. La Tooling API n'est pas faite pour migrer une org (piège plausible). La Metadata API ne renvoie pas la couverture : c'est l'inverse des rôles (inversion). La « Coverage API » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-dep4",
+      "domain": "deploy",
+      "question": "A Universal Containers deployment contains 14,000 files and fails with a limit error. What should the release manager do?",
+      "options": [
+        "Split it into several deployments of fewer than 10,000 files and less than 39 MB compressed each",
+        "Compress the zip file more tightly so that it stays under 39 MB",
+        "Deploy all the files at once with a change set",
+        "Enable Large Deployment Mode in Deployment Settings"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un deploy ou un retrieve est limité à 10 000 fichiers et 39 Mo compressés (600 Mo décompressés) : on découpe. Mieux compresser aide pour la taille, pas pour le nombre de fichiers (piège plausible). Un change set passe aussi par la Metadata API et ses limites (idée reçue). « Large Deployment Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-dep5",
+      "domain": "deploy",
+      "question": "A Universal Containers deployment fails because a modified class is referenced by a scheduled Apex job that runs every night. The team doesn't want to delete and reschedule the job at each release. What should the architect recommend?",
+      "options": [
+        "Enable the deployment setting that allows deployments of components when corresponding Apex jobs are pending or in progress",
+        "Delete the scheduled job before each deployment, and schedule it again afterward",
+        "Deploy with RunAllTestsInOrg",
+        "Annotate the class with @AllowDeploy"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Ce réglage des Deployment Settings autorise le déploiement malgré les jobs Apex en attente. Supprimer puis replanifier le job fonctionne, mais c'est justement ce que l'équipe veut éviter (piège plausible). RunAllTestsInOrg change les tests exécutés, pas le verrou (fonction mal appliquée). @AllowDeploy n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-dep6",
+      "domain": "deploy",
+      "question": "Universal Containers stores pricing rules and their child tiers as records. They must reach every environment with each release, and loading them again must not create duplicates. Which two practices should the architect recommend?",
+      "options": [
+        "Store the records in the repository, and load them with an upsert on an external ID",
+        "Load the parent rules before the child tiers, which reference their parent by its external ID",
+        "Reuse the production record IDs in the CSV files",
+        "Add the records to the release's change set",
+        "Deploy the records with the Metadata API as CustomRecord components"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un upsert sur une clé externe se rejoue sans doublon, et les parents passent avant les enfants. Les Id de production marchent dans une sandbox copiée, mais pas dans une org indépendante comme une scratch org (piège plausible). Un change set ne transporte pas de données (idée reçue). Le type « CustomRecord » n'existe pas ; des Custom Metadata Types seraient la version déployable (faux terme)."
+    },
+    {
+      "id": "q-tst1",
+      "domain": "test",
+      "question": "Universal Containers deploys two classes to production with RunSpecifiedTests and lists their two test classes. The org's overall code coverage is 82%, but one of the deployed classes is covered at 60% by the listed tests. What happens?",
+      "options": [
+        "The deployment fails, because each deployed class and trigger must be covered at least 75% by the listed tests",
+        "The deployment succeeds, because the org's overall code coverage is above 75%",
+        "The deployment succeeds, because RunSpecifiedTests has no coverage requirement",
+        "The deployment succeeds with a warning if Coverage Grace Mode is enabled"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Avec RunSpecifiedTests, le critère porte sur chaque composant déployé. Les 75 % globaux sont le critère de RunLocalTests (piège plausible). Dire qu'il n'y a aucune exigence est l'inverse de la règle (inversion). « Coverage Grace Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-tst2",
+      "domain": "test",
+      "question": "Universal Containers installed several managed packages. Before a major release, the architect wants to check that the org's code still works with these packages, including the packages' own tests. Which test level should the team use?",
+      "options": [
+        "RunAllTestsInOrg",
+        "RunLocalTests",
+        "NoTestRun",
+        "RunPackageTests"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "RunAllTestsInOrg inclut les tests des packages managés. RunLocalTests exécute tous les tests de l'org, sauf ceux des packages managés (piège plausible). NoTestRun n'exécute rien (inversion). RunPackageTests n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-tst3",
+      "domain": "test",
+      "question": "Universal Containers' UAT must use realistic data copied from production, which contains personal data. No real personal data can be exposed to testers. Which two actions should the architect recommend?",
+      "options": [
+        "Mask the personal data with Data Mask & Seed right after the refresh",
+        "Keep the sandbox closed to testers until masking is complete",
+        "Rely on the .invalid suffix that Salesforce adds to personal data in sandboxes",
+        "Give all testers access right after the refresh so that UAT starts sooner",
+        "Select Anonymize on Refresh on the sandbox"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "On masque juste après le refresh, et l'accès n'ouvre qu'une fois le masquage terminé. Le suffixe .invalid ne concerne que les e-mails des utilisateurs (piège plausible). Ouvrir l'accès avant le masquage fait l'inverse (inversion). L'option « Anonymize on Refresh » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-tst4",
+      "domain": "test",
+      "question": "Universal Containers wants automated end-to-end regression tests of its Lightning pages. The tests must not break each time Salesforce changes the DOM of standard components. Which tool should the architect recommend?",
+      "options": [
+        "UTAM (UI Test Automation Model), with WebdriverIO or Selenium",
+        "Jest, with sfdx-lwc-jest",
+        "Selenium scripts with hard-coded CSS selectors for the standard components",
+        "The Lightning Page Recorder"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "UTAM décrit les pages par des objets de page, maintenus par Salesforce pour ses composants standard. Jest teste les composants LWC unitairement, sans navigateur ni page complète (piège plausible). Des sélecteurs CSS en dur sont exactement ce qui casse (inversion). Le « Lightning Page Recorder » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-tst5",
+      "domain": "test",
+      "question": "Apex tests at Universal Containers fail randomly with UNABLE_TO_LOCK_ROW when the whole suite runs, but they pass one at a time. The suite must be reliable before the release, without rewriting all the tests now. What should the architect recommend?",
+      "options": [
+        "Enable Disable Parallel Apex Testing, and later change the tests so that they don't update the same shared records",
+        "Rewrite every test so that it creates its own isolated records",
+        "Annotate the test classes with @IsTest(isParallel=true)",
+        "Enable the Retry Locked Tests option"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Exécuter les tests en série supprime les verrous mutuels tout de suite ; isoler les données règle la cause ensuite. Tout réécrire fonctionne, mais contredit la contrainte (piège plausible). isParallel=true force l'exécution en parallèle, l'inverse du besoin (inversion). « Retry Locked Tests » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-rel1",
+      "domain": "release",
+      "question": "Universal Containers wants to split its org into versioned modules with explicit dependencies. Its internal developers must be able to read and change the code, and no AppExchange distribution is planned. Which package type should the architect recommend?",
+      "options": [
+        "Unlocked packages",
+        "Managed 2GP packages",
+        "Unmanaged packages",
+        "Internal managed packages"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les packages unlocked servent au développement interne modulaire : versions, dépendances, code visible. Un package managé 2GP est versionné aussi, mais masque le code et vise les éditeurs (piège plausible). Un package non managé ne se met pas à jour, l'inverse de modules versionnés (inversion). Les « internal managed packages » n'existent pas (faux terme)."
+    },
+    {
+      "id": "q-rel2",
+      "domain": "release",
+      "question": "A Universal Containers developer created an unlocked package version with sf package version create, and the release manager wants to install it in production. Which two statements are true?",
+      "options": [
+        "The version is a beta version, so it can be installed only in scratch orgs and sandboxes",
+        "It must be promoted with sf package version promote, which requires that it was created with --code-coverage and has at least 75% coverage",
+        "It can be installed in production right away if it has an installation key",
+        "Unlocked package versions can never be installed in production",
+        "Once promoted, it can be demoted with sf package version demote if a bug is found"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une version bêta ne s'installe qu'en scratch org et en sandbox ; la promotion la rend installable en production, avec 75 % de couverture. Une clé d'installation protège l'installation, mais ne lève pas la restriction bêta (piège plausible). Dire qu'une version unlocked ne s'installe jamais en production est l'inverse (inversion). « sf package version demote » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-rel3",
+      "domain": "release",
+      "question": "Universal Containers must train 200 users before each release, on realistic data and on the version that will be released. Training must not affect production data. Which environment should the architect recommend?",
+      "options": [
+        "A Partial Copy training sandbox, refreshed and updated with the release before each training session",
+        "The Full staging sandbox, shared with the release rehearsals",
+        "Production, with a training profile",
+        "A Training Edition org from Salesforce"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une Partial Copy avec template donne des données réalistes et se rafraîchit à chaque release. La Full de staging a les bonnes données, mais la formation y gênerait les répétitions de déploiement (piège plausible). Former en production contredit la contrainte (inversion). La « Training Edition » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-rel4",
+      "domain": "release",
+      "question": "A Universal Containers release causes a serious regression in production. The team must restore the previous behavior quickly. What is the realistic rollback plan?",
+      "options": [
+        "Redeploy the previous version from the release's Git tag, or turn off the feature with its feature flag",
+        "Undo the changes from Setup Audit Trail",
+        "Deploy the current develop branch, which contains newer fixes",
+        "Click Rollback on the Deployment Status page"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Salesforce n'a pas de rollback de déploiement : on redéploie l'état précédent conservé dans Git, ou on coupe la fonctionnalité par feature flag. Setup Audit Trail trace les changements, mais ne les annule pas (piège plausible). develop contient du travail inachevé, l'inverse d'un retour à un état connu (inversion). Il n'y a pas de bouton Rollback (faux terme)."
+    },
+    {
+      "id": "q-rel5",
+      "domain": "release",
+      "question": "Universal Containers has few automated tests, and most regression testing is manual. The business wants new features every month. Which release strategy should the architect recommend?",
+      "options": [
+        "Monthly scheduled releases, with a content freeze and a regression period before each go-live",
+        "Continuous deployment of each merge to production",
+        "A single annual release to reduce the regression effort",
+        "Release trains managed by the Salesforce Release Scheduler"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Sans automatisation fiable, chaque mise en production passe par une régression : des releases mensuelles planifiées le permettent. Le déploiement continu est une vraie pratique, mais il exige des tests automatisés solides (piège plausible). Une release annuelle contredit le rythme demandé (inversion). Le « Salesforce Release Scheduler » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-ops1",
+      "domain": "ops",
+      "question": "An admin at Universal Containers changed a validation rule directly in production to unblock sales. The next release will be deployed from Git in two weeks. What should the team do now?",
+      "options": [
+        "Retrieve the rule from production, commit it to main, and merge it into the active development branches",
+        "Recreate the rule manually in production after the next release",
+        "Nothing, because a deployment keeps the changes made in production",
+        "Enable Production Change Protection on the rule"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le changement doit rejoindre le source control, sinon le déploiement suivant l'écrase ; Lifecycle Center propose un back-sync. Le refaire à la main après chaque release fonctionne, mais entretient la dérive (piège plausible). Un déploiement depuis Git écrase justement ce changement (inversion). « Production Change Protection » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-ops2",
+      "domain": "ops",
+      "question": "A Universal Containers security officer asks who changed the sharing settings in production two months ago, and when. Which tool should the architect use?",
+      "options": [
+        "Setup Audit Trail",
+        "Field History Tracking",
+        "The administrators' debug logs",
+        "The Metadata Change Log"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Setup Audit Trail conserve 180 jours de modifications de configuration, avec l'auteur et la date. Field History Tracking suit les valeurs des enregistrements, pas la configuration (piège plausible). Les debug logs ne sont ni conservés si longtemps ni faits pour cela (outil hors sujet). Le « Metadata Change Log » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-ops3",
+      "domain": "ops",
+      "question": "Universal Containers needs a process to fix urgent production bugs while project work continues in other sandboxes. Which two elements should the architect recommend?",
+      "options": [
+        "A Developer Pro sandbox dedicated to hotfixes, refreshed from production and kept outside the project pipeline",
+        "An emergency approval path, such as a restricted CAB, before the hotfix is deployed",
+        "The Full staging sandbox, refreshed every day for hotfixes",
+        "The project's integration sandbox, which has the latest changes",
+        "A Hotfix sandbox type that syncs with production in real time"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une Developer Pro se rafraîchit chaque jour et reste hors du flux des projets ; un circuit d'approbation d'urgence garde le contrôle. Une Full ne se rafraîchit que tous les 29 jours (piège plausible). L'intégration contient du travail inachevé, l'inverse d'un environnement aligné sur la production (inversion). Le type « Hotfix sandbox » n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-ops4",
+      "domain": "ops",
+      "question": "Five Universal Containers orgs use the same trigger framework and integration utilities, which change together. Each org also has its own business logic. The architect wants versioned updates with minimal duplication. What should the architect recommend?",
+      "options": [
+        "A shared unlocked package for the common code, installed in each org, with each org's own logic in separate packages or configuration",
+        "A managed 2GP package with a namespace for the common code",
+        "A copy of the common classes in each org's repository",
+        "A Cross-Org Library in Lifecycle Center"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le package unlocked commun donne une version unique et des dépendances explicites. Un package managé fonctionne, mais verrouille le code et impose un namespace, lourd pour un usage interne (piège plausible). Copier le code partout est l'inverse de « minimal duplication » (inversion). La « Cross-Org Library » n'existe pas (faux terme)."
+    }
+  ]
+}

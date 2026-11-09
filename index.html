@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Révisions de certifications</title>
+<meta name="description" content="Fiches de révision, quiz, examens blancs et fiches mémo pour préparer des certifications Salesforce et d'autres éditeurs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/app.css">
+<script type="module" src="assets/js/catalog.js"></script>
+</head>
+<body>
+<div class="page">
+
+  <header class="catalog-hero">
+    <div class="eyebrow">Révisions de certifications</div>
+    <h1>Quelle certification veux-tu réviser&nbsp;?</h1>
+    <p class="sub">Chaque révision propose une fiche par domaine officiel, un quiz corrigé, un examen blanc chronométré et, selon la certification, une page détaillée, des schémas ou des fiches mémo. Ta progression reste enregistrée dans ce navigateur.</p>
+    <div class="catalog-tools">
+      <label class="visually-hidden" for="catalog-filter">Filtrer les certifications</label>
+      <input type="search" id="catalog-filter" class="search-input" placeholder="Filtrer : Developer, Architect, Agentforce…" autocomplete="off">
+    </div>
+  </header>
+
+  <div id="catalog-list"><p class="catalog-empty">Chargement des certifications…</p></div>
+
+  <footer class="catalog-footer">
+    <p>Les questions sont rédigées pour l'entraînement à partir des guides et de la documentation officiels. Elles ne proviennent pas des examens. Vérifie toujours le guide d'examen avant de t'inscrire.</p>
+  </footer>
+
+</div>
+<noscript><p style="padding:1rem">Cette page a besoin de JavaScript pour afficher la liste des certifications.</p></noscript>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{
+  "id": "dev-lifecycle-deployment-architect",
+  "title": "Development Lifecycle and Deployment Architect",
+  "vendor": "Salesforce",
+  "track": "Architect",
+  "code": "Plat-Arch-202",
+  "summary": "Fiche de révision alignée sur les objectifs officiels de l'examen Platform Development Lifecycle and Deployment Architect (Plat-Arch-202) : les huit sections notées, les tableaux à connaître et ce qui a changé jusqu'à Winter '27.",
+  "verified": "Vérifié le 9 octobre 2026 avec les objectifs de l'examen, la documentation Salesforce (Metadata API, Salesforce DX, Code Analyzer, Lifecycle Center) et les nouveautés publiées jusqu'à Winter '27.",
+  "language": {
+    "content": "fr",
+    "questions": "en"
+  },
+  "exam": {
+    "durationMinutes": 105,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.65,
+    "passingLabel": "seuil 65 %",
+    "price": "400 $ · repassage 200 $"
+  },
+  "domains": [
+    {
+      "id": "alm",
+      "label": "ALM & méthodologies",
+      "name": "Application Lifecycle Management",
+      "weight": 8,
+      "color": "#3450d6"
+    },
+    {
+      "id": "plan",
+      "label": "Planification",
+      "name": "Planning",
+      "weight": 13,
+      "color": "#a65a00"
+    },
+    {
+      "id": "design",
+      "label": "Conception du système",
+      "name": "System Design",
+      "weight": 15,
+      "color": "#187a4c"
+    },
+    {
+      "id": "build",
+      "label": "Construction",
+      "name": "Building",
+      "weight": 14,
+      "color": "#a13fc7"
+    },
+    {
+      "id": "deploy",
+      "label": "Déploiement",
+      "name": "Deploying",
+      "weight": 14,
+      "color": "#137a8c"
+    },
+    {
+      "id": "test",
+      "label": "Tests",
+      "name": "Testing",
+      "weight": 13,
+      "color": "#b4325a"
+    },
+    {
+      "id": "release",
+      "label": "Releases",
+      "name": "Releasing",
+      "weight": 13,
+      "color": "#5f6b12"
+    },
+    {
+      "id": "ops",
+      "label": "Exploitation",
+      "name": "Operating",
+      "weight": 10,
+      "color": "#4b5670"
+    }
+  ],
+  "quiz": {
+    "style": "certification"
+  },
+  "content": {
+    "fiche": "fiche.html",
+    "pages": [
+      {
+        "id": "details",
+        "label": "En détail",
+        "file": "details.html"
+      }
+    ],
+    "quiz": "quiz.json",
+    "exam": "exam.json"
+  },
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen blanc",
+      "source": "exam",
+      "durationMinutes": 105
+    }
+  ],
+  "searchExamples": [
+    "Quick deploy",
+    "Partial Copy",
+    "Unlocked",
+    "destructiveChanges",
+    "SandboxPostCopy",
+    "Lifecycle Center"
+  ],
+  "shortTitle": "Dev Lifecycle",
+  "stats": {
+    "quiz": 40,
+    "exam": 60
+  }
+}

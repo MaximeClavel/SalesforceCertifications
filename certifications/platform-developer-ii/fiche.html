@@ -1,0 +1,638 @@
+  <header class="hero">
+    <div class="eyebrow">Salesforce Certification</div>
+    <h1>Platform Developer <span>II</span></h1>
+    <p class="sub">Fiche de révision alignée sur le guide d'examen officiel : les cinq sections notées, les tableaux à connaître et tout ce qui a changé jusqu'à Summer '26.</p>
+    <div class="facts">
+      <span class="chip">⏱ <b>120 min</b></span>
+      <span class="chip">📝 <b>60</b> questions notées + 5 non notées max</span>
+      <span class="chip">✅ seuil de réussite <b>70 %</b></span>
+      <span class="chip">🎓 prérequis <b>Platform Developer</b> (ex-PD1)</span>
+      <span class="chip">💵 <b>200 $</b> · repassage <b>100 $</b></span>
+      <span class="chip">🔁 maintenance annuelle <b>Trailhead</b></span>
+    </div>
+    <p class="verified">Vérifié le 4 octobre 2026 avec le guide d'examen officiel, l'Apex Developer Guide et les release notes jusqu'à Summer '26 (API 67.0).</p>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="overall-bar"></div></div>
+      <span id="overall-progress">0 / 0 points revus</span>
+    </div>
+
+    <div class="blueprint">
+      <div class="blueprint-bar">
+        <a href="#adf" style="width:15%;background:#3450d6;">15%</a>
+        <a href="#pali" style="width:27%;background:#a65a00;">27%</a>
+        <a href="#ui" style="width:20%;background:#187a4c;">20%</a>
+        <a href="#tdd" style="width:20%;background:#a13fc7;">20%</a>
+        <a href="#perf" style="width:18%;background:#137a8c;">18%</a>
+      </div>
+      <div class="blueprint-legend">
+        <span><i class="dot" style="background:#3450d6;"></i>Fondamentaux avancés 15%</span>
+        <span><i class="dot" style="background:#a65a00;"></i>Automatisation, logique &amp; intégration 27%</span>
+        <span><i class="dot" style="background:#187a4c;"></i>Interface utilisateur 20%</span>
+        <span><i class="dot" style="background:#a13fc7;"></i>Tests, débogage &amp; déploiement 20%</span>
+        <span><i class="dot" style="background:#137a8c;"></i>Performance 18%</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Sections">
+      <a href="#adf">Fondamentaux avancés <span class="nav-count">0/0</span></a>
+      <a href="#pali">Logique &amp; intégration <span class="nav-count">0/0</span></a>
+      <a href="#ui">Interface <span class="nav-count">0/0</span></a>
+      <a href="#tdd">Tests &amp; déploiement <span class="nav-count">0/0</span></a>
+      <a href="#perf">Performance <span class="nav-count">0/0</span></a>
+      <a href="#ref">Repères &amp; changements <span class="nav-count">0/0</span></a>
+    </nav>
+
+    <main class="content">
+
+      <!-- ================= FONDAMENTAUX AVANCÉS ================= -->
+      <section class="domain" id="adf">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Advanced Developer Fundamentals · 15 %</span>
+            <h2>Fondamentaux avancés</h2>
+            <p>Multi-devises et localisation, partage programmatique, configuration par métadonnées.</p>
+          </div>
+          <span class="domain-count">0/3</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Connaître les fonctionnalités de localisation et de multi-devises, et leur impact sur le code.</li>
+            <li>Justifier, selon un scénario, l'usage des objets de partage et de l'Apex managed sharing.</li>
+            <li>Connaître les bonnes pratiques des Custom Metadata Types et des Custom Settings, et savoir les mettre en œuvre.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="adf-currency">
+          <div class="topic-head"><h3>Multi-devises &amp; localisation</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>En multi-devises, chaque enregistrement porte un champ <code>CurrencyIsoCode</code>. <code>convertCurrency(Amount)</code> dans le SELECT convertit dans la devise de l'utilisateur ; <code>FORMAT()</code> met en forme selon sa locale. On les combine : <code>FORMAT(convertCurrency(Amount))</code>.</li>
+            <li>Dans un WHERE, préfixer le montant par le code ISO : <code>WHERE Amount &gt; USD5000</code>. Sans code, c'est le nombre brut qui est comparé.</li>
+            <li>Avec <code>GROUP BY</code> ou <code>HAVING</code>, les agrégats (<code>SUM</code>, <code>MAX</code>…) sont renvoyés dans la <mark class="hl">devise de l'org</mark>, et <code>convertCurrency()</code> ne s'applique pas à un agrégat.</li>
+            <li>Advanced Currency Management : taux datés (<code>DatedConversionRate</code>) pour Opportunity, OpportunityLineItem et l'historique d'opportunité ; <code>convertCurrency()</code> prend le taux de la date concernée (ex. CloseDate).</li>
+            <li>Localisation : les Datetime sont stockés en GMT ; <code>maDate.format()</code> les affiche dans le fuseau et la locale de l'utilisateur. Textes traduits avec les Custom Labels (<code>System.Label.X</code>, <code>@salesforce/label/c.X</code> en LWC) et <code>toLabel(Champ)</code> pour les valeurs de picklist.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Comparer en Apex les montants de deux enregistrements dans des devises différentes, sans conversion, donne un résultat faux.</div>
+        </article>
+
+        <article class="topic" data-topic="adf-sharing">
+          <div class="topic-head"><h3>Partage programmatique (Apex managed sharing)</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Un objet dont l'OWD est Private ou Public Read Only a un objet de partage : <code>AccountShare</code>, <code>OpportunityShare</code>, <code>Projet__Share</code>… Chaque ligne indique l'enregistrement, l'utilisateur ou le groupe (<code>UserOrGroupId</code>), le niveau (<code>AccessLevel</code> : Read ou Edit) et la raison (<code>RowCause</code>).</li>
+            <li>Sur un objet personnalisé, une <b>Apex Sharing Reason</b> (<code>Schema.Projet__Share.RowCause.Chef_de_projet__c</code>) rend le partage <mark class="hl">durable</mark> : il survit au changement de propriétaire. Un partage <code>RowCause = 'Manual'</code> est supprimé quand le propriétaire change.</li>
+            <li>Les Apex Sharing Reasons n'existent que sur les objets personnalisés. Sur Account ou Opportunity, on recrée le partage manuel, par exemple dans un trigger qui détecte le changement de propriétaire.</li>
+            <li>Recalcul : une classe <code>Database.Batchable</code> déclarée pour l'objet dans « Apex Sharing Recalculation » recrée les partages, par exemple après un changement d'OWD.</li>
+            <li>Un partage ne peut qu'ouvrir l'accès au-delà de l'OWD, jamais le restreindre.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>N'utiliser l'Apex managed sharing que si aucune Sharing Rule, par propriétaire ou par critères, ne peut exprimer la logique.</div>
+        </article>
+
+        <article class="topic" data-topic="adf-config">
+          <div class="topic-head"><h3>Custom Metadata Types vs Custom Settings</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><b>Custom Metadata Type</b> : les enregistrements sont des métadonnées, donc déployables et packageables. Lecture avec <code>getAll()</code> / <code>getInstance()</code>, <mark class="hl">sans requête SOQL</mark>. Utilisables dans les formules, les règles de validation et les Flows. Pas de DML : en Apex, on les modifie avec <code>Metadata.Operations.enqueueDeployment()</code>, de façon asynchrone.</li>
+            <li><b>Custom Setting Hierarchy</b> : une valeur par défaut pour l'org, surchargée par profil puis par utilisateur ; <code>getInstance()</code> renvoie la valeur la plus spécifique. DML autorisé, et lisible dans les formules via <code>$Setup</code>.</li>
+            <li><b>Custom Setting List</b> : un Custom Metadata Type est en général préférable.</li>
+            <li>Les valeurs d'un Custom Setting sont des <i>données</i> : elles ne se déploient pas par change set et sont invisibles dans les tests tant qu'on ne les crée pas. Les enregistrements de Custom Metadata sont visibles dans les tests.</li>
+          </ul>
+          <p>Tableau comparatif complet dans <a href="#ref-config">Repères</a>.</p>
+        </article>
+      </section>
+
+      <!-- ================= AUTOMATISATION, LOGIQUE & INTÉGRATION ================= -->
+      <section class="domain" id="pali">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Process Automation, Logic, and Integration · 27 % — la plus grosse section</span>
+            <h2>Automatisation, logique &amp; intégration</h2>
+            <p>Déclaratif et code ensemble, triggers, Apex asynchrone et dynamique, Platform Events, gestion d'erreurs et intégrations.</p>
+          </div>
+          <span class="domain-count">0/7</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Analyser les interactions entre plusieurs automatisations, déclaratives et programmatiques, et justifier la solution optimale.</li>
+            <li>Déterminer les bénéfices de l'Apex asynchrone pour un besoin donné.</li>
+            <li>Choisir la fonctionnalité d'Apex dynamique adaptée.</li>
+            <li>Choisir la logique de publication et d'abonnement des Platform Events.</li>
+            <li>Utiliser les fonctionnalités Apex de gestion d'erreurs et d'intégrité transactionnelle.</li>
+            <li>Appliquer les techniques d'intégration entrante et sortante.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="pali-automation">
+          <div class="topic-head"><h3>Déclaratif ou code : qui s'exécute quand ?</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Flow est l'outil déclaratif de référence. Workflow Rules et Process Builder ne sont <mark class="hl">plus supportés depuis le 31 décembre 2025</mark> : ils continuent de s'exécuter, mais sans support ni correctifs.</li>
+            <li>Ordre officiel : Flows before-save → triggers before → règles de validation → duplicate rules → sauvegarde → triggers after → assignment rules → … → Flows after-save → entitlement rules → roll-up summary → partage par critères → commit. Détail dans <a href="#ref-order">Repères</a>.</li>
+            <li>Un Flow before-save met à jour l'enregistrement sans DML. Un Flow after-save qui modifie l'enregistrement déclencheur provoque un nouvel enregistrement, donc un nouveau passage dans les triggers.</li>
+            <li>Plusieurs Flows sur le même objet s'ordonnent avec leur trigger order ; plusieurs triggers Apex sur le même objet et le même contexte n'ont <b>pas d'ordre garanti</b>.</li>
+            <li>Passerelles : <code>@InvocableMethod</code> expose de l'Apex aux Flows ; Apex lance un Flow avec <code>Flow.Interview</code>.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>Si un Flow before-save et un trigger before modifient le même champ, le trigger s'exécute après le Flow : c'est sa valeur qui reste.</div>
+        </article>
+
+        <article class="topic" data-topic="pali-triggers">
+          <div class="topic-head"><h3>Triggers : bonnes pratiques</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Un seul trigger par objet, sans logique métier : il délègue à une classe handler, par exemple avec un <code>switch on Trigger.operationType</code>.</li>
+            <li>Bulkifier : collections, une seule requête avec <code>IN</code>, des <code>Map</code> ; jamais de SOQL ni de DML dans une boucle.</li>
+            <li>Bloquer un enregistrement avec <code>record.addError('message')</code>, ou sur un champ précis ; le message s'affiche dans l'interface.</li>
+            <li>Récursion : garde statique (un <code>Set&lt;Id&gt;</code> des enregistrements déjà traités) ; profondeur maximale 16.</li>
+            <li>Depuis Summer '26, les triggers <mark class="hl">s'exécutent toujours en mode système</mark> et ne peuvent pas déclarer de mode de partage ou d'accès : on définit ces modes dans les classes handler.</li>
+          </ul>
+          <pre><span class="k">trigger</span> OpportunityTrigger <span class="k">on</span> Opportunity (before insert, before update, after update) {
+    <span class="k">switch on</span> Trigger.operationType {
+        <span class="k">when</span> BEFORE_INSERT { OpportunityHandler.beforeInsert(Trigger.new); }
+        <span class="k">when</span> BEFORE_UPDATE { OpportunityHandler.beforeUpdate(Trigger.new, Trigger.oldMap); }
+        <span class="k">when</span> AFTER_UPDATE  { OpportunityHandler.afterUpdate(Trigger.newMap, Trigger.oldMap); }
+    }
+}</pre>
+        </article>
+
+        <article class="topic" data-topic="pali-async">
+          <div class="topic-head"><h3>Apex asynchrone : bénéfices et choix</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Bénéfices : limites plus hautes (200 SOQL, 60 s de CPU, 12 Mo de heap), callouts hors de la transaction de l'utilisateur, gros volumes, découplage.</li>
+            <li><b>Future</b> : simple ; paramètres primitifs ; pas de suivi ; impossible depuis un batch ou une autre méthode future.</li>
+            <li><b>Queueable</b> : sObjects en paramètre, Id de job, chaînage (un job enfant depuis un job). <code>AsyncOptions</code> : délai de 0 à 10 min, profondeur de chaîne maximale, signature anti-doublon (<code>QueueableDuplicateSignature</code>). Un <b>Transaction Finalizer</b> (<code>System.attachFinalizer</code>) réagit à la réussite ou à l'échec du job.</li>
+            <li><b>Batch</b> : jusqu'à 50 millions d'enregistrements avec un QueryLocator, scope de 200 par défaut (2 000 max), <code>Database.Stateful</code> pour garder un état ; 5 batchs actifs et 100 en attente (flex queue).</li>
+            <li><b>Scheduled</b> : expression CRON, 100 jobs planifiés au maximum.</li>
+            <li><b>Apex Cursors</b>, <mark class="hl">GA en API 66.0</mark> (Spring '26) : <code>Database.getCursor()</code> puis <code>fetch(position, nombre)</code>, jusqu'à 50 millions de lignes, transmis d'un Queueable au suivant.</li>
+          </ul>
+          <pre>AsyncOptions options = <span class="k">new</span> AsyncOptions();
+options.MinimumQueueableDelayInMinutes = 5;   <span class="c">// de 0 à 10</span>
+options.MaximumQueueableStackDepth = 10;      <span class="c">// garde-fou pour une chaîne de jobs</span>
+System.enqueueJob(<span class="k">new</span> SyncAccountJob(accountId), options);</pre>
+          <div class="trap"><b>Piège</b>Une méthode <code>@future</code> n'accepte pas de sObject en paramètre et ne peut pas être appelée depuis un Batch Apex ni depuis une autre méthode <code>@future</code>.</div>
+        </article>
+
+        <article class="topic" data-topic="pali-dynamic">
+          <div class="topic-head"><h3>Apex dynamique</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Describe : <code>Schema.SObjectType.Account.fields.Name.isUpdateable()</code>, <code>Schema.describeSObjects()</code>. <code>Schema.getGlobalDescribe()</code> est coûteux : le mettre en cache.</li>
+            <li>SOQL dynamique : <code>Database.query()</code>, ou <code>Database.queryWithBinds(requête, binds, AccessLevel)</code> qui lie les variables par nom et précise le mode d'accès.</li>
+            <li>DML dynamique : <code>SObjectType.newSObject()</code>, <code>record.put('Champ__c', valeur)</code> et <code>get()</code>.</li>
+            <li>Instanciation dynamique : <code>Type.forName('NomClasse').newInstance()</code> avec une interface (patterns stratégie et factory) ; interface <code>Callable</code> pour un couplage faible.</li>
+          </ul>
+          <pre>Map&lt;String, Object&gt; binds = <span class="k">new</span> Map&lt;String, Object&gt;{ 'stage' =&gt; stageName };
+List&lt;Opportunity&gt; opps = Database.queryWithBinds(
+    'SELECT Id, Name FROM Opportunity WHERE StageName = :stage',
+    binds,
+    AccessLevel.USER_MODE
+);</pre>
+        </article>
+
+        <article class="topic" data-topic="pali-events">
+          <div class="topic-head"><h3>Platform Events &amp; Change Data Capture</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Publier : <code>EventBus.publish()</code> (les limites DML s'appliquent), Flow ou API. <b>Publish After Commit</b> : publié seulement si la transaction est validée. <b>Publish Immediately</b> : publié tout de suite, même si la transaction échoue ensuite, sans rollback possible.</li>
+            <li>Les événements créés depuis l'API 45.0 sont <i>high-volume</i>, conservés 72 h. Les anciens standard-volume sont legacy : retrait prévu en Summer '27.</li>
+            <li>S'abonner dans Salesforce : trigger <code>after insert</code> (seul contexte, exécuté par l'utilisateur Automated Process ; <code>PlatformEventSubscriberConfig</code> change l'utilisateur et la taille de lot), Flow déclenché par Platform Event, LWC avec <code>lightning/empApi</code>.</li>
+            <li>S'abonner depuis l'extérieur : <mark class="hl">Pub/Sub API</mark> (gRPC), recommandée. La Streaming API CometD fonctionne toujours, mais PushTopic et les generic events sont legacy.</li>
+            <li>Fiabilité : <code>EventBus.RetryableException</code> pour réessayer un lot, <code>setResumeCheckpoint()</code> pour reprendre après une erreur, callbacks de publication Apex pour suivre le résultat.</li>
+            <li>CDC : événements automatiques (création, modification, suppression, restauration) sur les objets activés, canaux <code>…__ChangeEvent</code>, en-tête <code>ChangeEventHeader</code>, rejouables pendant 72 h.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="pali-errors">
+          <div class="topic-head"><h3>Gestion des erreurs &amp; intégrité transactionnelle</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><code>Database.insert(records, false)</code> : succès partiel, erreurs ligne par ligne dans <code>Database.SaveResult</code>. Un DML classique annule tout le lot à la première erreur.</li>
+            <li><code>Database.setSavepoint()</code> / <code>Database.rollback(sp)</code> : annule les DML faits après le savepoint, sans rendre les limites consommées.</li>
+            <li>Exceptions personnalisées (<code>extends Exception</code>), <code>try / catch / finally</code>. Une exception non interceptée annule toute la transaction.</li>
+            <li><code>System.LimitException</code> <mark class="hl">ne peut pas être interceptée</mark> : on surveille la consommation avec la classe <code>Limits</code>.</li>
+            <li>En asynchrone : Transaction Finalizer sur un Queueable, <code>EventBus.RetryableException</code> dans un trigger d'événement. Vers l'interface : <code>AuraHandledException</code>.</li>
+          </ul>
+          <div class="trap"><b>Piège</b>MIXED_DML_OPERATION : un DML sur un objet de configuration (User, Group, PermissionSetAssignment…) et un DML sur un objet métier dans la même transaction. On les sépare avec <code>@future</code>, ou avec <code>System.runAs()</code> dans un test.</div>
+        </article>
+
+        <article class="topic" data-topic="pali-integration">
+          <div class="topic-head"><h3>Intégration sortante &amp; entrante</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Sortant : <code>Http</code>, <code>HttpRequest</code>, <code>HttpResponse</code> avec une Named Credential (<code>callout:Nom/chemin</code>), sans Remote Site Setting. Modèle actuel : la Named Credential porte l'URL, l'<b>External Credential</b> porte l'authentification et ses principals, accordés via des permission sets. Les « legacy named credentials » sont dépréciées.</li>
+            <li>Pas de callout après un DML non validé dans la même transaction (« uncommitted work pending ») ; depuis un trigger, toujours en asynchrone (<code>@future(callout=true)</code>, ou Queueable avec <code>Database.AllowsCallouts</code>).</li>
+            <li>Limites : 100 callouts et 120 s cumulées par transaction ; timeout de 10 s par défaut, 120 s au maximum.</li>
+            <li>SOAP sortant : classes générées par « Generate from WSDL ». API décrites en OpenAPI : External Services, appelables depuis Flow et Apex. Sans code : action Outbound Message dans un Flow after-save.</li>
+            <li>Entrant : API REST, SOAP, Bulk API 2.0 (gros volumes) et Composite ; services Apex REST (<code>@RestResource</code>) et Apex SOAP (méthodes <code>webservice</code>) ; Pub/Sub API pour publier des événements.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= INTERFACE ================= -->
+      <section class="domain" id="ui">
+        <div class="domain-head">
+          <div>
+            <span class="weight">User Interface · 20 %</span>
+            <h2>Interface utilisateur</h2>
+            <p>LWC, Aura et Visualforce avec leur contrôleur Apex : événements, erreurs, responsive et static resources.</p>
+          </div>
+          <span class="domain-count">0/8</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Analyser le code d'un LWC ou d'un composant Aura et de son contrôleur Apex, et déterminer les changements nécessaires.</li>
+            <li>Utiliser Visualforce pour des actions, des rafraîchissements partiels et des opérations asynchrones.</li>
+            <li>Appliquer les bonnes pratiques d'affichage des erreurs.</li>
+            <li>Choisir entre LWC, Aura et Visualforce et en justifier les bénéfices.</li>
+            <li>Rendre un composant responsive selon le form factor.</li>
+            <li>Communiquer par événements entre LWC ou composants Aura.</li>
+            <li>Connaître l'intérêt des static resources dans Visualforce, LWC et Aura.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="ui-lwc-apex">
+          <div class="topic-head"><h3>LWC et contrôleur Apex</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Méthode <code>@AuraEnabled</code> <b>static</b>. <code>cacheable=true</code> est obligatoire pour <code>@wire</code> et interdit le DML ; l'appel impératif (Promise) sert aux modifications.</li>
+            <li>Les paramètres sont passés dans un objet dont les clés sont les noms des paramètres Apex ; <code>'$prop'</code> rend un paramètre de wire réactif ; le wire fournit <code>{ data, error }</code>.</li>
+            <li>Après une modification faite hors de Lightning Data Service : <code>refreshApex(valeurWire)</code> et <code>notifyRecordUpdateAvailable(recordIds)</code>, qui remplace <code>getRecordNotifyChange</code> (déprécié).</li>
+            <li>Sécurité du contrôleur : <code>with sharing</code> ou <code>inherited sharing</code>, requêtes <code>WITH USER_MODE</code> (défaut en API 67.0), <code>Security.stripInaccessible()</code> pour retirer les champs non lisibles.</li>
+            <li>Lightning Data Service (<code>lightning-record-form</code>, <code>getRecord</code>, <code>updateRecord</code>) : pas d'Apex, FLS et partage appliqués, cache partagé entre composants.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-lwc-basics">
+          <div class="topic-head"><h3>Les bases LWC qui reviennent dans les questions</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Cycle de vie : <code>constructor()</code> → <code>connectedCallback()</code> (à chaque insertion dans le DOM) → rendu → <code>renderedCallback()</code> (après chaque rendu : le protéger par un drapeau) ; <code>disconnectedCallback()</code> ; <code>errorCallback()</code> capture les erreurs des composants enfants.</li>
+            <li>Décorateurs : <code>@api</code> (public), <code>@wire</code> ; <code>@track</code> seulement pour suivre les mutations internes d'un objet ou d'un tableau.</li>
+            <li>Directives : <code>lwc:if</code>, <code>lwc:elseif</code> et <code>lwc:else</code> remplacent <code>if:true</code> et <code>if:false</code>, déconseillés ; <code>for:each</code> avec <code>key</code> ; <code>lwc:ref</code> pour cibler un élément.</li>
+            <li>Côté navigateur, Lightning Web Security remplace progressivement Lightning Locker ; c'est le réglage par défaut des orgs créées depuis Winter '23.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-vf">
+          <div class="topic-head"><h3>Visualforce : actions, rafraîchissement partiel, asynchrone</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><code>rerender</code> sur <code>apex:commandButton</code> ou <code>apex:commandLink</code> : seuls les composants ciblés sont rafraîchis.</li>
+            <li><code>apex:actionFunction</code> (appeler une action depuis du JavaScript), <code>apex:actionSupport</code> (sur un événement DOM), <code>apex:actionPoller</code> (à intervalle régulier), <code>apex:actionStatus</code> (indicateur), <code>apex:actionRegion</code> (limiter ce qui est soumis).</li>
+            <li>JavaScript Remoting : méthode <code>@RemoteAction</code> <code>static</code>, appel asynchrone sans view state.</li>
+            <li>Callout long : <code>Continuation</code>.</li>
+            <li>Contrôleurs : standard, extension (constructeur qui reçoit un <code>ApexPages.StandardController</code>), personnalisé ; <code>StandardSetController</code> pour paginer, jusqu'à 10 000 enregistrements.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-errors">
+          <div class="topic-head"><h3>Afficher les erreurs</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>D'Apex vers le composant : lever une <code>AuraHandledException</code> avec un message destiné à l'utilisateur ; côté JavaScript, lire <code>error.body.message</code> (les erreurs de l'UI API peuvent arriver sous forme de tableau).</li>
+            <li>Notification : le module <code>lightning/toast</code> (<code>Toast.show()</code>) est recommandé ; <code>ShowToastEvent</code> n'est pas supporté dans les sites LWR.</li>
+            <li>Erreurs de saisie : <code>setCustomValidity()</code> puis <code>reportValidity()</code> sur un <code>lightning-input</code> ; <code>lightning-messages</code> dans un <code>lightning-record-edit-form</code>.</li>
+            <li><code>errorCallback()</code> joue le rôle d'« error boundary » pour les composants enfants.</li>
+            <li>Triggers : <code>addError()</code>. Visualforce : <code>ApexPages.addMessage()</code> et <code>&lt;apex:pageMessages/&gt;</code>.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-choose">
+          <div class="topic-head"><h3>Choisir LWC, Aura ou Visualforce</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>LWC par défaut : standards web, meilleures performances, Lightning Web Security.</li>
+            <li>Un composant Aura peut contenir des LWC, l'inverse est impossible : Aura reste pertinent pour l'existant.</li>
+            <li>Visualforce : rendu PDF (<code>renderAs="pdf"</code>), pages et e-mails existants, Salesforce Classic.</li>
+            <li>Lightning Out pour afficher des composants hors de Salesforce ; LWR pour des sites Experience Cloud rapides.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-responsive">
+          <div class="topic-head"><h3>Responsive selon le form factor</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li><code>lightning-layout</code> et <code>lightning-layout-item</code> (<code>size</code>, <code>small-device-size</code>, <code>medium-device-size</code>, <code>large-device-size</code>), et la grille SLDS.</li>
+            <li><code>import FORM_FACTOR from '@salesforce/client/formFactor'</code> : <b>Large</b> (bureau), <b>Medium</b> (tablette), <b>Small</b> (téléphone).</li>
+            <li>Dans le <code>.js-meta.xml</code>, <code>&lt;supportedFormFactors&gt;</code> (Large, Small) déclare les form factors pris en charge par les pages d'application et d'enregistrement dans App Builder.</li>
+            <li>En Aura : <code>$Browser.formFactor</code>.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-events">
+          <div class="topic-head"><h3>Communication par événements</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Parent → enfant : propriétés et méthodes <code>@api</code>.</li>
+            <li>Enfant → parent : <code>this.dispatchEvent(new CustomEvent('select', { detail }))</code>, écouté avec <code>onselect</code>. Nom en minuscules, sans tiret.</li>
+            <li><code>bubbles: true</code> fait remonter l'événement, <code>composed: true</code> lui fait franchir le shadow DOM ; les deux valent false par défaut.</li>
+            <li>Composants sans lien : Lightning Message Service (canal de message), aussi entre LWC, Aura et Visualforce.</li>
+            <li>Aura : l'événement de composant remonte la hiérarchie ; l'événement d'application est diffusé à tous les abonnés, à utiliser avec parcimonie.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="ui-static">
+          <div class="topic-head"><h3>Static resources</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Fichiers JS, CSS, images ou archives zip stockés dans l'org (5 Mo par ressource), mis en cache par le navigateur et déployés avec les métadonnées.</li>
+            <li>LWC : <code>import LIB from '@salesforce/resourceUrl/lib'</code>, puis <code>loadScript()</code> ou <code>loadStyle()</code> de <code>lightning/platformResourceLoader</code>, une seule fois.</li>
+            <li>Visualforce : <code>{!$Resource.logo}</code>, ou <code>{!URLFOR($Resource.assets, 'img/logo.png')}</code> pour un fichier dans un zip.</li>
+            <li>Aura : <code>&lt;ltng:require scripts="{!$Resource.lib}"/&gt;</code>.</li>
+            <li>Intérêt : pas de dépendance à un CDN externe (CSP), versions maîtrisées, mise en cache.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= TESTS ================= -->
+      <section class="domain" id="tdd">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Testing, Debugging, and Deployment · 20 %</span>
+            <h2>Tests, débogage &amp; déploiement</h2>
+            <p>Mocks et stubs, tests du front, diagnostic et déploiement piloté par les sources.</p>
+          </div>
+          <span class="domain-count">0/4</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Appliquer des techniques avancées de test Apex, comme les mocks et les stubs.</li>
+            <li>Tester et déboguer les LWC, les composants Aura, les contrôleurs Visualforce et le JavaScript.</li>
+            <li>Trouver la cause d'un code, d'un trigger ou d'un test Apex qui ne se comporte pas comme prévu.</li>
+            <li>Définir le processus de déploiement, ses outils et le développement piloté par les sources.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="tdd-mocks">
+          <div class="topic-head"><h3>Tests Apex avancés : mocks et stubs</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Callouts : <code>HttpCalloutMock</code> avec <code>Test.setMock()</code>, <code>StaticResourceCalloutMock</code>, <code>MultiStaticResourceCalloutMock</code> ; SOAP : <code>WebServiceMock</code>.</li>
+            <li>Stub API : implémenter <code>System.StubProvider</code> et créer le double avec <code>Test.createStub(Type, provider)</code> ; pas pour les méthodes statiques.</li>
+            <li>SOSL renvoie une liste vide en test : définir le résultat avec <code>Test.setFixedSearchResults(ids)</code>.</li>
+            <li>Platform Events délivrés au <code>Test.stopTest()</code> ou avec <code>Test.getEventBus().deliver()</code> ; CDC activé avec <code>Test.enableChangeDataCapture()</code>.</li>
+            <li>Données : <code>@testSetup</code> (une méthode par classe), TestDataFactory, <code>Test.loadData()</code>. <code>Test.startTest()</code> / <code>stopTest()</code> réinitialise les limites et exécute l'asynchrone. <code>System.runAs()</code> applique le partage de l'utilisateur, pas sa FLS.</li>
+            <li>Couverture : 75 % sur l'org, plus de 0 % pour chaque trigger, tous les tests au vert.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tdd-front">
+          <div class="topic-head"><h3>Tester et déboguer le front</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>LWC : Jest via <code>@salesforce/sfdx-lwc-jest</code>, en local avec Node.js, sans org ; <code>createElement</code> pour monter le composant, <code>jest.mock()</code> pour l'Apex, <code>emit()</code> pour simuler un wire.</li>
+            <li>Aura : Lightning Testing Service (Jasmine ou Mocha). Jest ne fonctionne qu'avec les LWC.</li>
+            <li>Contrôleurs Visualforce : test Apex avec <code>Test.setCurrentPage(Page.MaPage)</code>, <code>ApexPages.currentPage().getParameters().put('id', …)</code> et <code>new ApexPages.StandardController(record)</code>.</li>
+            <li>JavaScript : mode debug Lightning (code non minifié), points d'arrêt ou instruction <code>debugger;</code> dans les DevTools du navigateur.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tdd-debug">
+          <div class="topic-head"><h3>Trouver pourquoi le code ne fait pas ce qui est prévu</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Debug logs et trace flags (utilisateur, classe, trigger) ; pour un trigger de Platform Event, poser le trace flag sur l'entité <b>Automated Process</b>.</li>
+            <li>Log Inspector (Execution Overview, Timeline, Executed Units) ; Apex Replay Debugger dans VS Code pour rejouer un log avec des points d'arrêt ; checkpoints dans la Developer Console.</li>
+            <li>La <mark class="hl">Web Console</mark> (bêta depuis avril 2026) remplace progressivement la Developer Console : logs, SOQL, Query Plan, Anonymous Apex.</li>
+            <li>Classe <code>Limits</code> (<code>getQueries()</code>, <code>getCpuTime()</code>…), <code>System.debug(LoggingLevel.ERROR, …)</code>. Un log est limité à 20 Mo : au-delà, les lignes les plus anciennes sont retirées.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="tdd-deploy">
+          <div class="topic-head"><h3>Déploiement et développement piloté par les sources</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Salesforce CLI (<code>sf</code>) : <code>sf project deploy start</code>, <code>sf project retrieve start</code>, <code>sf project deploy validate</code> puis <code>sf project deploy quick</code> ; suivi des sources avec les scratch orgs (Dev Hub) et les sandboxes compatibles.</li>
+            <li>Packages 2GP : unlocked (modules internes, code visible) ou managed (AppExchange, code protégé). DevOps Center pour un pipeline Git guidé.</li>
+            <li>Change sets : uniquement entre orgs liées, sans suppression possible ; on supprime avec <code>destructiveChanges.xml</code> (Metadata API). L'Ant Migration Tool est <b>retiré depuis Spring '24</b>.</li>
+            <li>Niveaux de test : RunLocalTests (défaut en production quand il y a de l'Apex), RunSpecifiedTests (chaque classe et trigger déployé couvert à 75 %), RunAllTestsInOrg, NoTestRun (hors production), RunRelevantTests (bêta Spring '26).</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ================= PERFORMANCE ================= -->
+      <section class="domain" id="perf">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Performance · 18 %</span>
+            <h2>Performance</h2>
+            <p>Interfaces rapides, requêtes sur gros volumes, callouts asynchrones, réutilisation et code inefficace.</p>
+          </div>
+          <span class="domain-count">0/5</span>
+        </div>
+        <details class="objectives">
+          <summary>Objectifs officiels de la section</summary>
+          <ul>
+            <li>Identifier les problèmes de performance courants des interfaces et les techniques pour les corriger.</li>
+            <li>Choisir la logique et la structure de requête adaptées aux gros volumes de données.</li>
+            <li>Déterminer les gains de performance d'un callout asynchrone.</li>
+            <li>Identifier les cas de réutilisation de code et la façon de la mettre en œuvre.</li>
+            <li>Repérer les inefficacités d'un code et les corriger.</li>
+          </ul>
+        </details>
+
+        <article class="topic" data-topic="perf-ui">
+          <div class="topic-head"><h3>Performance de l'interface</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Moins d'allers-retours serveur : Lightning Data Service (cache partagé), méthodes Apex <code>cacheable=true</code>, uniquement les champs utiles.</li>
+            <li>Charger à la demande : <code>lwc:if</code> pour ne rendre qu'au besoin, <code>lightning-datatable</code> avec <code>enable-infinite-loading</code> et <code>onloadmore</code>, pagination côté serveur.</li>
+            <li>Pas de traitement lourd dans <code>renderedCallback()</code>, appelé après chaque rendu.</li>
+            <li>Visualforce : view state limité à <mark class="hl">170 Ko</mark> (variables <code>transient</code>) ; <code>readOnly="true"</code> sur <code>apex:page</code> (1 million de lignes, 10 000 éléments par itération, pas de DML) ; JavaScript Remoting sans view state.</li>
+            <li>Static resources mises en cache plutôt que des fichiers rechargés à chaque page.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="perf-query">
+          <div class="topic-head"><h3>Requêtes et gros volumes (LDV)</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Un filtre est sélectif quand un index peut le servir. Indexés par défaut : Id, Name, OwnerId, CreatedDate, SystemModstamp, RecordTypeId, lookups et master-detail, champs External ID et Unique. Index personnalisé : via le Support.</li>
+            <li>Seuils : index standard <mark class="hl">30 % du premier million puis 15 %</mark> (plafond 1 000 000) ; index personnalisé <mark class="hl">10 % puis 5 %</mark> (plafond 333 333).</li>
+            <li>En général non sélectifs : <code>!=</code>, <code>NOT</code>, <code>LIKE '%texte'</code>, comparaison à null, formules non déterministes. Vérifier avec le Query Plan (coût inférieur à 1).</li>
+            <li>Traitements de masse : SOQL for loop (lots de 200, heap réduit), Batch Apex (QueryLocator, 50 M), Apex Cursors, Bulk API 2.0. <code>OFFSET</code> est limité à 2 000 lignes.</li>
+            <li>Data skew : plus de 10 000 enregistrements enfants sous un même parent, ou détenus par un même propriétaire, provoquent des verrous (UNABLE_TO_LOCK_ROW) et des recalculs de partage lents.</li>
+            <li>Big Objects : Async SOQL est <b>retiré depuis Summer '23</b> ; on interroge en SOQL en filtrant sur l'index, dans l'ordre, ou via Batch Apex et Bulk API. Skinny tables : activées par le Support.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="perf-callout">
+          <div class="topic-head"><h3>Callouts asynchrones et performance</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Une requête synchrone de plus de 5 secondes compte dans la limite d'org de requêtes longues simultanées (10) : des callouts lents peuvent bloquer d'autres utilisateurs.</li>
+            <li><code>Continuation</code> (Visualforce, Aura, LWC) : le thread serveur est libéré pendant l'attente ; 3 callouts et 120 s au maximum ; pas de DML dans la méthode qui renvoie la Continuation, mais possible dans le callback. En LWC : <code>@AuraEnabled(continuation=true)</code>.</li>
+            <li>Sans attente de l'utilisateur : Queueable avec <code>Database.AllowsCallouts</code>, chemin asynchrone d'un Flow, ou Platform Event traité par un autre système.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="perf-reuse">
+          <div class="topic-head"><h3>Réutiliser le code</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>Apex : classes de service et utilitaires, interfaces, classes <code>virtual</code> et <code>abstract</code>, framework de trigger handler, couches Selector / Domain / Service, logique pilotée par Custom Metadata, <code>@InvocableMethod</code> partagée avec les Flows.</li>
+            <li>LWC : module JavaScript de service (composant sans template qui exporte des fonctions), composition, composants de base, canaux LMS partagés.</li>
+            <li>Aura : héritage (<code>extends</code>, composants abstraits). Visualforce : <code>apex:component</code> et templates (<code>apex:composition</code>).</li>
+            <li>Tests : une TestDataFactory commune.</li>
+          </ul>
+        </article>
+
+        <article class="topic" data-topic="perf-code">
+          <div class="topic-head"><h3>Repérer les inefficacités</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ul>
+            <li>SOQL ou DML dans une boucle → une requête avec <code>IN</code>, un DML sur une liste.</li>
+            <li>Boucles imbriquées pour rapprocher deux listes → <code>Map</code> indexée par Id.</li>
+            <li>Requêtes répétées ou trop larges → ne lire que les champs et lignes utiles, réutiliser le résultat.</li>
+            <li><code>Schema.getGlobalDescribe()</code> appelé plusieurs fois → le mettre en cache dans une variable statique.</li>
+            <li><code>List.contains()</code> dans une boucle → <code>Set</code>. Gros volumes en mémoire → SOQL for loop.</li>
+          </ul>
+          <pre><span class="c">// Avant : n × m comparaisons</span>
+<span class="k">for</span> (Contact c : contacts) {
+    <span class="k">for</span> (Account a : accounts) {
+        <span class="k">if</span> (c.AccountId == a.Id) { c.Description = a.Industry; }
+    }
+}
+<span class="c">// Après : une recherche par contact</span>
+Map&lt;Id, Account&gt; byId = <span class="k">new</span> Map&lt;Id, Account&gt;(accounts);
+<span class="k">for</span> (Contact c : contacts) {
+    Account a = byId.get(c.AccountId);
+    <span class="k">if</span> (a != <span class="k">null</span>) { c.Description = a.Industry; }
+}</pre>
+        </article>
+      </section>
+
+      <!-- ================= REPÈRES ================= -->
+      <section class="domain" id="ref">
+        <div class="domain-head">
+          <div>
+            <span class="weight">Transversal — à connaître par cœur</span>
+            <h2>Repères &amp; changements</h2>
+            <p>Les limites, l'ordre d'exécution, les comparatifs, et tout ce qui a été retiré ou ajouté récemment.</p>
+          </div>
+          <span class="domain-count">0/5</span>
+        </div>
+
+        <article class="topic" data-topic="ref-changes" id="ref-changes">
+          <div class="topic-head"><h3>Ce qui a changé : retiré, legacy, nouveau</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Élément</th><th>Statut</th><th class="wrap">À utiliser ou à retenir</th><th>Quand</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Workflow Rules, Process Builder</td><td><span class="pill retired">Fin de support</span></td><td class="wrap">Flow (before-save, after-save), outil Migrate to Flow</td><td>31/12/2025</td></tr>
+                <tr><td class="wrap">Async SOQL (Big Objects)</td><td><span class="pill retired">Retiré</span></td><td class="wrap">SOQL filtrant sur l'index, Batch Apex, Bulk API</td><td>Summer '23</td></tr>
+                <tr><td class="wrap">Ant Migration Tool</td><td><span class="pill retired">Retiré</span></td><td class="wrap">Salesforce CLI (<code>sf</code>)</td><td>Spring '24</td></tr>
+                <tr><td class="wrap"><code>WITH SECURITY_ENFORCED</code></td><td><span class="pill retired">Supprimé en API 67.0</span></td><td class="wrap"><code>WITH USER_MODE</code></td><td>Summer '26</td></tr>
+                <tr><td class="wrap">Platform Events standard-volume</td><td><span class="pill legacy">Legacy</span></td><td class="wrap">High-volume (seul type créable depuis l'API 45.0) ; retrait prévu</td><td>Summer '27</td></tr>
+                <tr><td class="wrap">PushTopic, generic streaming</td><td><span class="pill legacy">Legacy</span></td><td class="wrap">Change Data Capture et Platform Events</td><td>—</td></tr>
+                <tr><td class="wrap">Streaming API (CometD)</td><td><span class="pill legacy">Toujours supportée</span></td><td class="wrap">Pub/Sub API (gRPC) recommandée pour les clients externes ; <code>lightning/empApi</code> en LWC</td><td>—</td></tr>
+                <tr><td class="wrap">Legacy Named Credentials</td><td><span class="pill legacy">Dépréciées</span></td><td class="wrap">Named Credential + External Credential, principals via permission sets</td><td>Depuis Winter '23</td></tr>
+                <tr><td class="wrap"><code>if:true</code> / <code>if:false</code></td><td><span class="pill legacy">Déconseillés</span></td><td class="wrap"><code>lwc:if</code>, <code>lwc:elseif</code>, <code>lwc:else</code></td><td>Spring '23</td></tr>
+                <tr><td class="wrap"><code>getRecordNotifyChange</code></td><td><span class="pill legacy">Déprécié</span></td><td class="wrap"><code>notifyRecordUpdateAvailable</code></td><td>—</td></tr>
+                <tr><td class="wrap"><code>ShowToastEvent</code></td><td><span class="pill legacy">Remplacé</span></td><td class="wrap"><code>lightning/toast</code> (fonctionne aussi dans les sites LWR)</td><td>—</td></tr>
+                <tr><td class="wrap">Lightning Locker</td><td><span class="pill legacy">Remplacé progressivement</span></td><td class="wrap">Lightning Web Security, par défaut dans les nouvelles orgs</td><td>Winter '23</td></tr>
+                <tr><td class="wrap">Developer Console</td><td><span class="pill legacy">Remplacement en cours</span></td><td class="wrap">Web Console (bêta)</td><td>Avril 2026</td></tr>
+                <tr><td class="wrap">Requêtes et DML</td><td><span class="pill changed">Changé en API 67.0</span></td><td class="wrap">Mode utilisateur par défaut ; <code>WITH SYSTEM_MODE</code> ou <code>AccessLevel.SYSTEM_MODE</code> pour l'inverse</td><td>Summer '26</td></tr>
+                <tr><td class="wrap">Classe sans mot-clé de partage</td><td><span class="pill changed">Changé en API 67.0</span></td><td class="wrap"><code>with sharing</code> au point d'entrée (avant : <code>without sharing</code>)</td><td>Summer '26</td></tr>
+                <tr><td class="wrap">Triggers Apex</td><td><span class="pill changed">Changé</span></td><td class="wrap">Toujours en mode système ; modes de partage et d'accès dans les handlers</td><td>Summer '26</td></tr>
+                <tr><td class="wrap">Apex Cursors</td><td><span class="pill new">GA</span></td><td class="wrap"><code>Database.getCursor()</code>, <code>fetch()</code>, jusqu'à 50 M de lignes</td><td>API 66.0, Spring '26</td></tr>
+                <tr><td class="wrap">RunRelevantTests</td><td><span class="pill new">Bêta</span></td><td class="wrap"><code>@IsTest(critical=true)</code>, <code>@IsTest(testFor='…')</code></td><td>Spring '26</td></tr>
+                <tr><td class="wrap">Pub/Sub API managed subscriptions</td><td><span class="pill new">Bêta</span></td><td class="wrap"><code>ManagedSubscribe</code> : Replay ID stocké côté serveur</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="topic" data-topic="ref-limits" id="ref-limits">
+          <div class="topic-head"><h3>Governor Limits (par transaction)</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">Limite</th><th class="num">Synchrone</th><th class="num">Asynchrone</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap">Requêtes SOQL</td><td class="num">100</td><td class="num">200</td></tr>
+                <tr><td class="wrap">Lignes retournées par SOQL (total)</td><td class="num">50 000</td><td class="num">50 000</td></tr>
+                <tr><td class="wrap">Requêtes SOSL</td><td class="num">20</td><td class="num">20</td></tr>
+                <tr><td class="wrap">Lignes par requête SOSL</td><td class="num">2 000</td><td class="num">2 000</td></tr>
+                <tr><td class="wrap">Instructions DML</td><td class="num">150</td><td class="num">150</td></tr>
+                <tr><td class="wrap">Lignes traitées par DML</td><td class="num">10 000</td><td class="num">10 000</td></tr>
+                <tr><td class="wrap">Temps CPU Apex</td><td class="num">10 000 ms</td><td class="num">60 000 ms</td></tr>
+                <tr><td class="wrap">Taille du tas (heap)</td><td class="num">6 Mo</td><td class="num">12 Mo</td></tr>
+                <tr><td class="wrap">Callouts HTTP</td><td class="num">100</td><td class="num">100</td></tr>
+                <tr><td class="wrap">Durée cumulée des callouts</td><td class="num">120 s</td><td class="num">120 s</td></tr>
+                <tr><td class="wrap">Profondeur de récursion des triggers</td><td class="num">16</td><td class="num">16</td></tr>
+                <tr><td class="wrap">Méthodes <code>@future</code></td><td class="num">50</td><td class="num wrap">0 depuis un batch ou une future</td></tr>
+                <tr><td class="wrap">Jobs ajoutés par <code>System.enqueueJob</code></td><td class="num">50</td><td class="num">1</td></tr>
+                <tr><td class="wrap">Durée maximale d'une transaction</td><td class="num">10 min</td><td class="num">10 min</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Autres repères : 5 batchs actifs et 100 dans la flex queue ; 100 jobs planifiés ; Apex Cursors : 50 millions de lignes par curseur et 10 <code>fetch</code> par transaction ; Continuation : 3 callouts et 120 s ; Platform Cache : 48 h maximum ; <code>OFFSET</code> : 2 000 lignes ; view state Visualforce : 170 Ko.</p>
+        </article>
+
+        <article class="topic" data-topic="ref-order" id="ref-order">
+          <div class="topic-head"><h3>Ordre d'exécution officiel (save order)</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <ol class="steps">
+            <li>Charge l'enregistrement d'origine, ou l'initialise pour un upsert.</li>
+            <li>Charge les nouvelles valeurs. Validations système : depuis l'interface (règles de mise en page, champs requis, formats, longueurs) ; depuis Apex ou l'API, seulement les clés étrangères et les picklists restreintes.</li>
+            <li><b>Flows before-save</b> (mise à jour rapide des champs).</li>
+            <li><b>Triggers <code>before</code></b>.</li>
+            <li>Validations système à nouveau, puis <b>règles de validation</b> personnalisées.</li>
+            <li>Duplicate rules : si une règle bloque, l'enregistrement s'arrête là.</li>
+            <li>Sauvegarde en base, sans commit.</li>
+            <li><b>Triggers <code>after</code></b>.</li>
+            <li>Assignment rules.</li>
+            <li>Auto-response rules.</li>
+            <li>Workflow rules (legacy) : une mise à jour de champ relance <i>une seule fois</i> les triggers before update et after update.</li>
+            <li>Escalation rules.</li>
+            <li>Process Builder et flows lancés par des processus (legacy), sans ordre garanti.</li>
+            <li><b>Flows after-save</b>.</li>
+            <li>Entitlement rules.</li>
+            <li>Roll-up summary : le parent est recalculé et repasse par la sauvegarde, puis le grand-parent si besoin.</li>
+            <li>Partage par critères.</li>
+            <li><b>Commit</b> de toutes les opérations DML.</li>
+            <li>Après le commit : envoi des e-mails, exécution des jobs asynchrones en file (Queueable, future), chemins asynchrones des Flows.</li>
+          </ol>
+        </article>
+
+        <article class="topic" data-topic="ref-async" id="ref-async">
+          <div class="topic-head"><h3>Comparatif Apex asynchrone</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">&nbsp;</th><th class="wrap">Future</th><th class="wrap">Queueable</th><th class="wrap">Batch Apex</th><th class="wrap">Scheduled Apex</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Déclaration</b></td><td class="wrap"><code>@future</code></td><td class="wrap"><code>Queueable</code></td><td class="wrap"><code>Database.Batchable</code></td><td class="wrap"><code>Schedulable</code></td></tr>
+                <tr><td class="wrap"><b>Paramètres</b></td><td class="wrap">Primitifs seulement</td><td class="wrap">Tout type, sObjects compris</td><td class="wrap">Via le constructeur</td><td class="wrap">Via le constructeur</td></tr>
+                <tr><td class="wrap"><b>Chaînage</b></td><td class="wrap">Impossible</td><td class="wrap">1 job enfant par job ; délai 0–10 min ; profondeur réglable</td><td class="wrap">Depuis <code>finish()</code></td><td class="wrap">—</td></tr>
+                <tr><td class="wrap"><b>Suivi</b></td><td class="wrap">Non</td><td class="wrap">Id de job, Transaction Finalizer</td><td class="wrap">AsyncApexJob</td><td class="wrap">CronTrigger</td></tr>
+                <tr><td class="wrap"><b>Volume</b></td><td class="wrap">Petit traitement</td><td class="wrap">Petit à moyen ; très gros avec Apex Cursors</td><td class="wrap">Jusqu'à 50 M (scope 200, max 2 000)</td><td class="wrap">Récurrent</td></tr>
+                <tr><td class="wrap"><b>Callouts</b></td><td class="wrap"><code>@future(callout=true)</code></td><td class="wrap"><code>Database.AllowsCallouts</code></td><td class="wrap"><code>Database.AllowsCallouts</code></td><td class="wrap">En lançant un batch ou un Queueable</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <pre><span class="c">// CRON : secondes minutes heures jour-du-mois mois jour-de-la-semaine [année]</span>
+System.schedule('Nettoyage nocturne', '0 0 2 * * ?', <span class="k">new</span> NightlyCleanup());</pre>
+        </article>
+
+        <article class="topic" data-topic="ref-config" id="ref-config">
+          <div class="topic-head"><h3>Custom Metadata vs Custom Setting vs Custom Label</h3><button class="check" role="checkbox" aria-checked="false">Revu</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="wrap">&nbsp;</th><th class="wrap">Custom Metadata Type</th><th class="wrap">Custom Setting</th><th class="wrap">Custom Label</th></tr></thead>
+              <tbody>
+                <tr><td class="wrap"><b>Déployable</b></td><td class="wrap">Oui, enregistrements compris</td><td class="wrap">Non : les valeurs sont des données</td><td class="wrap">Oui</td></tr>
+                <tr><td class="wrap"><b>Lecture en Apex</b></td><td class="wrap"><code>getAll()</code>, <code>getInstance()</code>, sans SOQL</td><td class="wrap"><code>getInstance()</code>, <code>getValues()</code>, depuis le cache</td><td class="wrap"><code>System.Label.X</code></td></tr>
+                <tr><td class="wrap"><b>Écriture en Apex</b></td><td class="wrap">Pas de DML : <code>Metadata.Operations.enqueueDeployment()</code></td><td class="wrap">DML autorisé</td><td class="wrap">Non</td></tr>
+                <tr><td class="wrap"><b>Visible dans les tests</b></td><td class="wrap">Oui</td><td class="wrap">Non, à créer dans le test</td><td class="wrap">Oui</td></tr>
+                <tr><td class="wrap"><b>Formules et Flows</b></td><td class="wrap">Oui</td><td class="wrap">Hierarchy seulement (<code>$Setup</code>)</td><td class="wrap">Oui (<code>$Label</code>)</td></tr>
+                <tr><td class="wrap"><b>Usage type</b></td><td class="wrap">Configuration déployable, mappings, interrupteurs de fonctionnalité</td><td class="wrap">Valeurs par utilisateur ou profil, modifiables à l'exécution</td><td class="wrap">Textes traduits</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <div>
+      <strong>Le jour de l'examen</strong>
+      <ul>
+        <li>120 minutes pour 60 questions notées et jusqu'à 5 non notées : environ 1 min 45 par question.</li>
+        <li>Automatisation, logique &amp; intégration pèse 27 % : c'est la section à maîtriser en priorité.</li>
+        <li>Lire combien de réponses sont attendues : une question à réponses multiples n'est juste que si tout est correct.</li>
+        <li>Une question peut décrire le comportement d'avant l'API 67.0 (mode système par défaut) : vérifier si une version est précisée.</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Sources officielles</strong>
+      <ul class="src-list">
+        <li><a href="https://help.salesforce.com/s/articleView?id=005298967&amp;language=en_US&amp;type=1" target="_blank" rel="noopener">Guide d'examen Platform Developer II</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_triggers_order_of_execution.htm" target="_blank" rel="noopener">Triggers and Order of Execution</a></li>
+        <li><a href="https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_apexgov.htm" target="_blank" rel="noopener">Apex Governor Limits</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?language=en_US&amp;id=release-notes.rn_apex_default_user_mode.htm&amp;release=262&amp;type=5" target="_blank" rel="noopener">Summer '26 : user mode par défaut</a> · <a href="https://help.salesforce.com/s/articleView?language=en_US&amp;id=release-notes.rn_apex_default_enforce_sharing.htm&amp;release=262&amp;type=5" target="_blank" rel="noopener">with sharing par défaut</a> · <a href="https://help.salesforce.com/s/articleView?id=release-notes.rn_apex_triggers_system_mode.htm&amp;language=en_US&amp;release=262&amp;type=5" target="_blank" rel="noopener">triggers en mode système</a></li>
+        <li><a href="https://developer.salesforce.com/docs/platform/api-streaming/guide/event-comparison.html" target="_blank" rel="noopener">Streaming Event Features (CometD, Pub/Sub API)</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=000394892&amp;language=en_US&amp;type=1" target="_blank" rel="noopener">Retrait d'Async SOQL</a> · <a href="https://help.salesforce.com/s/articleView?id=001096524&amp;language=en_US&amp;type=1" target="_blank" rel="noopener">Fin de support Workflow et Process Builder</a></li>
+        <li><a href="https://help.salesforce.com/s/articleView?id=000385218&amp;language=en_US&amp;type=1" target="_blank" rel="noopener">Requêtes SOQL sélectives</a> · <a href="https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_Database_Cursor.htm" target="_blank" rel="noopener">Apex Cursors</a></li>
+      </ul>
+    </div>
+  </footer>

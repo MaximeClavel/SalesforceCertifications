@@ -1,0 +1,44 @@
+<div class="subhead">
+  <div class="eyebrow">Aide-mémoire</div>
+  <h1>Les tableaux à connaître</h1>
+  <p class="sub">Les choix d’architecture qui reviennent dans les scénarios, les réponses séduisantes mais fausses, et le format de l’examen.</p>
+</div>
+<main class="content">
+  <section class="domain" id="memo-choix">
+    <div class="domain-head"><div><span class="weight">Tableaux de décision</span><h2>Choisir la bonne approche</h2></div></div>
+    <article class="topic">
+      <div class="topic-head"><h3>Choisir un pattern</h3></div>
+      <div class="table-wrap"><table><thead><tr><th class="wrap">Situation</th><th class="wrap">Pattern</th></tr></thead><tbody><tr><td class="wrap">Étapes fixes, dépendantes, auditables</td><td class="wrap">Prompt chaining avec contrôles entre étapes</td></tr><tr><td class="wrap">Entrées de natures différentes à traiter différemment</td><td class="wrap">Routing</td></tr><tr><td class="wrap">Sous-tâches indépendantes, ou même tâche relancée pour obtenir un consensus</td><td class="wrap">Parallelization (sectioning ou voting)</td></tr><tr><td class="wrap">Sous-tâches imprévisibles, décidées à l’exécution</td><td class="wrap">Orchestrator-workers</td></tr><tr><td class="wrap">Critère de qualité clair, amélioration par itérations</td><td class="wrap">Evaluator-optimizer</td></tr><tr><td class="wrap">Problème ouvert, nombre d’étapes inconnu</td><td class="wrap">Agent, avec garde-fous et limites</td></tr></tbody></table></div>
+    </article>
+    <article class="topic">
+      <div class="topic-head"><h3>Choisir un mécanisme d’intégration</h3></div>
+      <div class="table-wrap"><table><thead><tr><th class="wrap">Besoin</th><th class="wrap">Choix</th></tr></thead><tbody><tr><td class="wrap">Outil ou données à partager entre plusieurs clients IA</td><td class="wrap">Serveur MCP</td></tr><tr><td class="wrap">Un seul système, contrôle fin des requêtes et des erreurs</td><td class="wrap">API directe</td></tr><tr><td class="wrap">Outil déjà disponible en ligne de commande, flux de développement</td><td class="wrap">CLI</td></tr><tr><td class="wrap">Délégation entre agents autonomes de systèmes distincts</td><td class="wrap">Agent-to-agent</td></tr><tr><td class="wrap">Catalogue d’outils très large</td><td class="wrap">Progressive discovery</td></tr></tbody></table></div>
+    </article>
+    <article class="topic">
+      <div class="topic-head"><h3>Concevoir le retrieval</h3></div>
+      <div class="table-wrap"><table><thead><tr><th class="wrap">Situation</th><th class="wrap">Réponse</th></tr></thead><tbody><tr><td class="wrap">Codes, identifiants, noms exacts</td><td class="wrap">Recherche lexicale (BM25)</td></tr><tr><td class="wrap">Questions en langage naturel, formulations variées</td><td class="wrap">Embeddings</td></tr><tr><td class="wrap">Les deux types de requêtes</td><td class="wrap">Recherche hybride avec reranking</td></tr><tr><td class="wrap">Documents structurés : manuels, contrats</td><td class="wrap">Chunking par section, tableaux intacts, métadonnées</td></tr><tr><td class="wrap">Chunks qui perdent leur contexte hors de leur document</td><td class="wrap">Ajouter un court contexte à chaque chunk avant l’indexation</td></tr></tbody></table></div>
+    </article>
+    <article class="topic">
+      <div class="topic-head"><h3>Réduire coût et latence</h3></div>
+      <div class="table-wrap"><table><thead><tr><th class="wrap">Situation</th><th class="wrap">Levier</th></tr></thead><tbody><tr><td class="wrap">Préfixe répété : system prompt, documents</td><td class="wrap">Prompt caching, contenu stable en tête</td></tr><tr><td class="wrap">Volume important non urgent</td><td class="wrap">Message Batches API</td></tr><tr><td class="wrap">Tâche simple et volumineuse</td><td class="wrap">Modèle plus petit, validé par évaluation</td></tr><tr><td class="wrap">Réponses longues perçues comme lentes</td><td class="wrap">Streaming</td></tr><tr><td class="wrap">Contexte qui gonfle</td><td class="wrap">Résumer, élaguer, Skills, progressive discovery</td></tr></tbody></table></div>
+    </article>
+  </section>
+  <section class="domain" id="memo-pieges">
+    <div class="domain-head"><div><span class="weight">Méthode</span><h2>Pièges et ordre de travail</h2></div></div>
+    <article class="topic">
+      <div class="topic-head"><h3>Réponses séduisantes et fausses</h3></div>
+      <ul><li>Un agent autonome là où un workflow aux étapes connues suffirait.</li><li>Le plus gros modèle par défaut, sans mesure sur un jeu d’évaluation.</li><li>Donner tous les outils à l’agent « au cas où » : c’est du capability bloat et une surface d’attaque.</li><li>Compter sur une consigne du prompt pour contrôler l’accès aux données ou bloquer une injection.</li><li>Mettre le contenu variable avant le contenu stable et perdre le bénéfice du cache.</li><li>Évaluer sur quelques exemples choisis à la main, ou sur les exemples déjà présents dans le prompt.</li><li>Optimiser le prompt avant d’avoir défini des métriques et un jeu d’évaluation.</li><li>Automatiser entièrement une décision irréversible ou à fort impact, sans validation humaine.</li><li>Promettre un SLA de 100 % de réponses correctes à un client.</li><li>Proposer une architecture avant la discovery.</li></ul>
+    </article>
+    <article class="topic">
+      <div class="topic-head"><h3>Ordre de travail conseillé</h3></div>
+      <p>Commencer par les trois domaines les plus lourds : Integration (19 %), Solution Design & Architecture (17 %), Evaluation, Testing & Optimisation (16 %). Ils pèsent ensemble plus de la moitié de l’examen. Gouvernance et communication (14 % chacun) viennent ensuite, puis les modèles et le contexte (13 %), et enfin la productivité des développeurs (7 %).</p>
+    </article>
+  </section>
+  <section class="domain" id="memo-examen">
+    <div class="domain-head"><div><span class="weight">Format</span><h2>L’examen en chiffres</h2></div></div>
+    <article class="topic">
+      <div class="topic-head"><h3>Format, score et modalités</h3></div>
+      <div class="table-wrap"><table><thead><tr><th class="wrap">Élément</th><th class="wrap">Détail</th></tr></thead><tbody><tr><td class="wrap"><b>Format</b></td><td class="wrap">63 questions à choix unique ou multiple. Chaque question indique le nombre de réponses à choisir.</td></tr><tr><td class="wrap"><b>Durée</b></td><td class="wrap">120 minutes, soit environ 1 min 54 s par question.</td></tr><tr><td class="wrap"><b>Score</b></td><td class="wrap">Échelle de 100 à 1 000. Seuil de réussite : 720.</td></tr><tr><td class="wrap"><b>Tarif</b></td><td class="wrap">175 USD par tentative.</td></tr><tr><td class="wrap"><b>Passage</b></td><td class="wrap">Pearson VUE, en ligne surveillé ou en centre d’examen.</td></tr><tr><td class="wrap"><b>Validité</b></td><td class="wrap">12 mois à compter de l’obtention.</td></tr><tr><td class="wrap"><b>Reprises</b></td><td class="wrap">Attentes de 14, 30 puis 90 jours après un échec. Quatre tentatives maximum sur douze mois glissants.</td></tr><tr><td class="wrap"><b>Renouvellement</b></td><td class="wrap">Gratuit et sans surveillance s’il est fait à temps. Après expiration, il faut repasser l’examen complet.</td></tr><tr><td class="wrap"><b>Profil visé</b></td><td class="wrap">Plus de 3 ans d’architecture de systèmes ou de plateformes, et au moins 6 mois de production avec Claude. Recommandé, non exigé.</td></tr><tr><td class="wrap"><b>Rapport de score</b></td><td class="wrap">Réussite ou échec, score normalisé et pourcentage de réussite par domaine.</td></tr></tbody></table></div>
+    </article>
+  </section>
+</main>

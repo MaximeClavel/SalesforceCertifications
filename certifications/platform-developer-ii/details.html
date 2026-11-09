@@ -1,0 +1,568 @@
+    <div class="subhead">
+      <div class="eyebrow">Approfondissement</div>
+      <h1>Chaque point, en détail</h1>
+      <p class="sub">Les 27 points de la fiche, avec des explications, du code et les nuances qui font la différence dans les questions à scénario.</p>
+    </div>
+
+    <div class="layout">
+      <nav class="sidenav" aria-label="Sections détaillées">
+        <a href="#d-adf">Fondamentaux avancés</a>
+        <a href="#d-pali">Logique &amp; intégration</a>
+        <a href="#d-ui">Interface</a>
+        <a href="#d-tdd">Tests &amp; déploiement</a>
+        <a href="#d-perf">Performance</a>
+      </nav>
+
+      <main class="content">
+
+        <!-- ============ FONDAMENTAUX AVANCÉS ============ -->
+        <section class="domain" id="d-adf">
+          <div class="domain-head"><div><span class="weight">Advanced Developer Fundamentals · 15 %</span><h2>Fondamentaux avancés</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Multi-devises &amp; localisation</h3></div>
+            <p class="lead">Scénario type : l'org a l'euro comme devise d'entreprise, un commercial américain consulte des opportunités en EUR, GBP et USD. Il veut voir chaque montant dans sa devise et formaté à l'américaine, et un rapport doit totaliser les montants par étape.</p>
+            <pre><span class="c">// Montant converti dans la devise de l'utilisateur, puis formaté selon sa locale</span>
+List&lt;Opportunity&gt; opps = [
+    <span class="k">SELECT</span> Name, CurrencyIsoCode, FORMAT(convertCurrency(Amount))
+    <span class="k">FROM</span> Opportunity
+    <span class="k">WHERE</span> Amount &gt; USD100000      <span class="c">// comparaison en tenant compte des devises</span>
+];
+
+<span class="c">// Agrégat avec GROUP BY : résultat dans la devise de l'org, pas convertible</span>
+List&lt;AggregateResult&gt; totals = [
+    <span class="k">SELECT</span> StageName, SUM(Amount) total <span class="k">FROM</span> Opportunity <span class="k">GROUP BY</span> StageName
+];</pre>
+            <p>Avec Advanced Currency Management, la conversion des opportunités utilise le taux daté qui correspond à la date de l'enregistrement (CloseDate). Activer le multi-devises est irréversible, et une org qui référence <code>CurrencyIsoCode</code> dans son Apex ne peut plus le désactiver.</p>
+            <pre><span class="c">// Localisation en Apex</span>
+Datetime closedAt = opp.LastModifiedDate;   <span class="c">// stocké en GMT</span>
+String affichage = closedAt.format();       <span class="c">// fuseau + locale de l'utilisateur courant</span>
+String libelle = System.Label.Bienvenue;    <span class="c">// Custom Label traduit dans la langue de l'utilisateur</span>
+
+<span class="c">// Localisation en LWC</span>
+<span class="k">import</span> LOCALE <span class="k">from</span> '@salesforce/i18n/locale';
+<span class="k">import</span> CURRENCY <span class="k">from</span> '@salesforce/i18n/currency';
+<span class="k">import</span> BIENVENUE <span class="k">from</span> '@salesforce/label/c.Bienvenue';</pre>
+            <div class="why"><b>Pourquoi c'est testé</b>Les questions combinent souvent convertCurrency, FORMAT et GROUP BY pour vérifier que vous savez dans quelle devise arrive chaque valeur.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Partage programmatique (Apex managed sharing)</h3></div>
+            <p class="lead">Scénario type : un objet personnalisé <code>Projet__c</code> en OWD Private ; le chef de projet, désigné dans un champ lookup, doit pouvoir modifier le projet, même si le propriétaire change. Aucune Sharing Rule ne peut exprimer « l'utilisateur du champ Chef_de_projet__c » : c'est un cas d'Apex managed sharing.</p>
+            <pre>Projet__Share share = <span class="k">new</span> Projet__Share(
+    ParentId      = projet.Id,
+    UserOrGroupId = projet.Chef_de_projet__c,
+    AccessLevel   = 'Edit',
+    RowCause      = Schema.Projet__Share.RowCause.Chef_de_projet__c  <span class="c">// Apex Sharing Reason</span>
+);
+Database.SaveResult sr = Database.insert(share, <span class="k">false</span>);
+<span class="k">if</span> (!sr.isSuccess()) {
+    <span class="c">// ex. un accès égal ou inférieur à l'OWD : le partage est inutile et refusé</span>
+}</pre>
+            <ul>
+              <li>Sur <code>AccountShare</code>, les champs s'appellent <code>AccountId</code> et <code>AccountAccessLevel</code>, et il faut aussi préciser l'accès aux opportunités et aux cas.</li>
+              <li>Un partage <code>Manual</code> disparaît au changement de propriétaire ; un partage avec Apex Sharing Reason reste.</li>
+              <li>Après un changement d'OWD ou pour réparer des partages, la classe déclarée dans « Apex Sharing Recalculation » (un <code>Database.Batchable</code>) recrée les lignes.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Custom Metadata Types vs Custom Settings</h3></div>
+            <p class="lead">Règle simple : configuration qui doit voyager avec le code (taux, mappings, interrupteurs de fonctionnalité) → Custom Metadata Type ; valeur qui dépend de l'utilisateur ou du profil et change à l'exécution → Custom Setting Hierarchy ; texte affiché et traduit → Custom Label.</p>
+            <pre><span class="c">// Custom Metadata : lu sans SOQL, déployé avec le code</span>
+Map&lt;String, Tva__mdt&gt; taux = Tva__mdt.getAll();
+Decimal tauxFr = Tva__mdt.getInstance('FR').Taux__c;
+
+<span class="c">// Custom Setting Hierarchy : la valeur la plus spécifique (utilisateur, sinon profil, sinon org)</span>
+Preferences__c prefs = Preferences__c.getInstance(UserInfo.getUserId());
+prefs.Derniere_Vue__c = 'Kanban';
+<span class="k">upsert</span> prefs;   <span class="c">// crée la valeur propre à cet utilisateur</span></pre>
+            <div class="trap"><b>Piège</b>Un test qui lit un Custom Setting échoue sur une org vierge : ses valeurs ne sont pas visibles dans les tests et doivent y être créées. Les enregistrements de Custom Metadata, eux, sont visibles.</div>
+          </article>
+        </section>
+
+        <!-- ============ AUTOMATISATION, LOGIQUE & INTÉGRATION ============ -->
+        <section class="domain" id="d-pali">
+          <div class="domain-head"><div><span class="weight">Process Automation, Logic, and Integration · 27 %</span><h2>Automatisation, logique &amp; intégration</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Déclaratif ou code : qui s'exécute quand ?</h3></div>
+            <p class="lead">Scénario : à la création d'un Case, un Flow before-save remplit la priorité, un trigger before normalise l'objet, une règle de validation contrôle le canal, un trigger after crée une tâche, une assignment rule choisit le propriétaire, puis un Flow after-save met à jour le Case. Cette dernière mise à jour relance une sauvegarde complète du Case, triggers compris, avant le commit.</p>
+            <ul>
+              <li>Mise à jour de champs du même enregistrement : Flow before-save (rapide, sans DML) ou trigger before.</li>
+              <li>Création ou mise à jour d'autres enregistrements, appel de logique complexe ou de gros volumes : trigger after, ou Flow after-save s'il reste simple.</li>
+              <li>Callout ou traitement après le commit : chemin asynchrone du Flow, ou Queueable.</li>
+              <li>Workflow Rules et Process Builder ne doivent plus être utilisés : ils sont en fin de support depuis le 31/12/2025.</li>
+            </ul>
+            <div class="why"><b>Pourquoi c'est testé</b>Les scénarios mélangent Flow et triggers pour vérifier que vous savez ce qui s'exécute avant quoi, et ce qui peut relancer les triggers.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Triggers : bonnes pratiques</h3></div>
+            <p class="lead">Un trigger fin, une classe handler qui porte le mode de partage (depuis Summer '26, le trigger lui-même s'exécute toujours en mode système), et une garde de récursion par enregistrement plutôt qu'un simple booléen.</p>
+            <pre><span class="k">public with sharing class</span> OpportunityHandler {
+    <span class="k">private static</span> Set&lt;Id&gt; processed = <span class="k">new</span> Set&lt;Id&gt;();
+
+    <span class="k">public static void</span> afterUpdate(Map&lt;Id, Opportunity&gt; newMap, Map&lt;Id, Opportunity&gt; oldMap) {
+        List&lt;Opportunity&gt; changed = <span class="k">new</span> List&lt;Opportunity&gt;();
+        <span class="k">for</span> (Opportunity o : newMap.values()) {
+            <span class="k">if</span> (processed.contains(o.Id)) <span class="k">continue</span>;
+            processed.add(o.Id);
+            <span class="k">if</span> (o.StageName != oldMap.get(o.Id).StageName) changed.add(o);
+        }
+        <span class="c">// logique bulkifiée sur changed</span>
+    }
+}</pre>
+            <p>Un booléen statique bloque aussi les lots suivants de la même transaction (au-delà de 200 enregistrements, un trigger est appelé par lots de 200) : le <code>Set&lt;Id&gt;</code> évite ce piège.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Apex asynchrone : bénéfices et choix</h3></div>
+            <p class="lead">Grille de décision : traitement ponctuel simple → Future ; sObjects en paramètre, chaînage ou suivi → Queueable ; dizaines de milliers à millions d'enregistrements → Batch Apex, ou Apex Cursors dans une chaîne de Queueables ; tâche récurrente → Scheduled Apex, qui lance souvent un batch.</p>
+            <pre><span class="c">// Apex Cursors (GA en API 66.0) : parcourir un gros volume en chaîne de Queueables</span>
+<span class="k">public class</span> ReindexJob <span class="k">implements</span> Queueable {
+    <span class="k">private</span> Database.Cursor cursor;
+    <span class="k">private</span> Integer position;
+
+    <span class="k">public</span> ReindexJob(Database.Cursor cursor, Integer position) {
+        <span class="k">this</span>.cursor = cursor;
+        <span class="k">this</span>.position = position;
+    }
+    <span class="k">public void</span> execute(QueueableContext ctx) {
+        List&lt;Account&gt; chunk = cursor.fetch(position, 2000);
+        <span class="c">// traitement du lot</span>
+        position += chunk.size();
+        <span class="k">if</span> (position &lt; cursor.getNumRecords()) {
+            System.enqueueJob(<span class="k">new</span> ReindexJob(cursor, position));
+        }
+    }
+}
+Database.Cursor c = Database.getCursor('SELECT Id FROM Account WHERE Needs_Reindex__c = true');
+System.enqueueJob(<span class="k">new</span> ReindexJob(c, 0));</pre>
+            <p>Chaque <code>fetch()</code> compte comme une requête SOQL et ses lignes dans la limite de lignes ; la classe <code>Limits</code> suit aussi la consommation des curseurs.</p>
+            <pre><span class="c">// Transaction Finalizer : réagir à l'échec d'un Queueable</span>
+<span class="k">public class</span> RetryFinalizer <span class="k">implements</span> Finalizer {
+    <span class="k">public void</span> execute(FinalizerContext ctx) {
+        <span class="k">if</span> (ctx.getResult() == ParentJobResult.UNHANDLED_EXCEPTION) {
+            <span class="c">// journaliser ctx.getException(), relancer le job si besoin</span>
+        }
+    }
+}
+<span class="c">// Dans execute() du Queueable :</span>
+System.attachFinalizer(<span class="k">new</span> RetryFinalizer());</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Apex dynamique</h3></div>
+            <p class="lead">Le choix de la classe à exécuter vient d'une configuration plutôt que du code : c'est le cas d'usage typique de <code>Type.forName()</code> avec une interface.</p>
+            <pre><span class="k">public interface</span> DiscountStrategy { Decimal apply(Decimal amount); }
+
+String className = Discount_Config__mdt.getInstance('Default').Strategy_Class__c;
+DiscountStrategy strategy = (DiscountStrategy) Type.forName(className).newInstance();
+Decimal net = strategy.apply(order.Amount__c);</pre>
+            <p>Pour du SOQL dynamique, <code>Database.queryWithBinds()</code> évite la concaténation (et l'injection SOQL) et précise le mode d'accès. <code>String.escapeSingleQuotes()</code> reste une solution de repli quand on doit concaténer.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Platform Events &amp; Change Data Capture</h3></div>
+            <pre><span class="c">// Publication (les limites DML s'appliquent)</span>
+List&lt;Database.SaveResult&gt; results = EventBus.publish(<span class="k">new</span> List&lt;Order_Shipped__e&gt;{
+    <span class="k">new</span> Order_Shipped__e(Order_Id__c = ord.Id)
+});
+
+<span class="c">// Abonnement Apex : trigger after insert uniquement</span>
+<span class="k">trigger</span> OrderShippedTrigger <span class="k">on</span> Order_Shipped__e (after insert) {
+    <span class="k">for</span> (Order_Shipped__e evt : Trigger.new) {
+        <span class="c">// traitement ; en cas d'erreur temporaire :</span>
+        <span class="c">// throw new EventBus.RetryableException('Service indisponible');</span>
+        EventBus.TriggerContext.currentContext().setResumeCheckpoint(evt.ReplayId);
+    }
+}</pre>
+            <ul>
+              <li>Le trigger s'exécute par défaut avec l'utilisateur Automated Process : les champs « créé par » et les traces de debug en dépendent. <code>PlatformEventSubscriberConfig</code> change cet utilisateur et la taille de lot.</li>
+              <li>Côté externe, la Pub/Sub API (gRPC, HTTP/2, messages binaires Avro) publie et s'abonne aux Platform Events high-volume et à CDC. Elle ne gère pas les événements legacy (standard-volume, PushTopic, generic).</li>
+              <li>CDC plutôt que Platform Event : quand le besoin est « notifier tout changement d'enregistrement » sans code de publication.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Gestion des erreurs &amp; intégrité transactionnelle</h3></div>
+            <pre><span class="k">public class</span> InsufficientStockException <span class="k">extends</span> Exception {}
+
+Savepoint sp = Database.setSavepoint();
+<span class="k">try</span> {
+    <span class="k">insert</span> order;
+    <span class="k">if</span> (stock &lt; quantity) <span class="k">throw new</span> InsufficientStockException('Stock insuffisant');
+    <span class="k">insert</span> lines;
+} <span class="k">catch</span> (Exception e) {
+    Database.rollback(sp);   <span class="c">// annule la commande et les lignes</span>
+    <span class="k">throw new</span> AuraHandledException(e.getMessage());
+}</pre>
+            <ul>
+              <li>Pour un import tolérant aux erreurs : <code>Database.insert(records, false)</code>, puis parcourir les <code>SaveResult</code>.</li>
+              <li>Un rollback ne rend pas les DML consommés dans les limites, et les enregistrements gardent leur Id en mémoire : les réinsérer tels quels échoue.</li>
+              <li>Aucune construction ne peut intercepter une <code>LimitException</code> : la prévention passe par la bulkification et la classe <code>Limits</code>.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Intégration sortante &amp; entrante</h3></div>
+            <pre><span class="c">// Sortant avec une Named Credential (URL) + External Credential (authentification)</span>
+HttpRequest req = <span class="k">new</span> HttpRequest();
+req.setEndpoint('callout:Erp_API/v1/orders');
+req.setMethod('POST');
+req.setHeader('Content-Type', 'application/json');
+req.setBody(JSON.serialize(payload));
+req.setTimeout(30000);
+HttpResponse res = <span class="k">new</span> Http().send(req);</pre>
+            <p>L'utilisateur qui exécute le callout doit avoir accès au principal de l'External Credential via un permission set. Aucun Remote Site Setting n'est nécessaire avec une Named Credential.</p>
+            <pre><span class="c">// Entrant : service Apex REST</span>
+@RestResource(urlMapping='/orders/*')
+<span class="k">global with sharing class</span> OrderService {
+    @HttpGet
+    <span class="k">global static</span> Order__c getOrder() {
+        RestRequest req = RestContext.request;
+        Id orderId = req.requestURI.substringAfterLast('/');
+        <span class="k">return</span> [<span class="k">SELECT</span> Id, Status__c <span class="k">FROM</span> Order__c <span class="k">WHERE</span> Id = :orderId];
+    }
+}</pre>
+            <p>Sans code, un Flow after-save peut envoyer un Outbound Message (SOAP) avec l'Id de l'enregistrement ; le système externe répond par un accusé de réception, sinon Salesforce réessaie.</p>
+          </article>
+        </section>
+
+        <!-- ============ INTERFACE ============ -->
+        <section class="domain" id="d-ui">
+          <div class="domain-head"><div><span class="weight">User Interface · 20 %</span><h2>Interface utilisateur</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>LWC et contrôleur Apex</h3></div>
+            <pre><span class="k">public with sharing class</span> OrderController {
+    @AuraEnabled(cacheable=<span class="k">true</span>)
+    <span class="k">public static</span> List&lt;Order_Line__c&gt; getLines(Id orderId) {
+        <span class="k">return</span> [<span class="k">SELECT</span> Id, Product__c, Quantity__c <span class="k">FROM</span> Order_Line__c
+                <span class="k">WHERE</span> Order__c = :orderId <span class="k">WITH USER_MODE</span>];
+    }
+
+    @AuraEnabled
+    <span class="k">public static void</span> closeOrder(Id orderId) {
+        <span class="k">try</span> {
+            <span class="k">update as user new</span> Order__c(Id = orderId, Status__c = 'Closed');
+        } <span class="k">catch</span> (DmlException e) {
+            <span class="k">throw new</span> AuraHandledException(e.getDmlMessage(0));
+        }
+    }
+}</pre>
+            <pre><span class="k">import</span> { LightningElement, api, wire } <span class="k">from</span> 'lwc';
+<span class="k">import</span> { refreshApex } <span class="k">from</span> '@salesforce/apex';
+<span class="k">import</span> { notifyRecordUpdateAvailable } <span class="k">from</span> 'lightning/uiRecordApi';
+<span class="k">import</span> getLines <span class="k">from</span> '@salesforce/apex/OrderController.getLines';
+<span class="k">import</span> closeOrder <span class="k">from</span> '@salesforce/apex/OrderController.closeOrder';
+
+<span class="k">export default class</span> OrderLines <span class="k">extends</span> LightningElement {
+    @api recordId;
+    wiredLines;
+
+    @wire(getLines, { orderId: '$recordId' })
+    wired(result) { <span class="k">this</span>.wiredLines = result; }
+
+    <span class="k">async</span> handleClose() {
+        <span class="k">await</span> closeOrder({ orderId: <span class="k">this</span>.recordId });
+        <span class="k">await</span> refreshApex(<span class="k">this</span>.wiredLines);
+        <span class="k">await</span> notifyRecordUpdateAvailable([{ recordId: <span class="k">this</span>.recordId }]);
+    }
+}</pre>
+            <div class="trap"><b>Piège</b><code>refreshApex()</code> attend la valeur complète fournie par le wire (ici <code>result</code>), pas seulement <code>result.data</code>.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Les bases LWC qui reviennent dans les questions</h3></div>
+            <pre>&lt;template lwc:if={isLoading}&gt;
+    &lt;lightning-spinner alternative-text="Chargement"&gt;&lt;/lightning-spinner&gt;
+&lt;/template&gt;
+&lt;template lwc:elseif={error}&gt;
+    &lt;p class="slds-text-color_error"&gt;{errorMessage}&lt;/p&gt;
+&lt;/template&gt;
+&lt;template lwc:else&gt;
+    &lt;template for:each={lines} for:item="line"&gt;
+        &lt;c-order-line key={line.Id} line={line}&gt;&lt;/c-order-line&gt;
+    &lt;/template&gt;
+&lt;/template&gt;</pre>
+            <p><code>connectedCallback()</code> se relance à chaque insertion dans le DOM, par exemple quand un <code>lwc:if</code> bascule ; <code>constructor()</code> ne s'exécute qu'une fois par instance. <code>renderedCallback()</code> s'exécute après chaque rendu : y mettre à jour une propriété suivie relance un rendu, d'où la garde par drapeau.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Visualforce : actions, rafraîchissement partiel, asynchrone</h3></div>
+            <pre>&lt;apex:form&gt;
+    &lt;apex:actionFunction name="refreshTotals" action="{!recalculate}"
+                         rerender="totals" status="busy"/&gt;
+    &lt;apex:actionStatus id="busy" startText="Calcul en cours…"/&gt;
+    &lt;apex:outputPanel id="totals"&gt;Total : {!total}&lt;/apex:outputPanel&gt;
+&lt;/apex:form&gt;
+&lt;script&gt;
+    refreshTotals();   // appel depuis n'importe quel code JavaScript de la page
+&lt;/script&gt;</pre>
+            <pre><span class="c">// JavaScript Remoting : rapide, sans view state</span>
+@RemoteAction
+<span class="k">public static</span> List&lt;Account&gt; search(String term) {
+    <span class="k">return</span> [<span class="k">SELECT</span> Id, Name <span class="k">FROM</span> Account <span class="k">WHERE</span> Name <span class="k">LIKE</span> :(term + '%') <span class="k">LIMIT</span> 20];
+}
+<span class="c">// JS : Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AccountSearch.search}', term, callback);</span></pre>
+            <pre><span class="c">// Extension de contrôleur standard</span>
+<span class="k">public with sharing class</span> AccountExtension {
+    <span class="k">private final</span> Account acc;
+    <span class="k">public</span> AccountExtension(ApexPages.StandardController std) {
+        <span class="k">this</span>.acc = (Account) std.getRecord();
+    }
+}</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Afficher les erreurs</h3></div>
+            <pre><span class="k">import</span> Toast <span class="k">from</span> 'lightning/toast';
+
+<span class="k">async</span> handleSave() {
+    <span class="k">try</span> {
+        <span class="k">await</span> saveOrder({ orderId: <span class="k">this</span>.recordId });
+        Toast.show({ label: 'Commande enregistrée', variant: 'success' }, <span class="k">this</span>);
+    } <span class="k">catch</span> (error) {
+        <span class="k">const</span> message = Array.isArray(error.body)
+            ? error.body.map((e) =&gt; e.message).join(', ')
+            : error.body?.message;
+        Toast.show({ label: 'Enregistrement impossible', message, variant: 'error' }, <span class="k">this</span>);
+    }
+}</pre>
+            <p>Pour une erreur liée à un champ, <code>input.setCustomValidity('…')</code> puis <code>input.reportValidity()</code> affichent le message sous le champ, ce qui est plus clair qu'un toast. Côté Apex, <code>AuraHandledException</code> transmet un message lisible, sans trace de pile.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Choisir LWC, Aura ou Visualforce</h3></div>
+            <ul>
+              <li>Nouveau composant Lightning : LWC.</li>
+              <li>Composant existant en Aura : on peut y intégrer progressivement des LWC (Aura contient LWC, pas l'inverse).</li>
+              <li>Génération de PDF, modèles d'e-mail Visualforce, pages de Salesforce Classic : Visualforce.</li>
+              <li>Site Experience Cloud qui doit être rapide : LWR avec des LWC.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Responsive selon le form factor</h3></div>
+            <pre>&lt;lightning-layout multiple-rows&gt;
+    &lt;lightning-layout-item size="12" medium-device-size="6" large-device-size="4"&gt;
+        …
+    &lt;/lightning-layout-item&gt;
+&lt;/lightning-layout&gt;</pre>
+            <pre><span class="k">import</span> FORM_FACTOR <span class="k">from</span> '@salesforce/client/formFactor';
+
+<span class="k">export default class</span> OrderSummary <span class="k">extends</span> LightningElement {
+    <span class="k">get</span> isPhone() { <span class="k">return</span> FORM_FACTOR === 'Small'; }
+}</pre>
+            <pre>&lt;targetConfigs&gt;
+    &lt;targetConfig targets="lightning__RecordPage"&gt;
+        &lt;supportedFormFactors&gt;
+            &lt;supportedFormFactor type="Large"/&gt;
+            &lt;supportedFormFactor type="Small"/&gt;
+        &lt;/supportedFormFactors&gt;
+    &lt;/targetConfig&gt;
+&lt;/targetConfigs&gt;</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Communication par événements</h3></div>
+            <pre><span class="c">// Enfant</span>
+<span class="k">this</span>.dispatchEvent(<span class="k">new</span> CustomEvent('select', { detail: { id: <span class="k">this</span>.recordId } }));
+
+<span class="c">// Parent (template)</span>
+&lt;c-order-line onselect={handleSelect}&gt;&lt;/c-order-line&gt;
+
+<span class="c">// Lightning Message Service, entre composants sans lien</span>
+<span class="k">import</span> { publish, MessageContext } <span class="k">from</span> 'lightning/messageService';
+<span class="k">import</span> ORDER_CHANNEL <span class="k">from</span> '@salesforce/messageChannel/OrderChannel__c';
+@wire(MessageContext) messageContext;
+publish(<span class="k">this</span>.messageContext, ORDER_CHANNEL, { orderId });</pre>
+            <p>Si un composant plus haut que le parent doit recevoir l'événement, il faut <code>bubbles: true</code> et <code>composed: true</code>, ou que le parent relance son propre événement, ce qui garde l'API de chaque composant explicite.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Static resources</h3></div>
+            <pre><span class="k">import</span> { LightningElement } <span class="k">from</span> 'lwc';
+<span class="k">import</span> { loadScript } <span class="k">from</span> 'lightning/platformResourceLoader';
+<span class="k">import</span> CHART_JS <span class="k">from</span> '@salesforce/resourceUrl/chartjs';
+
+<span class="k">export default class</span> SalesChart <span class="k">extends</span> LightningElement {
+    chartLoaded = <span class="k">false</span>;
+
+    <span class="k">async</span> renderedCallback() {
+        <span class="k">if</span> (<span class="k">this</span>.chartLoaded) <span class="k">return</span>;
+        <span class="k">this</span>.chartLoaded = <span class="k">true</span>;
+        <span class="k">await</span> loadScript(<span class="k">this</span>, CHART_JS + '/chart.umd.min.js');
+        <span class="c">// initialiser le graphique</span>
+    }
+}</pre>
+            <p>En Visualforce : <code>&lt;apex:image url="{!URLFOR($Resource.assets, 'img/logo.png')}"/&gt;</code>. En Aura : <code>&lt;ltng:require scripts="{!$Resource.chartjs + '/chart.umd.min.js'}" afterScriptsLoaded="{!c.init}"/&gt;</code>.</p>
+          </article>
+        </section>
+
+        <!-- ============ TESTS ============ -->
+        <section class="domain" id="d-tdd">
+          <div class="domain-head"><div><span class="weight">Testing, Debugging, and Deployment · 20 %</span><h2>Tests, débogage &amp; déploiement</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Tests Apex avancés : mocks et stubs</h3></div>
+            <pre>@IsTest
+<span class="k">private class</span> ErpClientTest {
+    <span class="k">private class</span> ErpMock <span class="k">implements</span> HttpCalloutMock {
+        <span class="k">public</span> HttpResponse respond(HttpRequest req) {
+            HttpResponse res = <span class="k">new</span> HttpResponse();
+            res.setStatusCode(200);
+            res.setBody('{"status":"ok"}');
+            <span class="k">return</span> res;
+        }
+    }
+
+    @IsTest
+    <span class="k">static void</span> sendsOrder() {
+        Test.setMock(HttpCalloutMock.class, <span class="k">new</span> ErpMock());
+        Test.startTest();
+        String status = ErpClient.sendOrder('ORD-42');
+        Test.stopTest();
+        Assert.areEqual('ok', status);
+    }
+}</pre>
+            <pre><span class="c">// Stub API : remplacer une dépendance injectée</span>
+@IsTest
+<span class="k">public class</span> PricingServiceStub <span class="k">implements</span> System.StubProvider {
+    <span class="k">public</span> Object handleMethodCall(Object stubbedObject, String methodName, Type returnType,
+            List&lt;Type&gt; paramTypes, List&lt;String&gt; paramNames, List&lt;Object&gt; args) {
+        <span class="k">return</span> methodName == 'getDiscount' ? (Object) 0.1 : <span class="k">null</span>;
+    }
+}
+PricingService stub = (PricingService) Test.createStub(PricingService.class, <span class="k">new</span> PricingServiceStub());
+OrderService service = <span class="k">new</span> OrderService(stub);</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Tester et déboguer le front</h3></div>
+            <pre><span class="k">import</span> { createElement } <span class="k">from</span> '@lwc/engine-dom';
+<span class="k">import</span> OrderLines <span class="k">from</span> 'c/orderLines';
+<span class="k">import</span> getLines <span class="k">from</span> '@salesforce/apex/OrderController.getLines';
+
+jest.mock('@salesforce/apex/OrderController.getLines', () =&gt; {
+    <span class="k">const</span> { createApexTestWireAdapter } = require('@salesforce/sfdx-lwc-jest');
+    <span class="k">return</span> { default: createApexTestWireAdapter(jest.fn()) };
+}, { virtual: <span class="k">true</span> });
+
+it('affiche une ligne par enregistrement', <span class="k">async</span> () =&gt; {
+    <span class="k">const</span> el = createElement('c-order-lines', { is: OrderLines });
+    document.body.appendChild(el);
+    getLines.emit([{ Id: 'a01', Product__c: 'Widget' }]);
+    <span class="k">await</span> Promise.resolve();
+    expect(el.shadowRoot.querySelectorAll('c-order-line').length).toBe(1);
+});</pre>
+            <pre><span class="c">// Contrôleur Visualforce</span>
+Test.setCurrentPage(Page.OrderPage);
+ApexPages.currentPage().getParameters().put('id', ord.Id);
+OrderExtension ext = <span class="k">new</span> OrderExtension(<span class="k">new</span> ApexPages.StandardController(ord));
+PageReference next = ext.save();
+Assert.isNotNull(next);</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Trouver pourquoi le code ne fait pas ce qui est prévu</h3></div>
+            <ul>
+              <li>Aucun log pour un trigger de Platform Event ? Il s'exécute comme Automated Process : le trace flag doit viser cette entité, pas votre utilisateur.</li>
+              <li>Un test passe en sandbox et échoue ailleurs : chercher une dépendance aux données de l'org (SeeAllData, Custom Settings non créés, Id codés en dur).</li>
+              <li>Un comportement change selon l'utilisateur : vérifier le mode de partage de la classe, le mode d'accès des requêtes (user mode par défaut en API 67.0) et les permissions.</li>
+              <li>Le Log Inspector montre où part le temps (Timeline, Performance Tree) ; l'Apex Replay Debugger permet de parcourir le log pas à pas dans VS Code.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Déploiement et développement piloté par les sources</h3></div>
+            <pre>sf org create scratch -f config/project-scratch-def.json -a feature-x -d 7
+sf project deploy start -o feature-x
+sf apex run test -o feature-x --code-coverage --result-format human
+sf project deploy validate -o prod --test-level RunLocalTests
+sf project deploy quick -o prod --job-id 0Af…</pre>
+            <p>RunRelevantTests (bêta Spring '26) n'exécute que les tests liés aux composants déployés ; <code>@IsTest(critical=true)</code> force l'exécution d'une classe de test à chaque fois, <code>@IsTest(testFor='ApexClass:OrderService')</code> la lie à des composants précis.</p>
+          </article>
+        </section>
+
+        <!-- ============ PERFORMANCE ============ -->
+        <section class="domain" id="d-perf">
+          <div class="domain-head"><div><span class="weight">Performance · 18 %</span><h2>Performance</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Performance de l'interface</h3></div>
+            <pre>&lt;lightning-datatable key-field="Id" data={rows} columns={columns}
+    enable-infinite-loading onloadmore={loadMore}&gt;&lt;/lightning-datatable&gt;</pre>
+            <pre><span class="k">async</span> loadMore(event) {
+    event.target.isLoading = <span class="k">true</span>;
+    <span class="k">const</span> next = <span class="k">await</span> getAccounts({ afterName: <span class="k">this</span>.lastName, pageSize: 50 });
+    <span class="k">this</span>.rows = [...<span class="k">this</span>.rows, ...next];
+    <span class="k">if</span> (next.length) <span class="k">this</span>.lastName = next[next.length - 1].Name;
+    event.target.isLoading = <span class="k">false</span>;
+}
+<span class="c">// Apex : WHERE Name &gt; :afterName ORDER BY Name LIMIT :pageSize (pagination par clé, sans OFFSET)</span></pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Requêtes et gros volumes (LDV)</h3></div>
+            <pre><span class="c">// Lit par lots de 200 sans charger 500 000 lignes dans le heap</span>
+<span class="k">for</span> (List&lt;Contact&gt; batch : [<span class="k">SELECT</span> Id, Email <span class="k">FROM</span> Contact <span class="k">WHERE</span> CreatedDate = LAST_N_DAYS:30]) {
+    <span class="c">// traitement du lot</span>
+}
+
+<span class="c">// Souvent non sélectif : joker en tête, opérateur négatif</span>
+[<span class="k">SELECT</span> Id <span class="k">FROM</span> Account <span class="k">WHERE</span> Name <span class="k">LIKE</span> '%acme' <span class="k">AND</span> Status__c != 'Closed']
+<span class="c">// Sélectif : champ indexé, filtre précis</span>
+[<span class="k">SELECT</span> Id <span class="k">FROM</span> Account <span class="k">WHERE</span> External_Id__c = 'A-1042']</pre>
+            <p>Exemple de seuil : sur 3 millions d'enregistrements, un index personnalisé reste utilisable jusqu'à 10 % × 1 000 000 + 5 % × 2 000 000 = 200 000 enregistrements ciblés.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Callouts asynchrones et performance</h3></div>
+            <pre>@AuraEnabled(continuation=<span class="k">true</span> cacheable=<span class="k">true</span>)
+<span class="k">public static</span> Object startReport() {
+    Continuation con = <span class="k">new</span> Continuation(60);
+    con.continuationMethod = 'processReport';
+    HttpRequest req = <span class="k">new</span> HttpRequest();
+    req.setEndpoint('callout:Slow_API/report');
+    req.setMethod('GET');
+    con.addHttpRequest(req);
+    <span class="k">return</span> con;
+}
+
+@AuraEnabled(cacheable=<span class="k">true</span>)
+<span class="k">public static</span> Object processReport(List&lt;String&gt; labels, Object state) {
+    HttpResponse res = Continuation.getResponse(labels[0]);
+    <span class="k">return</span> res.getBody();
+}</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Réutiliser le code</h3></div>
+            <pre><span class="c">// c/formatUtils/formatUtils.js : composant de service, sans template</span>
+<span class="k">export function</span> formatAmount(value, currency) {
+    <span class="k">return new</span> Intl.NumberFormat(undefined, { style: 'currency', currency }).format(value);
+}
+
+<span class="c">// Dans n'importe quel autre LWC</span>
+<span class="k">import</span> { formatAmount } <span class="k">from</span> 'c/formatUtils';</pre>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Repérer les inefficacités</h3></div>
+            <pre><span class="k">public class</span> SchemaCache {
+    <span class="k">private static</span> Map&lt;String, Schema.SObjectType&gt; globalDescribe;
+
+    <span class="k">public static</span> Schema.SObjectType get(String objectName) {
+        <span class="k">if</span> (globalDescribe == <span class="k">null</span>) globalDescribe = Schema.getGlobalDescribe();
+        <span class="k">return</span> globalDescribe.get(objectName);
+    }
+}</pre>
+            <p>Les questions de cette section montrent souvent un extrait de code et demandent la correction la plus efficace : requête sortie de la boucle, Map à la place d'une double boucle, Set à la place de <code>List.contains()</code>, describe mis en cache.</p>
+          </article>
+        </section>
+
+      </main>
+    </div>

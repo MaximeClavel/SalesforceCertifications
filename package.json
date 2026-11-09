@@ -1,0 +1,11 @@
+{
+  "name": "salesforce-certifications",
+  "private": true,
+  "description": "Révisions de certifications : fiches, quiz, examens blancs et fiches mémo, publiés sur GitHub Pages.",
+  "scripts": {
+    "validate": "node tools/validate.mjs",
+    "fix": "node tools/validate.mjs --fix",
+    "serve": "python3 -m http.server 8000"
+  },
+  "engines": { "node": ">=18" }
+}

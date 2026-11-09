@@ -1,0 +1,93 @@
+{
+  "id": "platform-app-builder",
+  "title": "Platform App Builder",
+  "vendor": "Salesforce",
+  "track": "App Builder",
+  "summary": "Fiche de révision alignée sur le guide d'examen rafraîchi le 21 août 2026 : les cinq sections notées, Flow en profondeur, Agentforce et les tableaux à connaître.",
+  "verified": "Vérifié le 8 novembre 2026 avec le guide d'examen officiel, aligné sur Summer '26. Beaucoup de ressources affichent encore les anciens poids et un seuil de 63 ou 68 %.",
+  "language": {
+    "content": "fr",
+    "questions": "en"
+  },
+  "exam": {
+    "durationMinutes": 105,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.73,
+    "passingLabel": "seuil 73 %",
+    "price": "200 $ · repassage 100 $"
+  },
+  "domains": [
+    {
+      "id": "fund",
+      "label": "Fondamentaux",
+      "name": "Salesforce Fundamentals",
+      "weight": 18,
+      "color": "#3450d6"
+    },
+    {
+      "id": "data",
+      "label": "Données",
+      "name": "Data Modeling and Management",
+      "weight": 20,
+      "color": "#a65a00"
+    },
+    {
+      "id": "logic",
+      "label": "Logique & automatisation",
+      "name": "Business Logic and Process Automation",
+      "weight": 32,
+      "color": "#187a4c"
+    },
+    {
+      "id": "ui",
+      "label": "Interface",
+      "name": "User Interface",
+      "weight": 17,
+      "color": "#a13fc7"
+    },
+    {
+      "id": "dep",
+      "label": "Déploiement",
+      "name": "App Deployment",
+      "weight": 13,
+      "color": "#137a8c"
+    }
+  ],
+  "quiz": {
+    "style": "certification"
+  },
+  "content": {
+    "fiche": "fiche.html",
+    "pages": [
+      {
+        "id": "details",
+        "label": "En détail",
+        "file": "details.html"
+      }
+    ],
+    "quiz": "quiz.json",
+    "exam": "exam.json"
+  },
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen blanc",
+      "source": "exam",
+      "durationMinutes": 105
+    }
+  ],
+  "searchExamples": [
+    "Restriction Rules",
+    "Dynamic Forms",
+    "Roll-up",
+    "Flow",
+    "AgentExchange",
+    "Change set"
+  ],
+  "shortTitle": "App Builder",
+  "stats": {
+    "quiz": 40,
+    "exam": 60
+  }
+}

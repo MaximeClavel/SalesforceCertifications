@@ -1,0 +1,93 @@
+{
+  "id": "platform-developer-ii",
+  "title": "Platform Developer II",
+  "vendor": "Salesforce",
+  "track": "Developer",
+  "summary": "Fiche de révision alignée sur le guide d'examen officiel : les cinq sections notées, les tableaux à connaître et tout ce qui a changé jusqu'à Summer '26.",
+  "verified": "Vérifié le 4 octobre 2026 avec le guide d'examen officiel, l'Apex Developer Guide et les release notes jusqu'à Summer '26 (API 67.0).",
+  "language": {
+    "content": "fr",
+    "questions": "en"
+  },
+  "exam": {
+    "durationMinutes": 120,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.7,
+    "passingLabel": "seuil 70 %",
+    "price": "200 $ · repassage 100 $"
+  },
+  "domains": [
+    {
+      "id": "adf",
+      "label": "Fondamentaux avancés",
+      "name": "Advanced Developer Fundamentals",
+      "weight": 15,
+      "color": "#3450d6"
+    },
+    {
+      "id": "pali",
+      "label": "Logique & intégration",
+      "name": "Process Automation, Logic, and Integration",
+      "weight": 27,
+      "color": "#a65a00"
+    },
+    {
+      "id": "ui",
+      "label": "Interface",
+      "name": "User Interface",
+      "weight": 20,
+      "color": "#187a4c"
+    },
+    {
+      "id": "tdd",
+      "label": "Tests & déploiement",
+      "name": "Testing, Debugging, and Deployment",
+      "weight": 20,
+      "color": "#a13fc7"
+    },
+    {
+      "id": "perf",
+      "label": "Performance",
+      "name": "Performance",
+      "weight": 18,
+      "color": "#137a8c"
+    }
+  ],
+  "quiz": {
+    "style": "certification"
+  },
+  "content": {
+    "fiche": "fiche.html",
+    "pages": [
+      {
+        "id": "details",
+        "label": "En détail",
+        "file": "details.html"
+      }
+    ],
+    "quiz": "quiz.json",
+    "exam": "exam.json"
+  },
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen blanc",
+      "source": "exam",
+      "durationMinutes": 120
+    }
+  ],
+  "searchExamples": [
+    "Continuation",
+    "Queueable",
+    "with sharing",
+    "Pub/Sub API",
+    "stripInaccessible",
+    "Big Objects"
+  ],
+  "shortTitle": "Dev II",
+  "stats": {
+    "quiz": 40,
+    "exam": 60
+  }
+}

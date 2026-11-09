@@ -1,0 +1,614 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "q-fund1",
+      "domain": "fund",
+      "question": "Universal Containers wants sales reps to enter a request across three guided screens. The solution must then get a credit score from an external REST API. The company has no developers. What should the app builder use?",
+      "options": [
+        "A screen flow that uses an HTTP Callout action",
+        "A Lightning web component that calls an Apex method",
+        "A process built in Process Builder that calls an external service",
+        "A validation rule that references the external API"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un Screen Flow guide la saisie et HTTP Callout appelle une API REST sans code. Un LWC avec Apex fonctionne, mais exige un développeur (piège plausible). Process Builder est en fin de support et n'affiche pas d'écran (faux terme). Une règle de validation ne peut pas appeler de service externe (faux terme)."
+    },
+    {
+      "id": "q-fund2",
+      "domain": "fund",
+      "question": "The sales team at Universal Containers needs electronic signatures on contracts within two weeks. The company has no developers, and production must stay stable. Which two actions should the app builder take?",
+      "options": [
+        "Search AgentExchange for an electronic signature solution",
+        "Install the selected solution in a sandbox and validate it before installing it in production",
+        "Build a custom signature component in Apex and Visualforce",
+        "Install the solution directly in production to meet the deadline"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un besoin générique, un délai court, pas de développeur : on cherche sur AgentExchange, puis on teste en sandbox. Développer un composant répond au besoin, mais viole la contrainte (piège plausible). Installer directement en production expose l'org à un risque évitable (inversion)."
+    },
+    {
+      "id": "q-fund3",
+      "domain": "fund",
+      "question": "All sales reps at Universal Containers share the Sales User profile. Five of them must also be able to delete opportunities. The solution must require the least ongoing maintenance. What should the app builder do?",
+      "options": [
+        "Create a permission set with the Delete permission on Opportunity and assign it to the five users",
+        "Clone the Sales User profile, add the Delete permission, and assign the clone to the five users",
+        "Add the Delete permission on Opportunity to the Sales User profile",
+        "Change the Opportunity organization-wide default to Public Read/Write/Delete"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un Permission Set ajoute un droit à quelques utilisateurs sans dupliquer de profil. Cloner le profil fonctionne, mais crée un second profil à maintenir (piège plausible). Modifier le profil donne le droit à tous les commerciaux (inversion). L'OWD Public Read/Write/Delete n'existe pas (faux terme)."
+    },
+    {
+      "id": "q-fund4",
+      "domain": "fund",
+      "question": "The organization-wide default for Project__c is Private. Members of the Finance public group must have Read access to every project whose Budget__c value is above 1,000,000, regardless of its owner. What should the app builder configure?",
+      "options": [
+        "A criteria-based sharing rule that shares matching projects with the Finance public group",
+        "An owner-based sharing rule that shares projects with the Finance public group",
+        "A change of the organization-wide default to Public Read Only",
+        "Manual sharing on each project above the budget threshold"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le partage dépend d'une valeur de champ : Sharing Rule par critères, vers le groupe public. Une règle par propriétaire ne regarde pas le budget (piège plausible). Passer l'OWD en Public Read Only ouvre tous les projets à tout le monde (inversion). Le partage manuel n'est ni automatique ni durable au changement de propriétaire (piège plausible)."
+    },
+    {
+      "id": "q-fund5",
+      "domain": "fund",
+      "question": "Contractors at Universal Containers must see only the tasks they own. Existing sharing would otherwise give them access to more tasks. The restriction must also apply in list views and reports. What should the app builder create?",
+      "options": [
+        "A restriction rule on Task for the contractors",
+        "A sharing rule on Task for the contractors",
+        "A scoping rule on Task for the contractors",
+        "A Task page layout that hides the Assigned To field"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une Restriction Rule limite les enregistrements visibles, même quand le partage en ouvre davantage. Une Sharing Rule ne peut qu'ouvrir un accès (inversion). Une Scoping Rule change la vue par défaut sans bloquer l'accès (piège plausible). Une mise en page ne contrôle pas l'accès aux enregistrements (idée reçue)."
+    },
+    {
+      "id": "q-fund6",
+      "domain": "fund",
+      "question": "Regional managers at Universal Containers use one dashboard. Each manager must see only the data they have access to, and the team doesn't want to maintain a separate dashboard for each region. How should the dashboard be configured?",
+      "options": [
+        "Set the dashboard to run as the logged-in user",
+        "Set the dashboard to run as the VP of Sales",
+        "Create one dashboard folder for each region",
+        "Add a row-level formula to each source report"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un dashboard dynamique s'exécute avec l'utilisateur connecté : chacun voit ses propres données. Un running user désigné montre à tous les données de cette personne (inversion). Un dossier par région multiplie les tableaux à maintenir (piège plausible). Une row-level formula calcule une valeur, elle ne filtre pas selon le lecteur (faux terme)."
+    },
+    {
+      "id": "q-fund7",
+      "domain": "fund",
+      "question": "A sales director at Universal Containers needs a list of accounts that have no related opportunities. Which two features can meet this requirement?",
+      "options": [
+        "A cross filter of Accounts without Opportunities",
+        "A custom report type of Accounts with or without Opportunities, filtered on empty opportunity records",
+        "A bucket field on the Account report",
+        "A matrix report that groups by opportunity stage"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un cross filter « without » ou un report type « with or without » permettent de faire ressortir l'absence d'enfant. Un bucket classe des valeurs existantes, sans révéler une absence (piège plausible). Une matrice regroupe des données, mais les comptes sans opportunité n'y figurent pas avec un type de rapport « with » (inversion)."
+    },
+    {
+      "id": "q-data1",
+      "domain": "data",
+      "question": "At Universal Containers, one consultant can work on many projects, and one project can have many consultants. The number of hours for each assignment must be stored, and hours must be totaled on both the consultant and the project without code. What should the app builder create?",
+      "options": [
+        "A junction object with two master-detail relationships and an Hours field",
+        "A lookup from Project to Consultant and an Hours field on Project",
+        "A multi-select picklist of consultants on Project",
+        "A hierarchical relationship between Consultant and Project"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Plusieurs-à-plusieurs, avec une donnée portée par la relation et des roll-ups des deux côtés : objet de jonction avec deux master-detail. Une lookup n'autorise qu'un consultant par projet (piège plausible). Une multi-select ne stocke pas d'heures et ne s'agrège pas (idée reçue). La relation Hierarchical n'existe que sur User (faux terme)."
+    },
+    {
+      "id": "q-data2",
+      "domain": "data",
+      "question": "Expense lines at Universal Containers have no meaning without their expense report. They must be deleted with the report, inherit its access, and be totaled on it without code. Which relationship should be used?",
+      "options": [
+        "Master-detail from Expense Line to Expense Report",
+        "Lookup from Expense Line to Expense Report, made required",
+        "Lookup from Expense Report to Expense Line",
+        "External lookup from Expense Line to Expense Report"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Suppression en cascade, partage hérité, roll-up : les trois caractéristiques du master-detail. Une lookup requise impose une valeur, mais n'apporte ni héritage ni roll-up (piège plausible). Placer la lookup sur le parent inverse la relation (inversion). Une External Lookup exige un parent externe (faux terme)."
+    },
+    {
+      "id": "q-data3",
+      "domain": "data",
+      "question": "An app builder at Universal Containers tries to convert a lookup relationship on Invoice__c to a master-detail relationship, but the conversion is refused. What is the most likely cause?",
+      "options": [
+        "Some Invoice__c records have no value in the lookup field",
+        "The parent object already has a roll-up summary field",
+        "The lookup field isn't on the page layout",
+        "Lookup relationships can't be converted to master-detail relationships"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La conversion exige une valeur dans le champ sur tous les enregistrements. Un roll-up existant bloque le sens inverse, master-detail vers lookup (inversion). La présence sur une mise en page n'a aucun effet (piège plausible). La conversion est possible (idée reçue)."
+    },
+    {
+      "id": "q-data4",
+      "domain": "data",
+      "question": "An app builder at Universal Containers is reviewing a custom object on the detail side of a master-detail relationship. Which two statements are true?",
+      "options": [
+        "Access to detail records is controlled by the master record",
+        "Roll-up summary fields can be created on the master object",
+        "Sharing rules can be created on the detail object",
+        "A standard object can be placed on the detail side"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le detail hérite de l'accès du master, et le master peut porter des roll-ups. Un detail n'a pas d'Owner, donc pas de Sharing Rule (inversion). Un objet standard ne peut pas être côté detail (idée reçue)."
+    },
+    {
+      "id": "q-data5",
+      "domain": "data",
+      "question": "An app builder at Universal Containers must change the data type of a custom field that already contains data. Which conversion causes existing data to be lost?",
+      "options": [
+        "Checkbox to Text",
+        "Picklist to Text",
+        "Number to Text",
+        "Text to Text Area (Long)"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Passer d'une Checkbox à un autre type perd les données. Les trois autres conversions conservent le contenu : la valeur d'une picklist ou un nombre deviennent du texte, et un texte tient dans un Long Text (idée reçue)."
+    },
+    {
+      "id": "q-data6",
+      "domain": "data",
+      "question": "Universal Containers must load 200,000 orders from its ERP. Each order must be related to an account by the ERP account number, which is stored on Account. The file doesn't contain Salesforce record IDs. What should the app builder do?",
+      "options": [
+        "Mark the ERP number as an External ID and use Data Loader with an upsert",
+        "Use the Data Import Wizard and match accounts by name",
+        "Create external objects with Salesforce Connect and use them as orders",
+        "Export all accounts and add their record IDs to the file manually with the Data Import Wizard"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Au-delà de 50 000 lignes, Data Loader ; l'External ID relie les enregistrements sans Id Salesforce. Le Data Import Wizard est limité à 50 000 lignes (piège plausible). Salesforce Connect ne charge pas les commandes dans Salesforce (faux terme). Retrouver les Id à la main reste soumis à la limite du Wizard (piège plausible)."
+    },
+    {
+      "id": "q-data7",
+      "domain": "data",
+      "question": "Universal Containers stores 300 million inventory rows in an external database with an OData endpoint. Users occasionally need to view current rows from a product record. The data must not consume Salesforce storage. What should the app builder use?",
+      "options": [
+        "Salesforce Connect with external objects",
+        "A nightly Data Loader job that imports the rows",
+        "The Data Export Service",
+        "A roll-up summary field on Product"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Salesforce Connect affiche des données externes en temps réel, sans les stocker. Un chargement nocturne consomme du stockage et ne reflète pas l'état courant (piège plausible). Data Export Service exporte des données Salesforce, pas l'inverse (inversion). Un roll-up ne lit pas de données externes (faux terme)."
+    },
+    {
+      "id": "q-data8",
+      "domain": "data",
+      "question": "Universal Containers stores a customer code such as 00421 on Account. Leading zeros must be kept. The code will be used to match records during upserts, and duplicates must be rejected. How should the field be defined?",
+      "options": [
+        "A Text field marked as External ID and Unique",
+        "A Number field marked as External ID and Unique",
+        "An Auto Number field marked as External ID",
+        "A Formula field that returns text"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Text conserve les zéros en tête ; External ID et Unique assurent la correspondance et refusent les doublons. Un Number supprime les zéros (piège plausible). Auto Number génère ses propres valeurs (inversion). Une formule ne peut pas recevoir de valeur importée (faux terme)."
+    },
+    {
+      "id": "q-logic1",
+      "domain": "logic",
+      "question": "Sales reps at Universal Containers must see the tier of the related account on each opportunity. The value must always match the account, and no automation should be maintained. What should the app builder create?",
+      "options": [
+        "A formula field on Opportunity that references Account.Tier__c",
+        "A record-triggered flow that copies the tier to Opportunity",
+        "A roll-up summary field on Opportunity",
+        "A lookup field from Account to Opportunity"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une formule inter-objets lit toujours la valeur à jour du parent. Un flow fonctionne, mais doit être maintenu et ne couvre pas seul les changements sur le compte (piège plausible). Un roll-up agrège des enfants, le sens est inversé (inversion). Une lookup sur Account n'affiche pas le tier sur l'opportunité (piège plausible)."
+    },
+    {
+      "id": "q-logic2",
+      "domain": "logic",
+      "question": "At Universal Containers, Invoice__c has a lookup to Account. The total of the invoices must appear on each account, stay accurate when invoices are deleted or moved to another account, and be built without code. The lookup can't become a master-detail relationship. What should the app builder use?",
+      "options": [
+        "Record-triggered flows on Invoice__c that recalculate the account total",
+        "A roll-up summary field on Account that sums the related invoices",
+        "A cross-object formula on Account",
+        "An Apex trigger on Invoice__c"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Sur une lookup, Flow record-triggered reste la solution déclarative pour agréger des enfants. Un roll-up exige un master-detail (idée reçue). Une formule inter-objets ne descend pas vers les enfants (inversion). Un trigger fonctionne, mais c'est du code (piège plausible)."
+    },
+    {
+      "id": "q-logic3",
+      "domain": "logic",
+      "question": "At Universal Containers, an opportunity must not be saved as Closed Won without a value in Delivery_Date__c. StageName is a picklist. Which validation rule formula should the app builder use?",
+      "codeOptions": true,
+      "options": [
+        "AND(ISPICKVAL(StageName, \"Closed Won\"), ISBLANK(Delivery_Date__c))",
+        "AND(ISPICKVAL(StageName, \"Closed Won\"), NOT(ISBLANK(Delivery_Date__c)))",
+        "AND(StageName = \"Closed Won\", ISBLANK(Delivery_Date__c))",
+        "IF(ISBLANK(Delivery_Date__c), \"Closed Won\", \"Open\")"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La formule décrit la situation invalide et utilise ISPICKVAL pour la picklist. La deuxième bloque précisément quand la date est renseignée (inversion). Une picklist ne se compare pas directement à un texte (piège plausible). Une règle de validation doit renvoyer vrai ou faux (faux terme)."
+    },
+    {
+      "id": "q-logic4",
+      "domain": "logic",
+      "question": "At Universal Containers, an integration user must be able to save records that break a validation rule. The team wants the exception to be easy to assign and to survive profile renaming. What should the app builder do?",
+      "options": [
+        "Create a custom permission, assign it through a permission set, and reference it in the rule",
+        "Add a condition on $Profile.Name to the rule for the integration user's current profile",
+        "Deactivate the rule before each data load and reactivate it afterward",
+        "Nothing, because API updates don't run validation rules"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une Custom Permission attribuée par Permission Set est le contournement propre. Un test sur le nom de profil fonctionne, mais casse au renommage (piège plausible). Désactiver la règle ouvre une fenêtre pour tous les utilisateurs (piège plausible). Les règles de validation s'appliquent aussi à l'API (idée reçue)."
+    },
+    {
+      "id": "q-logic5",
+      "domain": "logic",
+      "question": "An app builder at Universal Containers is designing roll-up summary fields. Which two statements are true?",
+      "options": [
+        "A roll-up summary field can't aggregate a formula field that uses TODAY()",
+        "A validation rule on the master can prevent a detail record from being saved when the new total is invalid",
+        "A roll-up summary field can be created on any lookup relationship",
+        "Roll-up summary fields support AVERAGE and MEDIAN functions"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les formules à valeur dynamique sont exclues, et le recalcul du parent peut faire échouer l'enregistrement de l'enfant. Un roll-up exige un master-detail, hors relations standard prévues (idée reçue). Seuls COUNT, SUM, MIN et MAX existent (faux terme)."
+    },
+    {
+      "id": "q-logic6",
+      "domain": "logic",
+      "question": "When a case is created or updated at Universal Containers, the Severity_Label__c field on the same case must be set from its priority. The solution must have the least performance impact. How should the record-triggered flow be configured?",
+      "options": [
+        "Optimize for Fast Field Updates and use an Assignment on $Record",
+        "Optimize for Actions and Related Records and use an Update Records element",
+        "Add a Scheduled Path that runs zero hours after the update",
+        "Run the logic in a schedule-triggered flow every hour"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Fast Field Updates écrit sur l'enregistrement avant sa sauvegarde, sans DML supplémentaire. Actions and Related Records fonctionne, mais relance une sauvegarde (piège plausible). Un Scheduled Path ajoute du délai pour rien (piège plausible). Un flow horaire laisse le champ faux jusqu'à son passage (inversion)."
+    },
+    {
+      "id": "q-logic7",
+      "domain": "logic",
+      "question": "At Universal Containers, a renewal task must be created 30 days before a contract's End_Date__c. If the contract is canceled before that date, the task must not be created. What should the app builder use?",
+      "options": [
+        "A record-triggered flow with a Scheduled Path relative to End_Date__c",
+        "A schedule-triggered flow that runs every day and checks every contract",
+        "A workflow rule with a time-dependent action",
+        "A screen flow that reps launch 30 days before the end date"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un Scheduled Path se place par rapport à une date et ne s'exécute plus si l'enregistrement ne remplit plus les conditions. Un flow quotidien marche, mais demande plus de logique et de filtrage (piège plausible). Les Workflow Rules sont en fin de support (faux terme). Un lancement manuel ne garantit rien (inversion)."
+    },
+    {
+      "id": "q-logic8",
+      "domain": "logic",
+      "question": "A record-triggered flow at Universal Containers fails during large data loads. The flow has an Update Records element inside a Loop. Which two changes should the app builder make?",
+      "options": [
+        "In the Loop, add each record to a collection variable with Assignment elements",
+        "After the Loop, use one Update Records element on the collection",
+        "Add a Pause element inside the Loop",
+        "Replace the Loop with a Screen element"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "On assemble une collection dans la boucle, puis une seule écriture à la sortie, ce qui évite d'atteindre la limite de 150 DML. Pause n'est pas la solution dans ce contexte (piège plausible). Un écran n'existe pas dans un flow record-triggered (faux terme)."
+    },
+    {
+      "id": "q-logic9",
+      "domain": "logic",
+      "question": "When Universal Containers' warehouse system publishes an Order_Shipped__e message, Salesforce must update the related order. What type of flow should the app builder create?",
+      "options": [
+        "Platform event-triggered flow",
+        "Record-triggered flow on Order",
+        "Schedule-triggered flow",
+        "Screen flow"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Ce type de flow démarre à la réception d'un message de Platform Event. Un flow record-triggered réagit à l'enregistrement d'un record, pas à l'événement (piège plausible). Un flow planifié introduit du retard (piège plausible). Un Screen Flow exige un utilisateur (inversion)."
+    },
+    {
+      "id": "q-logic10",
+      "domain": "logic",
+      "question": "An active flow at Universal Containers has a defect in a Decision element. What should the app builder do to fix it?",
+      "options": [
+        "Save the flow as a new version, fix and test it, then activate it",
+        "Edit the Decision element directly in the active version",
+        "Delete the active version and rebuild the flow",
+        "Deactivate all flows on the object and edit them in place"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une version active ne s'édite pas : Save As New Version, test, activation. La modification directe n'est pas possible (faux terme). Supprimer la version active est inutile et n'est pas autorisé tant qu'elle reste active (piège plausible). Désactiver tous les flows de l'objet interrompt l'activité (inversion)."
+    },
+    {
+      "id": "q-logic11",
+      "domain": "logic",
+      "question": "A record-triggered flow without a fault path fails in production at Universal Containers. Where can the app builder find information about the failure? Choose the two best sources.",
+      "options": [
+        "The flow error email sent to the last admin who modified the flow or the Apex exception recipients",
+        "Paused and Failed Flow Interviews in Setup",
+        "Setup Audit Trail",
+        "Login History"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "L'e-mail d'erreur et l'interview en échec donnent l'élément et le message d'erreur. Setup Audit Trail liste les modifications de configuration (piège plausible). Login History concerne les connexions (faux terme)."
+    },
+    {
+      "id": "q-logic12",
+      "domain": "logic",
+      "question": "Discounts at Universal Containers need manager approval, then finance approval above a threshold. Routing must branch by outcome, and admins want to build it in Flow Builder. What should the app builder create?",
+      "options": [
+        "A record-triggered approval orchestration with stages, approval steps, and a Decision element",
+        "A validation rule that requires an approver name",
+        "A workflow rule with an email alert to each approver and a field update for each outcome",
+        "A schedule-triggered flow that sends reminder emails to every approver until a decision is recorded"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'approbation Flow gère les stages, les approbateurs et les branchements dans Flow Builder. Une règle de validation vérifie une saisie, sans processus d'approbation (piège plausible). Les Workflow Rules sont en fin de support (faux terme). Des rappels planifiés n'enregistrent aucune décision (piège plausible)."
+    },
+    {
+      "id": "q-logic13",
+      "domain": "logic",
+      "question": "Customers of Universal Containers write free-form messages asking to change a delivery. The request must be understood, the order identified, and the change applied by consistent business rules. What should the app builder implement?",
+      "options": [
+        "An Agentforce agent with a subagent and an action based on an autolaunched flow",
+        "A record-triggered flow on the Order object",
+        "A screen flow with a Long Text field that customers fill in and support agents review later",
+        "A validation rule on the delivery date"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une demande en langage libre relève d'un agent ; l'action basée sur un flow applique les règles de façon déterministe. Un flow record-triggered ne comprend pas de texte libre (piège plausible). Un champ texte collecte la demande, sans l'interpréter (piège plausible). Une règle de validation ne traite pas de conversation (faux terme)."
+    },
+    {
+      "id": "q-ui1",
+      "domain": "ui",
+      "question": "On the Case record page at Universal Containers, a group of refund fields must appear only when Type equals Refund. The solution must avoid additional record types and code. What should the app builder use?",
+      "options": [
+        "Dynamic Forms with a visibility filter on a field section",
+        "A new record type and page layout for refunds",
+        "A Lightning web component that shows the fields",
+        "A Path with key fields for each case type"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Dynamic Forms affiche une section selon la valeur d'un champ. Un Record Type répond partiellement, mais l'énoncé l'exclut (piège plausible). Un LWC est du code (piège plausible). Path présente des champs clés par étape d'une picklist, pas une section conditionnelle sur la page (faux terme)."
+    },
+    {
+      "id": "q-ui2",
+      "domain": "ui",
+      "question": "From an account record at Universal Containers, users must create an opportunity that is automatically related to the account and whose stage is preset to Prospecting. What should the app builder create?",
+      "options": [
+        "An object-specific Create a Record action with a predefined field value",
+        "A global Create a Record action",
+        "A custom link that opens the standard new opportunity page in a separate tab",
+        "An OnClick JavaScript button"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'action spécifique à l'objet relie automatiquement le nouvel enregistrement, et la valeur prédéfinie fixe l'étape. Une action globale ne relie pas au compte affiché (inversion). Un lien personnalisé n'établit pas la relation ni la valeur par lui-même (piège plausible). OnClick JavaScript n'est pas pris en charge en Lightning (faux terme)."
+    },
+    {
+      "id": "q-ui3",
+      "domain": "ui",
+      "question": "A developer at Universal Containers deploys a Lightning web component, but it doesn't appear in Lightning App Builder for record pages. Which two changes should be made to its configuration file?",
+      "options": [
+        "Set isExposed to true",
+        "Add lightning__RecordPage as a target",
+        "Add force:hasRecordId to the component's HTML template",
+        "Set apiVersion to a value below 40.0"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le composant doit être exposé et déclarer la cible Record Page. force:hasRecordId est une interface Aura, pas un réglage LWC (faux terme). Une version d'API ancienne n'aide pas (inversion)."
+    },
+    {
+      "id": "q-ui4",
+      "domain": "ui",
+      "question": "In the Sales app at Universal Containers, opportunity record pages must differ for inside sales and field sales profiles. What should the app builder do?",
+      "options": [
+        "Create two Lightning record pages and assign them by app and profile",
+        "Assign two page layouts and expect each to change the Lightning page's components",
+        "Create a separate Lightning app for each profile",
+        "Set one record page as the org default for both profiles"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'activation d'une page Lightning peut se faire par combinaison d'application, de Record Type et de profil. Une Page Layout ne pilote pas la composition de la page Lightning (idée reçue). Une application par profil alourdit la navigation (piège plausible). Une page par défaut donne le même résultat à tous (inversion)."
+    },
+    {
+      "id": "q-ui5",
+      "domain": "ui",
+      "question": "Field technicians at Universal Containers want different key fields at the top of an account in the Salesforce mobile app. What should the app builder change?",
+      "options": [
+        "The compact layout assigned to Account",
+        "The Account page layout's related lists",
+        "The Salesforce mobile navigation menu",
+        "The account's list view columns"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les premiers champs de la Compact Layout s'affichent en haut d'un enregistrement sur mobile. Les related lists se trouvent plus bas (piège plausible). Le menu de navigation organise l'application (piège plausible). Les colonnes d'une vue de liste n'affectent pas l'enregistrement (faux terme)."
+    },
+    {
+      "id": "q-ui6",
+      "domain": "ui",
+      "question": "Users at Universal Containers must be able to log a general support idea from anywhere in the mobile app, with no relation to a specific record. What should the app builder create?",
+      "options": [
+        "A global action added to the publisher layout",
+        "An object-specific action on Account",
+        "A list button on the Idea tab",
+        "A validation rule on the Idea object"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une action globale se lance partout, sans contexte d'enregistrement. Une action spécifique à l'objet exige d'être sur un compte (piège plausible). Un List Button n'existe que dans une liste (piège plausible). Une règle de validation ne crée rien (faux terme)."
+    },
+    {
+      "id": "q-ui7",
+      "domain": "ui",
+      "question": "Universal Containers needs a screen flow on the Account record page. The flow must know which account the user is viewing. How should the app builder set this up?",
+      "options": [
+        "Add the Flow component to the page and pass the record ID to an input variable named recordId",
+        "Rewrite the flow as a Visualforce page that reads the account ID from the page URL",
+        "Add a URL button that doesn't pass parameters",
+        "Create a Lightning web component that duplicates the flow's logic"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le composant Flow transmet l'Id de l'enregistrement à la variable d'entrée recordId. Visualforce est inutile ici (piège plausible). Un bouton sans paramètre ne transmet pas l'Id (inversion). Dupliquer la logique dans un LWC ajoute du code (piège plausible)."
+    },
+    {
+      "id": "q-dep1",
+      "domain": "dep",
+      "question": "Before go-live, Universal Containers must run a performance test against the same data volume as production. Which sandbox type should be used?",
+      "options": [
+        "Full",
+        "Partial Copy",
+        "Developer Pro",
+        "Developer"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Seul un Full reproduit le volume complet de production. Partial Copy n'en contient qu'un échantillon (piège plausible). Developer Pro et Developer ne contiennent que les métadonnées (idée reçue)."
+    },
+    {
+      "id": "q-dep2",
+      "domain": "dep",
+      "question": "Universal Containers wants a user acceptance environment with a sample of production data that can be refreshed about once a week. Which sandbox type should be used?",
+      "options": [
+        "Partial Copy",
+        "Full",
+        "Developer",
+        "Developer Pro"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Partial Copy copie un échantillon défini par un template, avec un refresh tous les 5 jours. Full se rafraîchit tous les 29 jours (piège plausible). Developer et Developer Pro n'ont pas de données de production (idée reçue)."
+    },
+    {
+      "id": "q-dep3",
+      "domain": "dep",
+      "question": "An inbound change set at Universal Containers fails validation because a custom field used by a flow is missing. Which two actions should the app builder take?",
+      "options": [
+        "Clone the outbound change set in the source org",
+        "Add the missing field, using View/Add Dependencies to check for others, and upload again",
+        "Edit the uploaded outbound change set",
+        "Add the missing field to the inbound change set in the target org"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Un change set envoyé ne se modifie pas : on le clone, on complète les dépendances et on renvoie. Modifier le change set envoyé est impossible (faux terme). Un inbound ne se modifie pas et se déploie en entier (faux terme)."
+    },
+    {
+      "id": "q-dep4",
+      "domain": "dep",
+      "question": "A partner of Universal Containers will sell an app to many customers. Customers must receive upgrades, and the partner's Apex code must stay protected. Which distribution option should be used?",
+      "options": [
+        "A managed package",
+        "An unmanaged package",
+        "Change sets to each customer org",
+        "A Partial Copy sandbox template"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le package géré protège le code et permet les mises à niveau. Un non-géré expose le code et ne reçoit pas de mises à jour (inversion). Les change sets n'existent qu'entre orgs liées (idée reçue). Un template de sandbox ne distribue pas d'application (faux terme)."
+    },
+    {
+      "id": "q-dep5",
+      "domain": "dep",
+      "question": "After a change set is deployed to production at Universal Containers, a flow that was active in the sandbox isn't running. The org uses default settings. What is the most likely cause?",
+      "options": [
+        "Active flows are deployed as inactive by default, so the flow must be activated",
+        "Flows can't be deployed with change sets",
+        "The flow must be rebuilt manually in production",
+        "The flow runs only after the next sandbox refresh has copied it back from production"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Par défaut, un flow actif arrive inactif en production, sauf réglage « Deploy processes and flows as active ». Les change sets prennent les flows en charge (idée reçue). Reconstruire le flow est inutile (piège plausible). Le refresh d'un sandbox n'a pas d'effet sur la production (faux terme)."
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "id": "agentforce-specialist",
+  "title": "Agentforce Specialist",
+  "shortTitle": "Agentforce",
+  "vendor": "Salesforce",
+  "track": "AI Specialist",
+  "summary": "Révision alignée sur le guide d’examen officiel (Spring ’26) : les six domaines et leurs objectifs, un schéma du processus complet d’un agent, des questions d’entraînement, deux formats d’examen blanc et des fiches mémo.",
+  "verified": "Guide d’examen officiel aligné sur Spring ’26. Salesforce le met à jour selon les versions : vérifie-le avant de planifier ton examen.",
+  "language": {
+    "content": "fr",
+    "questions": "fr"
+  },
+  "exam": {
+    "durationMinutes": 105,
+    "scoredQuestions": 60,
+    "unscoredQuestions": 5,
+    "passRate": 0.72,
+    "passingLabel": "seuil 72 %",
+    "price": "200 USD · reprise 100"
+  },
+  "facts": [
+    "**60** questions (+5 non notées)",
+    "**105** min",
+    "seuil **72 %**",
+    "**200 USD** · reprise 100",
+    "FR · EN · JA"
+  ],
+  "domains": [
+    {
+      "id": "agents",
+      "label": "Agents IA",
+      "short": "Agents IA",
+      "name": "AI Agents",
+      "weight": 35,
+      "color": "#3450d6",
+      "objectives": [
+        "Expliquer le fonctionnement d’un agent et les blocs de base d’Agent Script.",
+        "Expliquer les composants et avantages du raisonnement hybride, dont Agent Script en vue Canvas et en vue Script.",
+        "Selon un cas d’usage, gérer le comportement déterministe avec des filtres, des variables et des expressions de modèle.",
+        "Selon un scénario, choisir et configurer rubriques (topics) standard et personnalisées, actions d’agent standard et personnalisées.",
+        "Expliquer comment connecter un agent aux canaux : Digital Experience, e-mail, voix et Slack.",
+        "Expliquer le contexte de sécurité dans lequel l’agent s’exécute et son effet sur l’exécution des actions.",
+        "Selon un scénario, savoir quand utiliser un agent Employee ou un agent Service.",
+        "Selon un scénario, savoir quand utiliser l’Agent API."
+      ]
+    },
+    {
+      "id": "prompt",
+      "label": "Ingénierie d’invite",
+      "short": "Invites",
+      "name": "Prompt Engineering",
+      "weight": 20,
+      "color": "#a65a00",
+      "objectives": [
+        "Selon des besoins métier, savoir quand utiliser Prompt Builder.",
+        "Identifier les contrôles d’accès qui régissent les modèles d’invite.",
+        "Identifier les considérations des types de modèles, comme Field Generation et Flex.",
+        "Selon un scénario, choisir la technique d’ancrage (grounding) appropriée.",
+        "Expliquer comment créer, activer et exécuter un modèle d’invite.",
+        "Appliquer les bonnes pratiques de rédaction d’invites efficaces.",
+        "Identifier les fonctions de sécurité et de confidentialité du Trust Layer.",
+        "Expliquer comment gérer les modèles (LLM) et empêcher l’accès à certains d’entre eux."
+      ]
+    },
+    {
+      "id": "data",
+      "label": "Fondamentaux Data 360",
+      "short": "Data 360",
+      "name": "Data 360 Fundamentals",
+      "weight": 20,
+      "color": "#187a4c",
+      "objectives": [
+        "Expliquer les considérations de l’Agentforce Data Library et ses concepts.",
+        "Expliquer les concepts fondamentaux de Data 360 : découpage (chunking), indexation et retrievers."
+      ]
+    },
+    {
+      "id": "test",
+      "label": "Tests, déploiement, maintenance",
+      "short": "Tests & déploiement",
+      "name": "Testing, Deployment & Maintenance",
+      "weight": 10,
+      "color": "#a13fc7",
+      "objectives": [
+        "Selon un scénario, tester un agent avec Testing Center.",
+        "Expliquer le fonctionnement des évaluations de Testing Center.",
+        "Identifier les considérations de déploiement d’un agent du sandbox vers la production.",
+        "Identifier les considérations de déploiement d’un modèle d’invite du sandbox vers la production."
+      ]
+    },
+    {
+      "id": "gov",
+      "label": "Gouvernance et observabilité",
+      "short": "Gouvernance",
+      "name": "Governance & Observability",
+      "weight": 10,
+      "color": "#137a8c",
+      "objectives": [
+        "Expliquer comment gérer et surveiller les agents.",
+        "Expliquer l’analytique des agents et l’optimisation des agents."
+      ]
+    },
+    {
+      "id": "multi",
+      "label": "Orchestration multi-agents",
+      "short": "Multi-agents",
+      "name": "Multi-Agent Orchestration",
+      "weight": 5,
+      "color": "#b4325a",
+      "objectives": [
+        "Selon un scénario, déterminer si une architecture multi-agents est appropriée (scalabilité, contrôle).",
+        "Expliquer le rôle des protocoles ouverts multi-agents comme MCP et A2A."
+      ]
+    }
+  ],
+  "content": {
+    "pages": [
+      {
+        "id": "schema",
+        "label": "Schéma",
+        "file": "schema.html"
+      }
+    ],
+    "quiz": "quiz.json",
+    "flashcards": "flashcards.json"
+  },
+  "styles": [
+    "schema.css"
+  ],
+  "mockExams": [
+    {
+      "id": "full",
+      "label": "Examen complet",
+      "source": "quiz",
+      "durationMinutes": 105,
+      "allocation": {
+        "agents": 21,
+        "prompt": 12,
+        "data": 12,
+        "test": 6,
+        "gov": 6,
+        "multi": 3
+      },
+      "description": "Les conditions de l’examen officiel."
+    },
+    {
+      "id": "mini",
+      "label": "Mini-examen",
+      "source": "quiz",
+      "durationMinutes": 35,
+      "allocation": {
+        "agents": 7,
+        "prompt": 4,
+        "data": 4,
+        "test": 2,
+        "gov": 2,
+        "multi": 1
+      },
+      "description": "Un tiers de l’examen, pour une séance courte."
+    }
+  ],
+  "notes": [
+    "Questions originales rédigées à partir des objectifs du guide d’examen officiel (aligné Spring ’26). Ce ne sont pas des questions de l’examen réel.",
+    "Terminologie : les « topics » (rubriques) s’appellent désormais « subagents » dans Agent Script. Les deux termes coexistent dans la documentation."
+  ],
+  "sources": [
+    {
+      "label": "Guide d’examen officiel Agentforce Specialist",
+      "url": "https://help.salesforce.com/s/articleView?id=005298924&language=en_US&type=1"
+    }
+  ],
+  "searchExamples": [
+    "Agent User",
+    "Prompt Builder",
+    "Trust Layer",
+    "Agent Script",
+    "Data Library",
+    "Testing Center"
+  ],
+  "stats": {
+    "quiz": 84,
+    "flashcards": 42
+  }
+}

@@ -1,0 +1,936 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "x-a1",
+      "domain": "alm",
+      "question": "A steering committee at Universal Containers sets a fixed budget and a fixed go-live date for an 18-month Salesforce program. The business also wants to adjust the scope based on user feedback during the build. Which approach should the architect recommend?",
+      "options": [
+        "A hybrid approach: scoping, architecture, and a release plan up front, then the build in sprints, and planned testing and go-live",
+        "Scrum with no release plan, with each team releasing when it's ready",
+        "Strict waterfall, with requirements frozen at the start and no demo before acceptance testing",
+        "The Salesforce Adaptive Delivery Framework"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Budget et date fixés demandent un cadrage et un plan de release ; ajuster le contenu demande des itérations : l'hybride combine les deux. Scrum sans plan de release ne garantit ni budget ni date (piège plausible). Le waterfall strict empêche d'ajuster le périmètre (inversion). L'« Adaptive Delivery Framework » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-a2",
+      "domain": "alm",
+      "question": "Universal Containers' run team handles a continuous flow of small, unpredictable requests: fixes, new fields, and reports. Some requests are urgent and can't wait for the end of a sprint. How should the architect recommend organizing the work?",
+      "options": [
+        "Kanban, with work-in-progress limits",
+        "Scrum, with two-week sprints",
+        "Waterfall, with a specification for each request",
+        "Sprint Zero Mode in Agile Accelerator"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Kanban gère un flux continu en limitant le travail en cours, et une demande urgente entre dès qu'une place se libère. Scrum gère bien un backlog, mais une urgence attendrait le sprint suivant (piège plausible). Une spécification par demande alourdit au lieu d'accélérer (inversion). « Sprint Zero Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-a3",
+      "domain": "alm",
+      "question": "A Universal Containers developer wants to introduce a second trigger framework and an integration pattern that differs from the company's standards. Who should approve this deviation?",
+      "options": [
+        "The Design Authority (Architecture Review Board)",
+        "The Change Advisory Board",
+        "The developer's own team, during sprint planning",
+        "The Technical Waiver Committee in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La Design Authority définit les standards techniques et valide les écarts. Le CAB est un vrai organe de gouvernance, mais il approuve les mises en production, pas les choix d'architecture (piège plausible). Laisser l'équipe décider seule est l'inverse d'une gouvernance (inversion). Il n'existe pas de « Technical Waiver Committee » dans Setup (faux terme)."
+    },
+    {
+      "id": "x-a4",
+      "domain": "alm",
+      "question": "Universal Containers creates a Change Advisory Board. Which two responsibilities should the CAB have?",
+      "options": [
+        "Approve each production release and its deployment window",
+        "Review the risks and the rollback plan of each production change",
+        "Define the technical standards, such as the trigger framework",
+        "Let each team approve its own production deployments",
+        "Assign the Deploy Approver permission to developers"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le CAB rend le go/no-go sur les changements en production, après revue des risques et du plan de retour arrière. Définir les standards techniques relève de la Design Authority (piège plausible). Laisser chaque équipe s'approuver est l'inverse du rôle du CAB (inversion). La permission « Deploy Approver » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-a5",
+      "domain": "alm",
+      "question": "Several Universal Containers business units compete for the same Salesforce team. Priorities change every week, and nobody arbitrates between business units. The company wants to keep one org. Which governance body should the architect recommend?",
+      "options": [
+        "A Center of Excellence that sets the vision and prioritizes across business units",
+        "A Change Advisory Board that approves each deployment",
+        "No central body: each business unit manages its own backlog and its own releases",
+        "The Business Unit Priority setting in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le CoE porte la vision et arbitre les priorités entre métiers. Le CAB approuve les mises en production, mais n'arbitre pas le backlog (piège plausible). Laisser chaque métier gérer ses releases dans une org partagée aggrave les conflits (inversion). Le réglage « Business Unit Priority » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-p1",
+      "domain": "plan",
+      "question": "During an ALM maturity assessment at Universal Containers, which two findings indicate low maturity?",
+      "options": [
+        "Administrators make changes directly in production",
+        "There's no source control, and nobody knows what was deployed last month",
+        "Every user story has acceptance criteria",
+        "Deployments are validated the day before go-live",
+        "The org's Maturity Score in Setup is below 50"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Changements en production et absence de source control sont les signes les plus nets d'une faible maturité. Des critères d'acceptation et une validation la veille sont au contraire de bonnes pratiques (inversions). Le « Maturity Score » n'existe pas dans Setup (faux terme)."
+    },
+    {
+      "id": "x-p2",
+      "domain": "plan",
+      "question": "A team of five Universal Containers admins who use change sets must move to Git and Salesforce CLI. The team has no Git experience, and releases can't stop during the transition. What should the architect plan first?",
+      "options": [
+        "Training on Git and the CLI, clear roles including a release manager, and a gradual rollout that starts with a pilot project",
+        "A third-party DevOps tool, so that no training is needed",
+        "A stop on all releases until the whole team is certified",
+        "Git Mode for change sets"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'évaluation de maturité porte sur les personnes, les processus et les outils : on forme, on clarifie les rôles et on avance par étapes. Un outil tiers aide, mais ne remplace pas les compétences (piège plausible). Geler les releases contredit la contrainte (inversion). « Git Mode » n'existe pas pour les change sets (faux terme)."
+    },
+    {
+      "id": "x-p3",
+      "domain": "plan",
+      "question": "Salesforce will enforce a Release Update on a published date. Universal Containers wants to control when the change affects its users, without surprises in production. What should the architect recommend?",
+      "options": [
+        "Enable and test the update in a sandbox, fix any issues, and then enable it in production before the enforcement date",
+        "Enable the update directly in production as soon as it's announced",
+        "Wait for the enforcement date, and fix issues afterward",
+        "Snooze the update until the next release"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Activer d'abord en sandbox puis en production avant la date d'application permet de choisir le moment, sans surprise. L'activer tout de suite en production choisit bien le moment, mais sans test (piège plausible). Attendre la date d'application, c'est subir le changement (inversion). On ne peut pas reporter une Release Update (faux terme : « snooze »)."
+    },
+    {
+      "id": "x-p4",
+      "domain": "plan",
+      "question": "Four Universal Containers developers work in the same Developer Pro sandbox and often overwrite each other's changes. The team wants to stop the overwrites without slowing down development. Which mitigation should the architect recommend?",
+      "options": [
+        "An isolated environment for each developer, such as a Developer sandbox or a scratch org, with the changes merged in Git",
+        "A schedule that gives each developer the shared sandbox on different days",
+        "A larger, shared Full sandbox for the four developers",
+        "The Sandbox Lock feature on shared sandboxes"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Des environnements isolés et des fusions dans Git suppriment les écrasements. Un planning d'accès évite les écrasements, mais ralentit tout le monde (piège plausible). Une sandbox partagée plus grande garde le même problème (inversion). « Sandbox Lock » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-p5",
+      "domain": "plan",
+      "question": "Universal Containers just refreshed a Full sandbox, and the architect must explain which email protections apply by default. Which two statements are true?",
+      "options": [
+        "Email deliverability is set to System email only",
+        "Users' email addresses get the .invalid suffix",
+        "Contact and lead email addresses get the .invalid suffix",
+        "Email deliverability is set to All email so that tests can run",
+        "Sandboxes can never send email"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une sandbox nouvelle ou rafraîchie démarre en System email only, et les e-mails des utilisateurs reçoivent le suffixe .invalid. Les e-mails des contacts et des leads restent intacts : c'est le piège classique (piège plausible). « All email » est l'inverse du réglage par défaut (inversion). Un admin peut rouvrir les envois, donc « jamais » est faux (faux énoncé)."
+    },
+    {
+      "id": "x-p6",
+      "domain": "plan",
+      "question": "Six project teams share Universal Containers' org. They use different frameworks, release without coordinating, and cause incidents. The company wants to keep a single org. Which governance model should the architect recommend?",
+      "options": [
+        "A CoE for priorities, a Design Authority for common standards, and a release manager with a shared release calendar",
+        "One org per team",
+        "Each team defines its own standards and its own release schedule",
+        "A governance service managed by Salesforce"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le problème vient du manque de standards et de coordination : CoE, Design Authority et release manager y répondent. Une org par équipe est une vraie stratégie, mais contredit la contrainte et crée des intégrations (piège plausible). Des standards par équipe reproduisent le problème (inversion). Salesforce ne gère pas la gouvernance d'une org à la place du client (faux énoncé)."
+    },
+    {
+      "id": "x-p7",
+      "domain": "plan",
+      "question": "Universal Containers wants to test the next Salesforce release in its UAT sandbox before production is upgraded. What must the architect check?",
+      "options": [
+        "That the UAT sandbox is on a preview instance, using Trust and the Sandbox Preview Guide, and, if it isn't, refresh it before the deadline",
+        "That the UAT sandbox is a Full sandbox, because only Full sandboxes get the preview",
+        "That production is already on the preview release",
+        "That the Preview Features license is installed in the sandbox"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "C'est l'instance d'une sandbox, pas son type, qui décide si elle reçoit la release en avance. Croire que seules les Full sont en preview est une idée reçue (piège plausible). La production passe toujours après les sandboxes preview : c'est l'inverse (inversion). Il n'existe pas de licence « Preview Features » (faux terme)."
+    },
+    {
+      "id": "x-p8",
+      "domain": "plan",
+      "question": "Universal Containers' production instance will be upgraded to the new Salesforce release on a Saturday, and a major release was planned for the same weekend. The architect wants to limit the risk. What should the architect recommend?",
+      "options": [
+        "Move the release outside the instance upgrade weekend, and run a smoke test after the upgrade",
+        "Deploy the night before the upgrade, without regression testing on the new version",
+        "Deploy during the upgrade window to save time",
+        "Ask Salesforce to move the instance upgrade to another weekend"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "On gèle les déploiements autour de la mise à jour de l'instance et on vérifie la production après. Déployer la veille évite la fenêtre, mais sans test sur la nouvelle version (piège plausible). Déployer pendant la mise à jour cumule les risques (inversion). Le client ne choisit pas la date de mise à jour de son instance (faux énoncé)."
+    },
+    {
+      "id": "x-d1",
+      "domain": "design",
+      "question": "The sandbox template of a Universal Containers Partial Copy sandbox includes Account, Contact, and Case. Production has 400,000 cases. What is the maximum number of cases that the sandbox copies?",
+      "options": [
+        "10,000",
+        "400,000, because the template includes Case",
+        "1,000",
+        "As many as the Partial Copy Extended Limit add-on allows"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le template choisit les objets ; la Partial Copy en copie jusqu'à 10 000 enregistrements par objet, dans une limite de 5 Go. Croire que le template copie tout l'objet est le piège classique (piège plausible). 1 000 sous-estime la limite. L'add-on « Partial Copy Extended Limit » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-d2",
+      "domain": "design",
+      "question": "Universal Containers needs environments with production data for UAT and staging. Which two sandbox types copy production data?",
+      "options": [
+        "Partial Copy",
+        "Full",
+        "Developer Pro",
+        "Developer",
+        "Data Copy"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "La Partial Copy copie un échantillon défini par un template, la Full copie toutes les données. La Developer Pro a plus de stockage, mais ne copie que les métadonnées (piège plausible). La Developer ne copie aucune donnée. Le type « Data Copy » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-d3",
+      "domain": "design",
+      "question": "Universal Containers wants its integration sandbox refreshed every day and its staging sandbox as close to production as possible. Which combination should the architect recommend?",
+      "options": [
+        "A Developer Pro sandbox for integration and a Full sandbox for staging",
+        "A Full sandbox for integration, refreshed every day, and a Partial Copy sandbox for staging",
+        "A Developer sandbox for staging and a Full sandbox for integration",
+        "A Partial Copy sandbox with the Daily Refresh add-on for both"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Developer Pro : refresh quotidien ; Full : copie complète de la production, idéale pour le staging. Une Full ne se rafraîchit que tous les 29 jours (piège plausible). Inverser les rôles donne un staging sans données et une intégration rarement rafraîchie (inversion). L'add-on « Daily Refresh » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-d4",
+      "domain": "design",
+      "question": "Universal Containers is choosing between one org and one org per business unit. The business units share most of their customers. Which two benefits does a single org provide?",
+      "options": [
+        "A 360-degree view of shared customers, with global reporting",
+        "Lower integration and administration costs",
+        "Separate platform limits for each business unit",
+        "An independent release schedule for each business unit",
+        "Unlimited governor limits for single-org customers"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Une org unique partage données et processus et évite les intégrations entre orgs. Des limites séparées sont un argument de la multi-org (piège plausible). Un calendrier indépendant par métier est l'inverse d'une org partagée (inversion). Les governor limits ne deviennent jamais illimitées (faux énoncé)."
+    },
+    {
+      "id": "x-d5",
+      "domain": "design",
+      "question": "Universal Containers wants a new QA sandbox with exactly the configuration of its UAT sandbox, which contains changes that aren't in production yet. The architect wants to avoid redeploying those changes. What should the architect recommend?",
+      "options": [
+        "Clone the UAT sandbox",
+        "Create a sandbox from production, and then deploy the UAT changes to it",
+        "Refresh the UAT sandbox from production",
+        "Promote the UAT sandbox to a QA template"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le clonage crée une sandbox à partir d'une autre sandbox, avec sa configuration en cours. Partir de la production puis redéployer fonctionne, mais contredit la contrainte (piège plausible). Rafraîchir l'UAT depuis la production efface justement ses changements (inversion). « Promote to a QA template » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-d6",
+      "domain": "design",
+      "question": "A Universal Containers team of developers is comfortable with Git. It wants every pull request validated against an org and every merge deployed automatically. Which tooling should the architect recommend?",
+      "options": [
+        "Salesforce CLI in a CI/CD pipeline, such as GitHub Actions, GitLab CI, or Jenkins",
+        "Lifecycle Center, with promotions done by a release manager",
+        "Change sets created after each merge",
+        "The Ant Migration Tool in Jenkins"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La CLI est scriptable : validation à chaque pull request, déploiement à chaque fusion. Lifecycle Center trace bien les promotions, mais elles se font en clics, pas automatiquement à chaque fusion (piège plausible). Les change sets sont manuels, l'inverse de l'automatisation (inversion). L'Ant Migration Tool est retiré depuis Spring '24 (outil retiré)."
+    },
+    {
+      "id": "x-d7",
+      "domain": "design",
+      "question": "Universal Containers' admins plan to keep using change sets for a small team. Which two limitations should the architect explain?",
+      "options": [
+        "Change sets can't delete or rename components",
+        "Change sets move only between orgs affiliated with the same production org, through an authorized deployment connection",
+        "Change sets can't deploy Apex classes",
+        "Change sets can move data records along with the metadata",
+        "Change sets are versioned in Git automatically"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les change sets ne suppriment rien et relient seulement la production et ses sandboxes, après autorisation de la connexion entrante. Ils déploient bien des classes Apex (idée reçue). Ils ne transportent pas de données (fausse capacité). Ils n'ont aucun lien avec Git (faux énoncé)."
+    },
+    {
+      "id": "x-d8",
+      "domain": "design",
+      "question": "Universal Containers sets up a Lifecycle Center (DevOps Center) pipeline with Integration, UAT, and Production stages. What does each stage represent?",
+      "options": [
+        "An environment (org) and a branch of the source repository",
+        "A work item that moves through the pipeline",
+        "A package version",
+        "A change set connection between two orgs"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Chaque étape associe une org et une branche ; promouvoir un work item fusionne ses changements dans la branche suivante et les déploie dans l'org correspondante. Le work item est ce qui avance dans le pipeline, pas l'étape (piège plausible : confusion de notions). Les versions de package et les change sets ne structurent pas le pipeline (confusions)."
+    },
+    {
+      "id": "x-d9",
+      "domain": "design",
+      "question": "The refresh of Universal Containers' Full staging sandbox takes too long because of large archive objects that testers never use. The sandbox must keep all the records of the other objects. What should the architect recommend?",
+      "options": [
+        "Apply a sandbox template to the Full sandbox that excludes the archive objects",
+        "Replace the Full sandbox with a Partial Copy sandbox",
+        "Refresh the Full sandbox more often so that each copy is smaller",
+        "Enable Incremental Refresh on the Full sandbox"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Sur une Full, un template sert à exclure des objets pour accélérer la copie. Une Partial Copy est plus rapide, mais plafonne à 10 000 enregistrements par objet (piège plausible). Rafraîchir plus souvent ne réduit pas la copie, et une Full se rafraîchit tous les 29 jours au plus (idée reçue). Le « refresh incrémental » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b1",
+      "domain": "build",
+      "question": "A Universal Containers developer needs a scratch org for a feature that will take three weeks. The org must not expire before the feature is finished. What should the developer do?",
+      "options": [
+        "Create the scratch org with --duration-days 30",
+        "Create it with the default duration, and extend it before it expires",
+        "Create it with the default duration, which is 30 days",
+        "Create a persistent scratch org with --no-expiry"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La durée se choisit à la création, de 1 à 30 jours (7 par défaut), et ne se prolonge pas. Prolonger une scratch org paraît possible, mais ne l'est pas (piège plausible). La durée par défaut est de 7 jours, pas 30 (idée reçue). Le flag --no-expiry n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b2",
+      "domain": "build",
+      "question": "Universal Containers is considering a move from org-based development to package development. Which two benefits support the move?",
+      "options": [
+        "Modules with explicit dependencies, each with its own version numbers",
+        "Each module can be released independently of the others",
+        "No Dev Hub is needed",
+        "No modular split of the metadata is needed",
+        "Packages remove the need for Apex code coverage"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les packages donnent des versions et des dépendances explicites, et chaque module se livre à son rythme. Ils demandent au contraire une Dev Hub et un découpage des métadonnées (inversions). La promotion d'une version exige 75 % de couverture (faux énoncé)."
+    },
+    {
+      "id": "x-b3",
+      "domain": "build",
+      "question": "Universal Containers' scratch orgs don't have the same features and settings as production, and the definition file is long and hard to maintain. What should the architect recommend?",
+      "options": [
+        "Org Shape, so that scratch orgs are created with the shape of production",
+        "Developer sandboxes instead of scratch orgs",
+        "Removing features from the definition file to keep it short",
+        "Scratch Org Mirror Mode"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Org Shape reprend l'édition, les licences, les features et les réglages d'une org source. Des Developer sandboxes ont la configuration de la production, mais font perdre les scratch orgs jetables (piège plausible). Retirer des features éloigne encore les scratch orgs de la production (inversion). « Scratch Org Mirror Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b4",
+      "domain": "build",
+      "question": "Merges at Universal Containers often fail on the System Administrator profile XML, which several developers change at the same time. What should the architect recommend?",
+      "options": [
+        "Manage access with permission sets, and merge small branches more often",
+        "Remove profiles from source control",
+        "Have one developer merge all the profile changes once a month",
+        "Enable the Profile Auto-Merge setting"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les permission sets, petits et ciblés, réduisent les conflits ; des fusions fréquentes les rendent plus simples. Sortir les profils du source control supprime les conflits, mais crée de la dérive (piège plausible). Des fusions mensuelles grossissent les conflits (inversion). « Profile Auto-Merge » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b5",
+      "domain": "build",
+      "question": "A Universal Containers trigger works in manual testing but fails during data loads. The architect wants the test suite to catch this kind of issue before deployment. What should the tests do?",
+      "options": [
+        "Insert 200 or more records in a single DML operation and assert the results",
+        "Load data with Data Loader in a sandbox after each deployment",
+        "Insert one record and check that the code coverage is above 75%",
+        "Call Test.enableBulkMode() before the insert"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un trigger reçoit jusqu'à 200 enregistrements par lot : un test à 200 enregistrements révèle les SOQL ou DML dans une boucle. Un chargement avec Data Loader détecte le problème, mais après le déploiement et à la main (piège plausible). Un seul enregistrement ne teste justement pas le volume (inversion). Test.enableBulkMode() n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b6",
+      "domain": "build",
+      "question": "Before any merge into develop, Universal Containers wants to block code that doesn't meet its standards. Which two practices should the architect recommend?",
+      "options": [
+        "A required pull request review by a peer",
+        "Automated checks on each pull request, such as Code Analyzer and a deployment validation with tests, that block the merge when they fail",
+        "A code review in production after each release",
+        "Turning off tests to speed up merges",
+        "The Quality Gate checkbox on the develop branch in Setup"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "La revue humaine et les contrôles automatiques bloquent le code non conforme avant l'intégration. Une revue en production arrive après coup (piège plausible : trop tard). Désactiver les tests est l'inverse d'une quality gate (inversion). Setup n'a pas de case « Quality Gate » sur une branche Git (faux terme)."
+    },
+    {
+      "id": "x-b7",
+      "domain": "build",
+      "question": "Universal Containers' developers work in Developer sandboxes. They want Salesforce CLI to detect what changed in each sandbox, as it does for scratch orgs. What should the architect recommend?",
+      "options": [
+        "Enable source tracking for Developer and Developer Pro sandboxes in the Dev Hub",
+        "Use Setup Audit Trail to list the changes",
+        "Move the developers to Full sandboxes, which track source changes by default",
+        "Enable Change Detection on each sandbox"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le source tracking s'active dans la Dev Hub pour les Developer et Developer Pro ; la CLI détecte alors les changements. Setup Audit Trail liste les changements, mais la CLI ne s'en sert pas (piège plausible). Les Full ne prennent pas en charge le source tracking (inversion). « Change Detection » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-b8",
+      "domain": "build",
+      "question": "An architect reviews whether Universal Containers' test suite covers the expected types of test cases. Which type of case does this test cover?",
+      "code": "@IsTest\nstatic void excessiveDiscountRejected() {\n    Opportunity o = TestFactory.createOpportunity();\n    o.Discount__c = 60;\n    try {\n        insert o;\n        Assert.fail('The validation rule should have blocked the insert');\n    } catch (DmlException e) {\n        Assert.isTrue(e.getMessage().contains('Discount'));\n    }\n}",
+      "options": [
+        "A negative case: it checks that an expected error occurs",
+        "A permission case: it checks the running user's access",
+        "A positive case: it checks that the opportunity is saved",
+        "A fail-fast case: it stops the test suite at the first error"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le test vérifie qu'une erreur attendue se produit : c'est un cas négatif, et Assert.fail() le fait échouer si l'insertion passe. Rien ne change d'utilisateur : ce n'est pas un test de permissions (piège plausible). Un cas positif vérifierait l'enregistrement, l'inverse (inversion). « Fail-fast » n'est pas une famille de tests Apex (faux terme)."
+    },
+    {
+      "id": "x-y1",
+      "domain": "deploy",
+      "question": "Universal Containers wants to use a quick deploy for its next production release. Which two conditions must be met?",
+      "options": [
+        "A successful validation in the last 10 days",
+        "During that validation, the Apex tests passed and the code coverage requirements were met",
+        "The validation used the RunAllTestsInOrg test level",
+        "The tests run again during the quick deploy",
+        "The validation was started from a Full sandbox"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le quick deploy réutilise une validation de moins de 10 jours où les tests ont réussi et la couverture est atteinte. RunLocalTests ou RunSpecifiedTests conviennent aussi (piège plausible). Les tests ne sont justement pas relancés (inversion). L'environnement d'origine n'entre pas en compte (faux énoncé)."
+    },
+    {
+      "id": "x-y2",
+      "domain": "deploy",
+      "question": "A Universal Containers deployment of 300 components to production fails on one component. The release manager asks what was deployed. What should the architect answer?",
+      "options": [
+        "Nothing: production deployments are all or nothing, so the whole deployment is rolled back",
+        "The other 299 components, as in a sandbox deployment with rollbackOnError set to false",
+        "The failed component, as an inactive version",
+        "The 299 components, which wait in a Pending Deployment queue"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "En production, rollbackOnError est obligatoire : la moindre erreur annule tout. Un déploiement partiel n'est possible qu'en dehors de la production (piège plausible). Le composant en erreur n'est jamais déployé (inversion). La file « Pending Deployment » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-y3",
+      "domain": "deploy",
+      "question": "A Universal Containers developer retrieved the Sales profile on its own and deployed it to UAT. The profile arrived without any field permissions. What should the developer do?",
+      "options": [
+        "Retrieve the profile together with the objects and fields that it grants access to, or manage these permissions with permission sets",
+        "Retrieve the profile with the Tooling API instead",
+        "Retrieve and deploy the profile on its own again, with a higher API version",
+        "Add the --include-all-permissions flag to the retrieve"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un retrieve de profil ne renvoie que les permissions des composants récupérés dans la même requête. La Tooling API existe, mais elle n'est pas faite pour migrer de la configuration (piège plausible). Refaire la même opération donne le même résultat (inversion). Le flag --include-all-permissions n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-y4",
+      "domain": "deploy",
+      "question": "A Universal Containers package.xml file contains <members>*</members> for CustomObject. The customizations of Account and Opportunity aren't retrieved. What should the developer do?",
+      "options": [
+        "Add Account and Opportunity as explicit members of CustomObject",
+        "Use a more recent API version so that the wildcard includes standard objects",
+        "Remove the wildcard and list only the custom objects",
+        "Use <members>**</members> to include standard objects"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Pour CustomObject, le joker ne renvoie que les objets personnalisés : un objet standard se nomme explicitement. Changer de version d'API ne change pas cette règle (piège plausible). Lister seulement les objets personnalisés exclut encore Account (inversion). Le double joker n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-y5",
+      "domain": "deploy",
+      "question": "Universal Containers wants flows deployed to production to be active immediately, without a manual post-deployment step. What must the architect set up?",
+      "options": [
+        "Enable Deploy processes and flows as active in production, and make sure that Apex tests cover at least 75% of the active processes and autolaunched flows",
+        "Add the activation of each flow to the post-deployment runbook",
+        "Deploy the flows with NoTestRun so that they keep their status",
+        "Set the AutoActivate attribute in each flow's metadata"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Ce réglage des Process Automation Settings déploie les flows actifs, si la couverture des flows par les tests Apex atteint 75 %. Une étape de runbook fonctionne, mais c'est l'étape manuelle à éviter (piège plausible). NoTestRun n'est pas autorisé en production avec de l'Apex et ne change pas le statut (fonction mal appliquée). L'attribut AutoActivate n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-y6",
+      "domain": "deploy",
+      "question": "Universal Containers is writing the runbook for a release. Which two tasks must be listed as manual or scripted steps because a metadata deployment doesn't perform them?",
+      "options": [
+        "Assign the new permission sets to users",
+        "Enter the secrets of the external credentials in each org",
+        "Deploy the new Apex classes",
+        "Create the new custom fields",
+        "Deploy the assignments with the PermissionSetAssignment metadata type"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les attributions de permission sets sont des données, et les secrets d'authentification ne sont pas transportés par les déploiements. Classes et champs se déploient normalement par la Metadata API (pièges : ce que le déploiement fait déjà). PermissionSetAssignment est un objet de données, pas un type de métadonnée (faux terme)."
+    },
+    {
+      "id": "x-y7",
+      "domain": "deploy",
+      "question": "Before automating the deployment of a new metadata type, a Universal Containers architect must know whether the type is supported by the Metadata API, unlocked packages, and change sets. Where should the architect look?",
+      "options": [
+        "The Metadata Coverage Report",
+        "The Tooling API Developer Guide",
+        "Setup Audit Trail",
+        "The Deployment Readiness page in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le Metadata Coverage Report indique, type par type, les canaux qui le prennent en charge. Le guide de la Tooling API décrit ses objets, pas la couverture des canaux de déploiement (piège plausible). Setup Audit Trail trace les changements passés (outil hors sujet). La page « Deployment Readiness » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-y8",
+      "domain": "deploy",
+      "question": "A Universal Containers release changes organization-wide defaults and adds sharing rules on objects with millions of records. The architect wants to limit the impact of sharing recalculation during the release window. What should the architect recommend?",
+      "options": [
+        "Use Defer Sharing Calculations: suspend the calculations before the changes, and resume them after the deployment",
+        "Split the sharing changes into daily deployments over a week",
+        "Deploy the sharing changes during business hours so that users notice issues quickly",
+        "Enable Async Sharing Mode for the deployment"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Defer Sharing Calculations (activé par le support Salesforce) suspend les recalculs pendant les changements, puis les relance en une fois. Étaler sur une semaine limite chaque recalcul, mais prolonge un partage incohérent (piège plausible). Déployer en journée expose les utilisateurs aux recalculs (inversion). « Async Sharing Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t1",
+      "domain": "test",
+      "question": "Universal Containers deploys Apex to production with RunLocalTests. Which two requirements apply?",
+      "options": [
+        "Overall code coverage of at least 75%",
+        "Every trigger has at least some test coverage",
+        "The tests of installed managed packages also pass",
+        "Each deployed class is covered at least 90%",
+        "Tests are written with SeeAllData=true"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "En production : tous les tests exécutés passent, 75 % de couverture globale, et chaque trigger couvert. Les tests des packages managés relèvent de RunAllTestsInOrg (piège plausible). Aucun seuil de 90 % n'existe (faux énoncé). SeeAllData=true est à éviter, pas exigé (inversion)."
+    },
+    {
+      "id": "x-t2",
+      "domain": "test",
+      "question": "A Universal Containers release manager deploys Apex classes to production without specifying a test level, and wants to estimate how long the deployment will take. Which test level applies?",
+      "options": [
+        "RunLocalTests",
+        "RunSpecifiedTests, with the test classes in the deployment",
+        "NoTestRun, because no level was specified",
+        "RunDefaultTests"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "RunLocalTests est le niveau par défaut en production dès qu'il y a de l'Apex. RunSpecifiedTests existe, mais doit être choisi et listé explicitement (piège plausible). NoTestRun n'est pas autorisé en production avec de l'Apex (inversion). RunDefaultTests n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t3",
+      "domain": "test",
+      "question": "Universal Containers' business users must confirm that a new quoting process meets their needs before go-live. Which test should the architect plan, and where?",
+      "options": [
+        "User acceptance testing by business users, in a Partial Copy or Full sandbox with representative data",
+        "Apex unit tests written by developers in scratch orgs",
+        "User acceptance testing in production, right after go-live",
+        "Business Validation Mode in Lifecycle Center"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "L'UAT est menée par les métiers sur des données représentatives, avant la mise en production. Les tests unitaires vérifient le code, pas l'adéquation au besoin (piège plausible). Tester après la mise en production est l'inverse du besoin (inversion). « Business Validation Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t4",
+      "domain": "test",
+      "question": "Universal Containers uses Lifecycle Center. It wants to run Apex, flow, and partner test suites, and block a promotion when a stage's quality criteria aren't met. What should the architect recommend?",
+      "options": [
+        "DevOps Testing, with quality gates for each pipeline stage",
+        "Running sf apex run test manually before each promotion",
+        "Turning off tests for promotions to speed them up",
+        "The Promotion Shield feature"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "DevOps Testing (GA en Winter '26) réunit les suites natives et partenaires et bloque une promotion si les critères d'une étape ne sont pas atteints. Lancer les tests à la main fonctionne, mais ne bloque rien automatiquement (piège plausible). Désactiver les tests fait l'inverse (inversion). « Promotion Shield » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t5",
+      "domain": "test",
+      "question": "Universal Containers wants a unified and secure test data strategy for all its sandboxes. Which two practices should the architect recommend?",
+      "options": [
+        "Versioned reference datasets that can be loaded again into every environment",
+        "Masking personal data after each Partial Copy or Full sandbox refresh, before access is granted",
+        "Letting each tester create data manually",
+        "Copying unmasked production data into Developer sandboxes for realism",
+        "Production Data Sync for Developer sandboxes"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Unifiée : les mêmes données de référence partout, versionnées et rejouables. Sécurisée : aucune donnée personnelle réelle hors production. La saisie à la main fonctionne, mais n'est ni reproductible ni unifiée (piège plausible). Copier des données non masquées fait l'inverse (inversion). « Production Data Sync » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t6",
+      "domain": "test",
+      "question": "Universal Containers must run a load test before its peak sales season. Which plan should the architect recommend?",
+      "options": [
+        "Refresh a Full sandbox from production, run a small trial with about 100 users, and then book a Scale Test slot",
+        "Run the test in a Partial Copy sandbox to save refresh time",
+        "Run the load test in production on a Sunday night",
+        "Enable Unlimited Load Mode on a Developer Pro sandbox"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une Full fraîchement copiée évite les faux résultats, un premier essai valide les scripts, et Scale Test ajoute de la capacité pendant le créneau. Une Partial Copy n'a pas les volumes de la production (piège plausible). Tester en production met les utilisateurs en risque (inversion). « Unlimited Load Mode » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-t7",
+      "domain": "test",
+      "question": "Universal Containers' developers want unit tests for Lightning web components that run in the CI pipeline without an org. Which tool should the architect recommend?",
+      "options": [
+        "Jest, with sfdx-lwc-jest",
+        "UTAM end-to-end tests in a sandbox",
+        "Apex test classes that call the components' controllers",
+        "The LWC Test Runner in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Jest exécute les tests unitaires des LWC en local et dans la CI, sans org. UTAM teste des parcours complets dans un navigateur, sur une org (piège plausible). Des tests Apex couvrent les contrôleurs, pas les composants (outil hors sujet). Le « LWC Test Runner » n'existe pas dans Setup (faux terme)."
+    },
+    {
+      "id": "x-t8",
+      "domain": "test",
+      "question": "An Apex test at Universal Containers passes in the Full sandbox but fails in scratch orgs. The test queries existing accounts. What should the architect recommend?",
+      "options": [
+        "Change the test so that it creates its own data, for example with @TestSetup and a test data factory",
+        "Annotate the test with @IsTest(SeeAllData=true)",
+        "Run this test only in the Full sandbox",
+        "Call Test.copyOrgData() at the start of the test"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un test Apex crée ses propres données, sinon il échoue dans une org vide comme une scratch org. SeeAllData=true donne accès aux données de l'org, mais une scratch org n'en a pas (piège plausible). Limiter le test à la Full contourne le problème au lieu de le corriger (inversion). Test.copyOrgData() n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-r1",
+      "domain": "release",
+      "question": "A Universal Containers consulting partner wants to share an app template that each customer can adapt freely. No upgrades will ever be provided. Which package type should the partner use?",
+      "options": [
+        "An unmanaged package",
+        "A managed 2GP package",
+        "An unlocked package, so that customers receive upgrades",
+        "A template package"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un package non managé distribue un point de départ : les composants appartiennent à l'org et se modifient librement, sans mise à jour. Un package managé se met à jour, mais verrouille le code (piège plausible). Prévoir des mises à jour contredit le besoin (inversion). Le « template package » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-r2",
+      "domain": "release",
+      "question": "Universal Containers installs its own unlocked packages in production. Which two statements are true?",
+      "options": [
+        "The packages are upgraded by installing a new version",
+        "Their metadata can be changed in the org, but the next upgrade overwrites those changes",
+        "Their Apex code is hidden in the org where they're installed",
+        "Salesforce pushes upgrades to the orgs automatically",
+        "Unlocked packages can't declare dependencies"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Les packages unlocked se mettent à jour par installation et laissent le code visible ; la version suivante écrase les modifications locales. Code masqué et push upgrades sont propres aux packages managés (pièges plausibles). Les dépendances se déclarent dans sfdx-project.json (faux énoncé)."
+    },
+    {
+      "id": "x-r3",
+      "domain": "release",
+      "question": "Universal Containers wants to package part of a large org, but the code depends on many metadata components that will stay outside the package for now. Which option should the architect recommend?",
+      "options": [
+        "An org-dependent unlocked package",
+        "An unlocked package that also contains all the metadata that the code depends on",
+        "An unmanaged package",
+        "A partial package"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un org-dependent unlocked package ne valide pas ses dépendances à la création et s'installe dans les orgs qui les contiennent. Tout embarquer fonctionne, mais contredit la contrainte (piège plausible). Un package non managé ne se met pas à jour (inversion du besoin de versions). Le « partial package » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-r4",
+      "domain": "release",
+      "question": "Two Universal Containers project streams deliver in the same monthly release, and urgent fixes can come up at any time. Which sandbox strategy should the architect recommend?",
+      "options": [
+        "Development and integration environments for each stream, shared QA and UAT where the streams converge, a Full staging sandbox, and a separate hotfix sandbox aligned with production",
+        "A single Full sandbox shared by both streams and by hotfixes",
+        "An integration sandbox for each stream that deploys directly to production",
+        "A Stream sandbox type for each project"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Chaque stream avance isolé, puis les streams convergent avant l'UAT pour tester la release complète ; la Full de staging répète le déploiement et le hotfix reste hors du flux. Une Full partagée paraît simple, mais mélange tout et se rafraîchit tous les 29 jours (piège plausible). Déployer chaque stream directement saute la convergence (inversion). Le type « Stream sandbox » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-r5",
+      "domain": "release",
+      "question": "A Universal Containers release includes data loads, manual steps, and a long deployment. The architect must know how long the release window must be. What should the architect recommend?",
+      "options": [
+        "Rehearse the whole deployment and runbook in a Full staging sandbox refreshed just before the release, and time each step",
+        "Estimate the duration from the deployment time in a developer's scratch org",
+        "Skip the rehearsal, and book a whole weekend for the release",
+        "Use the Release Duration Estimator in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Seule une répétition sur une copie fidèle de la production mesure la vraie durée, étapes manuelles comprises. Une scratch org donne un temps, mais sans données ni configuration complète (piège plausible). Sauter la répétition est l'inverse d'une estimation (inversion). L'« Release Duration Estimator » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-r6",
+      "domain": "release",
+      "question": "Universal Containers' Service package depends on its Core package. Both must be installed in a new org. What should the architect recommend?",
+      "options": [
+        "Install Core first, and then Service",
+        "Install Service first, and let the installation add Core automatically",
+        "Install them in any order, because dependencies are checked only during upgrades",
+        "Merge both into one unmanaged package"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Une dépendance s'installe avant le package qui en dépend ; elle est déclarée dans sfdx-project.json et vérifiée à l'installation. Croire que l'installation ajoute la dépendance seule est une idée reçue (piège plausible). Dire que l'ordre est libre est faux : l'installation échoue (inversion). Fusionner en un package non managé perd les versions (fonction mal appliquée)."
+    },
+    {
+      "id": "x-r7",
+      "domain": "release",
+      "question": "Which two responsibilities should belong to Universal Containers' release manager?",
+      "options": [
+        "Maintain the release calendar and freeze the content of each release",
+        "Coordinate the go/no-go decision and the communication around each go-live",
+        "Approve deviations from the technical standards",
+        "Write the Apex code for release features",
+        "Choose the dates of Salesforce's major releases"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le release manager planifie, fige le contenu, coordonne et communique. Valider les écarts aux standards relève de la Design Authority (piège plausible). Écrire le code n'est pas son rôle (confusion de rôles). Les dates des releases Salesforce sont imposées par Salesforce (faux énoncé)."
+    },
+    {
+      "id": "x-r8",
+      "domain": "release",
+      "question": "Universal Containers wants to know exactly which code was in each production release, and to redeploy any previous release if needed. What should the architect recommend?",
+      "options": [
+        "Tag each release in Git, and deploy releases only from the repository",
+        "Export Setup Audit Trail after each release",
+        "Retrieve production after each release, and overwrite the repository with it",
+        "Enable Release Snapshots in Setup"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Un tag Git par release fige son contenu et permet de le redéployer. Setup Audit Trail liste les changements, mais ne permet pas de redéployer (piège plausible). Écraser le repo avec la production fait de l'org la référence, l'inverse d'un source-driven (inversion). « Release Snapshots » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-o1",
+      "domain": "ops",
+      "question": "An admin at Universal Containers often makes small changes directly in production. Which two consequences should the architect explain?",
+      "options": [
+        "Drift between production and source control",
+        "The change is overwritten by the next deployment from the repository",
+        "The change is copied to all sandboxes automatically",
+        "The change is committed to Git automatically",
+        "Validation rules can no longer be edited in production"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Le repo ne contient pas le changement : il diverge de la production, et le déploiement suivant réécrit l'ancienne version. Les sandboxes ne le reçoivent qu'au prochain refresh (idée reçue). Rien ne commite automatiquement un changement fait en production : il faut le récupérer (faux énoncé). Une règle de validation reste modifiable en production (faux énoncé)."
+    },
+    {
+      "id": "x-o2",
+      "domain": "ops",
+      "question": "An emergency fix was made directly in Universal Containers' production org on a Friday evening. What should the team do on Monday?",
+      "options": [
+        "Retrieve the change, commit it to main, merge it into develop and the active branches, and update the sandboxes",
+        "Refresh all the sandboxes, including the Full sandbox, so that they get the fix",
+        "Remove the fix from production, and redo it through the normal process before the next release",
+        "Enable Production Sync Lock"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le changement doit rejoindre le source control et toutes les branches actives, sinon la release suivante l'écrase. Rafraîchir les sandboxes leur donne le correctif, mais pas au repo, et la Full ne se rafraîchit que tous les 29 jours (piège plausible). Retirer le correctif rouvre le bug (inversion). « Production Sync Lock » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-o3",
+      "domain": "ops",
+      "question": "After each refresh, a Universal Containers admin spends an hour creating test users, turning off integrations, and loading data. The architect wants these steps to run automatically at the end of the refresh. What should the architect recommend?",
+      "options": [
+        "An Apex class that implements SandboxPostCopy, selected when the sandbox is created or refreshed",
+        "A checklist in the runbook that the admin follows after each refresh",
+        "A trigger on the Organization object",
+        "A Post-Refresh flow type"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "La méthode runApexClass(SandboxContext) de SandboxPostCopy s'exécute automatiquement à la fin de la copie. Une checklist fonctionne, mais reste manuelle (piège plausible). L'objet Organization n'accepte pas de trigger (fausse capacité). Le type de flow « Post-Refresh » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-o4",
+      "domain": "ops",
+      "question": "Universal Containers installs the same unlocked Core package in four orgs. Each org calls a different ERP endpoint and uses different approval thresholds. The architect wants a single package version for all the orgs. What should the architect recommend?",
+      "options": [
+        "Keep the differences in configuration: a named credential defined in each org, and custom metadata records for the thresholds",
+        "Hard-code the four endpoints in Apex, and choose one at run time from the org ID",
+        "Build one variant of the Core package for each org, with its own values",
+        "Set Package Variables during each installation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Les différences passent par la configuration propre à chaque org, et le même package s'installe partout. Coder les quatre endpoints fonctionne, mais lie le code aux Id d'org (piège plausible). Une variante par org est l'inverse d'une version unique (inversion). Les « Package Variables » n'existent pas (faux terme)."
+    },
+    {
+      "id": "x-o5",
+      "domain": "ops",
+      "question": "After a release, Universal Containers' users report slowness and record locking errors. The architect must find the transactions involved. Which tool should the architect use?",
+      "options": [
+        "Scale Center",
+        "Setup Audit Trail",
+        "Disable Parallel Apex Testing",
+        "The Lock Analyzer in the Developer Console"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Scale Center montre la performance de l'org et les erreurs (verrous, Apex, pool de connexions). Setup Audit Trail trace la configuration, pas les performances (piège plausible). Disable Parallel Apex Testing ne concerne que l'exécution des tests (confusion). Le « Lock Analyzer » n'existe pas (faux terme)."
+    },
+    {
+      "id": "x-o6",
+      "domain": "ops",
+      "question": "A bug blocks Universal Containers orders on a Friday evening, and develop contains unfinished features. The fix must reach production tonight, without those features. Which process should the architect recommend?",
+      "options": [
+        "Create a hotfix branch from main, fix and test it in the hotfix sandbox, get emergency approval, deploy it, and then merge it into main and develop",
+        "Fix the bug directly in production, and document it later",
+        "Deploy the develop branch, which already contains the fix",
+        "Wait for the next monthly release"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Le hotfix ne contient que le correctif : il part de main, passe par un circuit d'urgence, puis rejoint develop. Corriger en production est rapide, mais sans test ni trace, avec de la dérive (piège plausible). Déployer develop livre les fonctionnalités inachevées (inversion). Attendre contredit l'urgence (contrainte ignorée)."
+    }
+  ]
+}

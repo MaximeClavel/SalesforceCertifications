@@ -1,0 +1,474 @@
+    <div class="subhead">
+      <div class="eyebrow">Approfondissement</div>
+      <h1>Chaque point, en détail</h1>
+      <p class="sub">Les 25 points des huit sections, avec un scénario type, des exemples concrets et les nuances qui départagent les réponses des questions à scénario.</p>
+    </div>
+
+    <div class="layout">
+      <nav class="sidenav" aria-label="Sections détaillées">
+        <a href="#d-alm">ALM &amp; méthodes</a>
+        <a href="#d-plan">Planification</a>
+        <a href="#d-design">Conception</a>
+        <a href="#d-build">Construction</a>
+        <a href="#d-deploy">Déploiement</a>
+        <a href="#d-test">Tests</a>
+        <a href="#d-release">Releases</a>
+        <a href="#d-ops">Exploitation</a>
+      </nav>
+
+      <main class="content">
+
+        <!-- ============ ALM ============ -->
+        <section class="domain" id="d-alm">
+          <div class="domain-head"><div><span class="weight">Application Lifecycle Management · 8 %</span><h2>ALM &amp; méthodologies</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Waterfall, Agile, hybride : choisir selon le contexte</h3></div>
+            <p class="lead">Le cycle de vie d'une application Salesforce suit toujours les mêmes étapes. Ce qui change d'une méthodologie à l'autre, c'est la taille des lots et le nombre de passages dans la boucle.</p>
+            <ol class="steps">
+              <li><b>Planifier la release</b> : besoins, priorités, calendrier.</li>
+              <li><b>Développer</b> : configuration et code dans des environnements isolés.</li>
+              <li><b>Tester</b> : tests unitaires et fonctionnels du changement.</li>
+              <li><b>Construire la release</b> : assembler les changements dans un environnement d'intégration.</li>
+              <li><b>Tester la release</b> : régression, UAT, performance sur une copie proche de la production.</li>
+              <li><b>Livrer</b> : déploiement en production et étapes post-déploiement.</li>
+            </ol>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">&nbsp;</th><th class="wrap">Waterfall</th><th class="wrap">Scrum</th><th class="wrap">Kanban</th><th class="wrap">Hybride</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Exigences</b></td><td class="wrap">Figées et validées au départ</td><td class="wrap">Backlog qui évolue</td><td class="wrap">Flux de demandes</td><td class="wrap">Cadrage initial, détail en sprints</td></tr>
+                  <tr><td class="wrap"><b>Livraison</b></td><td class="wrap">Une fois, à la fin</td><td class="wrap">Incrément à chaque sprint</td><td class="wrap">Au fil de l'eau</td><td class="wrap">Release planifiée</td></tr>
+                  <tr><td class="wrap"><b>Bon choix quand</b></td><td class="wrap">Périmètre stable, réglementation, forfait</td><td class="wrap">Besoins incertains, retours fréquents</td><td class="wrap">Run, support, petites demandes</td><td class="wrap">Budget et date fixés, équipes agiles</td></tr>
+                  <tr><td class="wrap"><b>Risque principal</b></td><td class="wrap">Écarts découverts tard</td><td class="wrap">Dérive du périmètre, dette technique</td><td class="wrap">Pas de jalons ni de vision d'ensemble</td><td class="wrap">Cumuler la lourdeur des deux</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="why"><b>Pourquoi c'est testé</b>Les questions décrivent un client (régulé, budget fixe, besoins mouvants) et demandent la méthodologie et ses risques. La contrainte citée dans l'énoncé décide.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Gouvernance selon la maturité</h3></div>
+            <p class="lead">Scénario type : six équipes de projet travaillent dans la même org. Elles se marchent dessus : deux frameworks de triggers différents, des mises en production le même soir, des conflits sur les mêmes objets. Il faut un cadre de gouvernance.</p>
+            <ul>
+              <li>Un <b>CoE</b> fixe la vision et arbitre les priorités entre métiers.</li>
+              <li>Une <b>Design Authority</b> publie les standards (un seul framework de triggers, patterns d'intégration, règles déclaratif ou code) et valide les écarts.</li>
+              <li>Un <b>release manager</b> tient un calendrier de releases commun ; le <b>CAB</b> approuve chaque mise en production.</li>
+              <li>Pour une petite équipe peu mature, on commence plus léger : Git comme référence, une sandbox par personne, une validation avant production, puis on ajoute des étapes quand l'équipe grandit.</li>
+            </ul>
+            <div class="trap"><b>Piège</b>La gouvernance la plus complète n'est pas la bonne réponse si le client n'a pas les moyens de la faire vivre. L'examen valorise une recommandation proportionnée.</div>
+          </article>
+        </section>
+
+        <!-- ============ PLANIFICATION ============ -->
+        <section class="domain" id="d-plan">
+          <div class="domain-head"><div><span class="weight">Planning · 13 %</span><h2>Planification</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Évaluer la maturité : personnes, processus, outils</h3></div>
+            <p class="lead">Scénario type : deux admins font leurs changements en production le vendredi soir, un consultant pousse du code par change sets, personne ne sait ce qui a été livré le mois dernier. L'architecte doit évaluer la maturité et proposer une trajectoire.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">Axe</th><th class="wrap">Faible maturité</th><th class="wrap">Maturité élevée</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Personnes</b></td><td class="wrap">Pas de rôle de release manager, pas de compétence Git</td><td class="wrap">Rôles clairs, équipe formée à Git, à la CLI et aux tests</td></tr>
+                  <tr><td class="wrap"><b>Processus</b></td><td class="wrap">Changements en production, pas de revue, pas de calendrier</td><td class="wrap">Stories avec critères d'acceptation, revue de code, CAB, calendrier</td></tr>
+                  <tr><td class="wrap"><b>Outils</b></td><td class="wrap">Change sets, tableurs, e-mails</td><td class="wrap">Backlog outillé, Git, CI/CD, analyse statique, tests automatisés</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>La trajectoire se fait par étapes : source control et environnements séparés d'abord, puis validation et revue systématiques, puis automatisation (CI, tests, analyse statique), puis éventuellement packages.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Risques des environnements et mitigation</h3></div>
+            <p class="lead">Scénario type : après le refresh de la sandbox Full, des clients réels reçoivent des e-mails de relance, et l'ERP reçoit des commandes de test sur son instance de production.</p>
+            <ul>
+              <li>À la création ou au refresh, la sandbox démarre en accessibilité des e-mails <b>System email only</b>, et les adresses e-mail des utilisateurs reçoivent le suffixe <code>.invalid</code>. Les champs e-mail des contacts et des leads restent intacts : si un admin rouvre les e-mails, de vrais clients peuvent être contactés. → Masquer ou vider ces champs.</li>
+              <li>Les endpoints copiés depuis la production pointent vers les systèmes de production. → Les rediriger vers des environnements de test dans le runbook post-refresh.</li>
+              <li>Une classe qui implémente <code>SandboxPostCopy</code>, renseignée à la création ou au refresh, s'exécute automatiquement à la fin de la copie.</li>
+            </ul>
+            <pre><span class="k">global class</span> PostRefresh <span class="k">implements</span> SandboxPostCopy {
+    <span class="k">global void</span> runApexClass(SandboxContext context) {
+        <span class="c">// context.sandboxName() permet d'adapter le traitement à chaque sandbox</span>
+        Integration_Settings__c s = Integration_Settings__c.getOrgDefaults();
+        s.Envoi_Actif__c = <span class="k">false</span>;           <span class="c">// coupe les envois vers l'ERP</span>
+        <span class="k">upsert</span> s;
+    }
+}</pre>
+            <div class="trap"><b>Piège</b>Le suffixe <code>.invalid</code> protège les utilisateurs, pas les contacts : ce n'est pas une mesure de protection des données clients.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Préparer une release Salesforce</h3></div>
+            <p class="lead">Scénario type : l'entreprise a beaucoup d'Apex et cinq intégrations. La prochaine release Salesforce arrive dans six semaines. Comment réduire le risque ?</p>
+            <ol class="steps">
+              <li><b>Choisir ses sandboxes preview</b> : vérifier leur instance (Trust, Sandbox Preview Guide) et rafraîchir avant la date limite pour être en preview, ou en non-preview.</li>
+              <li><b>Lire les release notes</b> et la page Release Updates : noter les mises à jour appliquées d'office et leur date.</li>
+              <li><b>Tester</b> : régression automatisée et processus critiques dans la sandbox preview, avec les intégrations.</li>
+              <li><b>Activer les Release Updates</b> d'abord en sandbox, puis en production avant leur date d'application.</li>
+              <li><b>Geler</b> les déploiements autour du week-end de mise à jour de l'instance de production, et communiquer les nouveautés aux utilisateurs.</li>
+            </ol>
+            <p>Pendant la preview, développer en sandbox preview crée un décalage de version. Garder la <code>sourceApiVersion</code> de <code>sfdx-project.json</code> sur la version de la production évite de dépendre d'une API qu'elle ne connaît pas encore.</p>
+          </article>
+        </section>
+
+        <!-- ============ CONCEPTION ============ -->
+        <section class="domain" id="d-design">
+          <div class="domain-head"><div><span class="weight">System Design · 15 %</span><h2>Conception du système</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Les outils agiles</h3></div>
+            <p class="lead">Scénario type : l'auditeur demande quelles user stories sont entrées en production le 3 mars et qui les a approuvées.</p>
+            <ul>
+              <li>Un outil de backlog relié au source control répond directement : la story référence ses commits (identifiant dans le message de commit ou le nom de branche), sa pull request, son approbation et son déploiement.</li>
+              <li>Il apporte aussi la visibilité (tableau de sprint, burndown, vélocité) et une priorisation partagée.</li>
+              <li>Dans Lifecycle Center, le <b>work item</b> passe par les statuts New, In Progress, In Review, Ready to Promote puis Promoted ; chaque passage d'étape crée une change request (pull request).</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Une org ou plusieurs ?</h3></div>
+            <p class="lead">Scénario type : un groupe acquiert une filiale qui a ses propres processus, ses administrateurs, un régulateur différent et veut garder son rythme de livraison. Le reste du groupe partage les mêmes clients et veut une vue 360°.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">Critère</th><th class="wrap">Pousse vers une org unique</th><th class="wrap">Pousse vers plusieurs orgs</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Clients et données</b></td><td class="wrap">Clients partagés, vue 360°, reporting global</td><td class="wrap">Clients distincts, peu de données communes</td></tr>
+                  <tr><td class="wrap"><b>Processus</b></td><td class="wrap">Processus harmonisables</td><td class="wrap">Processus très différents</td></tr>
+                  <tr><td class="wrap"><b>Réglementation</b></td><td class="wrap">Cadre commun</td><td class="wrap">Isolation juridique ou réglementaire exigée</td></tr>
+                  <tr><td class="wrap"><b>Autonomie</b></td><td class="wrap">Gouvernance centrale acceptée</td><td class="wrap">Admins et calendrier de release propres</td></tr>
+                  <tr><td class="wrap"><b>Coûts</b></td><td class="wrap">Une seule plateforme à maintenir</td><td class="wrap">Intégrations entre orgs et artefacts dupliqués à financer</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Ici, une org dédiée à la filiale, intégrée à l'org du groupe pour les données partagées, se défend. Pour le reste du groupe, l'org unique reste le choix par défaut.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Types de sandbox et stratégie</h3></div>
+            <p class="lead">Scénario type : il faut un environnement d'UAT avec environ 3 000 comptes représentatifs et leurs opportunités, rafraîchi chaque semaine.</p>
+            <ul>
+              <li>Developer et Developer Pro ne copient aucune donnée. La Full copie tout, mais ne se rafraîchit que tous les 29 jours.</li>
+              <li>La <b>Partial Copy</b> avec un <b>sandbox template</b> (Account, Opportunity et les objets liés) se rafraîchit tous les 5 jours et copie jusqu'à 10 000 enregistrements par objet : c'est la bonne réponse.</li>
+              <li>Un template ne s'utilise qu'avec une Partial Copy ou une Full. Sur une Full, il sert à exclure des objets pour accélérer la copie.</li>
+              <li><b>Clonage</b> : créer une sandbox à partir d'une autre, pour reprendre une configuration en cours qui n'est pas encore en production.</li>
+              <li><b>Source tracking</b> sur Developer et Developer Pro : la CLI détecte ce qui a changé dans la sandbox, comme pour une scratch org.</li>
+            </ul>
+            <div class="why"><b>Pourquoi c'est testé</b>Volume de données, fréquence de refresh et besoin de données réelles suffisent presque toujours à désigner le type de sandbox.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Outils de déploiement</h3></div>
+            <p class="lead">Scénario type : trois profils d'équipes. Une PME de deux admins ; une équipe d'admins et de développeurs qui veut des promotions traçables sans manipuler Git ; une équipe de développeurs qui veut déployer automatiquement à chaque fusion.</p>
+            <ul>
+              <li>PME : change sets acceptables au départ, avec une validation avant production. Limites : pas de suppression, pas d'historique, orgs de la même production seulement, deployment connection à autoriser dans l'org cible.</li>
+              <li>Équipe mixte : <b>Lifecycle Center</b>. Pipeline d'étapes (chaque étape = une org et une branche), work items, change requests, détection de conflits, DX Inspector pour commiter depuis la sandbox, DevOps Testing pour les quality gates.</li>
+              <li>Développeurs : <b>Salesforce CLI</b> dans une CI (GitHub Actions, GitLab CI, Jenkins…), avec validation à chaque pull request et déploiement à chaque fusion.</li>
+              <li>Lifecycle Center ne couvre pas tout : pas de rollback en un clic, pas de comparaison de métadonnées entre orgs, pas de backup. Les outils tiers comblent ces manques.</li>
+            </ul>
+          </article>
+        </section>
+
+        <!-- ============ CONSTRUCTION ============ -->
+        <section class="domain" id="d-build">
+          <div class="domain-head"><div><span class="weight">Building · 14 %</span><h2>Construction</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Branches, versions et fusions</h3></div>
+            <p class="lead">Scénario type : Gitflow, release mensuelle. Un bug bloque les commandes en production alors que <code>develop</code> contient déjà des fonctionnalités inachevées de la prochaine release.</p>
+            <pre><span class="c"># 1. Partir de la production, pas de develop</span>
+git switch main
+git switch -c hotfix/commande-bloquee
+
+<span class="c"># 2. Corriger, tester, puis fusionner dans main et déployer</span>
+git switch main
+git merge --no-ff hotfix/commande-bloquee
+git tag v2026.10.1
+
+<span class="c"># 3. Reporter le correctif dans develop</span>
+git switch develop
+git merge --no-ff hotfix/commande-bloquee</pre>
+            <ul>
+              <li>Trunk-based : on fusionne dans <code>main</code> plusieurs fois par jour ; une fonctionnalité inachevée est livrée mais désactivée par un feature flag (enregistrement de Custom Metadata, Custom Permission lue avec <code>FeatureManagement.checkPermission()</code>).</li>
+              <li>Les conflits XML se réduisent avec des fusions fréquentes, des permission sets plutôt que des profils, et le format source qui découpe un objet en un fichier par champ.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Org-based ou package-based ? Scratch org ou sandbox ?</h3></div>
+            <p class="lead">Scénario type : une entreprise veut publier séparément le module Facturation et le module Service, avec leurs propres versions, sans tout redéployer à chaque fois.</p>
+            <ul>
+              <li>C'est un cas de <b>package development</b> : un package unlocked par module, les dépendances déclarées dans <code>sfdx-project.json</code>, chaque module versionné et installé indépendamment.</li>
+              <li>Prérequis : une Dev Hub, un découpage clair des métadonnées et une équipe à l'aise avec la CLI. Sans découpage possible, un <b>org-dependent unlocked package</b> laisse dépendre le package de métadonnées restées dans l'org.</li>
+              <li>Les scratch orgs se créent depuis un fichier de définition :</li>
+            </ul>
+            <pre>{
+  "orgName": "Facturation - dev",
+  "edition": "Enterprise",
+  "features": ["MultiCurrency", "ServiceCloud"],
+  "settings": {
+    "lightningExperienceSettings": { "enableS1DesktopEnabled": <span class="k">true</span> }
+  }
+}</pre>
+            <p>Org Shape remplace la liste des features et settings par la « forme » d'une org existante (édition, licences, réglages). Un snapshot capture une scratch org déjà configurée pour en recréer d'autres rapidement.</p>
+            <div class="trap"><b>Piège</b>Les scratch orgs ne remplacent pas les sandboxes : l'intégration, l'UAT et les problèmes liés aux données réelles demandent une sandbox.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Tests unitaires et données de test</h3></div>
+            <p class="lead">Une seule classe de test peut couvrir les quatre familles de cas attendues à l'examen.</p>
+            <pre><span class="k">@IsTest</span>
+<span class="k">private class</span> RemiseServiceTest {
+    <span class="k">@TestSetup</span> <span class="k">static void</span> setup() { TestFactory.comptes(200); }   <span class="c">// gros volume</span>
+
+    <span class="k">@IsTest static void</span> remiseAppliquee() {                         <span class="c">// positif</span>
+        Opportunity o = TestFactory.opportunite(20);
+        <span class="k">insert</span> o;
+        Assert.areEqual(20, [<span class="k">SELECT</span> Remise__c <span class="k">FROM</span> Opportunity <span class="k">WHERE</span> Id = :o.Id].Remise__c);
+    }
+
+    <span class="k">@IsTest static void</span> remiseTropForteRefusee() {                  <span class="c">// négatif</span>
+        <span class="k">try</span> {
+            <span class="k">insert</span> TestFactory.opportunite(60);
+            Assert.fail('La règle de validation aurait dû bloquer');
+        } <span class="k">catch</span> (DmlException e) {
+            Assert.isTrue(e.getMessage().contains('Remise'));
+        }
+    }
+
+    <span class="k">@IsTest static void</span> commercialSansDroit() {                      <span class="c">// permissions</span>
+        User u = TestFactory.utilisateur('Commercial junior');
+        System.runAs(u) {
+            Assert.isFalse(RemiseService.peutAccorder(30));
+        }
+    }
+}</pre>
+            <div class="trap"><b>Piège</b><code>System.runAs()</code> applique le partage d'enregistrements de l'utilisateur, pas ses permissions d'objet ni sa sécurité au niveau des champs. Pour tester ces droits, le code testé doit s'exécuter en mode utilisateur.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Qualité du code</h3></div>
+            <p class="lead">Scénario type : chaque release apporte son lot de SOQL dans des boucles et de classes sans tests. L'architecte doit empêcher ce code d'atteindre <code>develop</code>.</p>
+            <ol class="steps">
+              <li><b>Standards écrits</b> : nommage, framework de triggers, gestion des erreurs, règles déclaratif ou code.</li>
+              <li><b>Pull request obligatoire</b> sur <code>develop</code> et <code>main</code>, avec au moins une revue par un pair.</li>
+              <li><b>Contrôles automatiques</b> sur chaque pull request : Code Analyzer v5, validation du déploiement avec tests, couverture.</li>
+              <li><b>Seuils bloquants</b> : la fusion est refusée si un contrôle échoue.</li>
+              <li><b>Suivi en production</b> : ApexGuru signale les anti-patterns observés à l'exécution.</li>
+            </ol>
+            <pre><span class="c"># Analyse statique dans la CI</span>
+sf code-analyzer run --rule-selector Recommended --output-file resultats.html</pre>
+          </article>
+        </section>
+
+        <!-- ============ DÉPLOIEMENT ============ -->
+        <section class="domain" id="d-deploy">
+          <div class="domain-head"><div><span class="weight">Deploying · 14 %</span><h2>Déploiement</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Metadata API vs Tooling API</h3></div>
+            <p class="lead">Règle simple : déplacer de la configuration entre orgs → Metadata API ; construire un outil de développement ou interroger des métadonnées fines (couverture, logs, symboles) → Tooling API.</p>
+            <pre><span class="c">&lt;!-- package.xml : le joker ne couvre pas les objets standard --&gt;</span>
+&lt;Package xmlns="http://soap.sforce.com/2006/04/metadata"&gt;
+    &lt;types&gt;
+        &lt;members&gt;*&lt;/members&gt;          <span class="c">&lt;!-- objets personnalisés --&gt;</span>
+        &lt;members&gt;Account&lt;/members&gt;    <span class="c">&lt;!-- objet standard, à nommer --&gt;</span>
+        &lt;name&gt;CustomObject&lt;/name&gt;
+    &lt;/types&gt;
+    &lt;version&gt;66.0&lt;/version&gt;
+&lt;/Package&gt;</pre>
+            <pre><span class="c">-- Tooling API : couverture par classe ou trigger</span>
+<span class="k">SELECT</span> ApexClassOrTrigger.Name, NumLinesCovered, NumLinesUncovered
+<span class="k">FROM</span> ApexCodeCoverageAggregate</pre>
+            <ul>
+              <li>Un déploiement de plus de 10 000 fichiers ou de plus de 39 Mo compressés se découpe en plusieurs déploiements.</li>
+              <li>Retrieve d'un profil seul : il revient presque vide. Le récupérer avec les objets, champs et classes concernés, ou passer aux permission sets.</li>
+              <li>Avant d'automatiser un type de métadonnée, vérifier dans le <b>Metadata Coverage Report</b> qu'il est supporté ; sinon, il rejoint le runbook manuel.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Étapes avant et après déploiement</h3></div>
+            <p class="lead">Scénario type : la release supprime le champ <code>Ancien_Statut__c</code>, que la classe <code>CommandeService</code> référence encore, et active un nouveau flow.</p>
+            <ol class="steps">
+              <li><b>J-1, validation</b> : <code>sf project deploy validate</code> avec la classe corrigée (sans référence au champ), le flow, et <code>destructiveChangesPost.xml</code> qui supprime le champ.</li>
+              <li><b>Étapes « pré »</b> : désactiver les intégrations si besoin, activer « Defer Sharing Calculations » pour une grosse modification de partage, prévenir les utilisateurs.</li>
+              <li><b>Jour J</b> : <code>sf project deploy quick --job-id …</code> dans les 10 jours qui suivent la validation, sans relancer les tests.</li>
+              <li><b>Étapes « post »</b> : activer le flow si le réglage « Deploy processes and flows as active » n'est pas coché, attribuer les permission sets, saisir les secrets des External Credentials, replanifier les jobs Apex, charger les données de référence, smoke test.</li>
+            </ol>
+            <ul>
+              <li><code>destructiveChangesPre.xml</code> sert quand le composant doit disparaître <i>avant</i> que le reste soit déployé, par exemple pour libérer un nom.</li>
+              <li>Un déploiement qui modifie une classe référencée par un job Apex planifié échoue, sauf si le réglage de déploiement qui l'autorise est activé. Sinon : supprimer le job, déployer, replanifier.</li>
+            </ul>
+            <div class="trap"><b>Piège</b>Un quick deploy ne relance pas les tests : c'est tout son intérêt pour réduire la fenêtre de mise en production.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Données de référence techniques</h3></div>
+            <p class="lead">Scénario type : des règles de tarification sont stockées dans un objet personnalisé avec une hiérarchie parent-enfant. Elles doivent arriver dans chaque environnement avec chaque release.</p>
+            <ul>
+              <li>Si la logique le permet, les transformer en <b>Custom Metadata Types</b> : ils suivent les métadonnées dans Git et dans les déploiements.</li>
+              <li>Sinon, les stocker dans le repo et les charger par upsert sur un External ID, en commençant par les parents, les enfants retrouvant leur parent par l'External ID.</li>
+            </ul>
+            <pre><span class="c"># Parents puis enfants, rejouable à chaque release sans doublon</span>
+sf data upsert bulk --sobject Regle_Prix__c --file data/regles.csv --external-id Code__c --target-org uat
+sf data upsert bulk --sobject Palier_Prix__c --file data/paliers.csv --external-id Code__c --target-org uat
+<span class="c"># paliers.csv référence le parent par sa clé : Regle_Prix__r.Code__c</span></pre>
+            <div class="trap"><b>Piège</b>Une copie de sandbox conserve les Id de la production, mais deux orgs indépendantes (production et scratch org, par exemple) n'ont jamais les mêmes Id. Une clé métier stable est la seule référence sûre.</div>
+          </article>
+        </section>
+
+        <!-- ============ TESTS ============ -->
+        <section class="domain" id="d-test">
+          <div class="domain-head"><div><span class="weight">Testing · 13 %</span><h2>Tests</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Méthodologie de test</h3></div>
+            <p class="lead">Chaque type de test a son environnement et son responsable.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">Test</th><th class="wrap">Qui</th><th class="wrap">Où</th><th class="wrap">Outils</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Unitaire</b></td><td class="wrap">Développeurs</td><td class="wrap">Scratch org, Developer</td><td class="wrap">Apex, Jest, Flow tests</td></tr>
+                  <tr><td class="wrap"><b>Intégration</b></td><td class="wrap">Équipe, CI</td><td class="wrap">Developer Pro, Partial Copy</td><td class="wrap">Tests Apex avec mocks, tests de bout en bout</td></tr>
+                  <tr><td class="wrap"><b>Régression</b></td><td class="wrap">QA, automatisée</td><td class="wrap">QA, staging, sandbox preview</td><td class="wrap">UTAM, Provar, DevOps Testing</td></tr>
+                  <tr><td class="wrap"><b>UAT</b></td><td class="wrap">Métiers</td><td class="wrap">Partial Copy ou Full</td><td class="wrap">Scénarios d'acceptation</td></tr>
+                  <tr><td class="wrap"><b>Performance</b></td><td class="wrap">Architectes, QA</td><td class="wrap">Full, créneau Scale Test</td><td class="wrap">Scripts de charge, Scale Center</td></tr>
+                  <tr><td class="wrap"><b>Smoke test</b></td><td class="wrap">Release manager</td><td class="wrap">Production, juste après le déploiement</td><td class="wrap">Liste de vérifications courte</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Pour un test de charge, la Full est rafraîchie depuis la production pour éviter les faux positifs, puis on réserve un créneau Scale Test qui ajoute de la capacité à la sandbox, après un premier essai à 100 utilisateurs. Scale Center aide ensuite à analyser les erreurs de verrouillage et les points chauds.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Exécution des tests et couverture</h3></div>
+            <p class="lead">Scénario type : le déploiement ne contient que deux classes et leurs classes de test. L'équipe veut un déploiement rapide en production sans exécuter les 3 000 tests de l'org.</p>
+            <pre>sf project deploy start --source-dir force-app/main/default/classes \
+  --test-level RunSpecifiedTests --tests FactureServiceTest --tests AvoirServiceTest \
+  --target-org prod</pre>
+            <ul>
+              <li>Avec <code>RunSpecifiedTests</code>, chacune des deux classes déployées doit être couverte à 75 % par les tests listés ; la couverture globale de l'org n'est pas le critère.</li>
+              <li>Sans niveau précisé, un déploiement en production qui contient de l'Apex exécute <code>RunLocalTests</code>.</li>
+              <li>Les tests Apex s'exécutent en parallèle. Des tests qui modifient les mêmes enregistrements (ou un même Custom Setting) peuvent échouer par verrouillage : « Disable Parallel Apex Testing » les exécute un par un.</li>
+            </ul>
+            <div class="why"><b>Pourquoi c'est testé</b>La différence entre 75 % global (RunLocalTests) et 75 % par composant (RunSpecifiedTests) revient souvent.</div>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Stratégie de données de test</h3></div>
+            <p class="lead">Scénario type : une banque veut des sandboxes d'UAT réalistes, mais aucune donnée client réelle ne doit en sortir.</p>
+            <ol class="steps">
+              <li><b>Copier</b> : Partial Copy avec un template, ou Full selon le volume.</li>
+              <li><b>Masquer</b> immédiatement après le refresh, avant d'ouvrir l'accès (Data Mask &amp; Seed : anonymisation, pseudonymisation, suppression).</li>
+              <li><b>Compléter</b> par des jeux de données de référence versionnés et rejouables (seed templates, plans de données).</li>
+              <li><b>Réserver</b> l'accès aux utilisateurs qui en ont besoin, et tracer les refresh.</li>
+            </ol>
+            <p>Pour les sandboxes Developer et Developer Pro, qui ne copient aucune donnée, le seeding apporte les données de test. Data Mask &amp; Seed alimente les quatre types de sandbox.</p>
+          </article>
+        </section>
+
+        <!-- ============ RELEASES ============ -->
+        <section class="domain" id="d-release">
+          <div class="domain-head"><div><span class="weight">Releasing · 13 %</span><h2>Releases</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Managé, non managé ou unlocked ?</h3></div>
+            <p class="lead">Trois scénarios, trois réponses.</p>
+            <ul>
+              <li>Un intégrateur veut partager un modèle d'application que chaque client adaptera librement, sans suivi des versions : <b>non managé</b>.</li>
+              <li>Une entreprise veut découper son org en modules versionnés, avec des dépendances, et garder la main sur le code : <b>unlocked</b>.</li>
+              <li>Un éditeur vend une application sur l'AppExchange, protège son code et pousse les correctifs à ses clients : <b>managé 2GP</b>.</li>
+            </ul>
+            <pre><span class="c">// sfdx-project.json : le package Service dépend du package Core</span>
+{
+  "packageDirectories": [
+    { "path": "core", "package": "Core", "versionNumber": "1.4.0.NEXT", "default": <span class="k">false</span> },
+    { "path": "service", "package": "Service", "versionNumber": "2.1.0.NEXT", "default": <span class="k">true</span>,
+      "dependencies": [ { "package": "Core", "versionNumber": "1.4.0.LATEST" } ] }
+  ],
+  "namespace": "",
+  "sourceApiVersion": "66.0"
+}</pre>
+            <p>Installation : le package de base (Core) d'abord, puis ceux qui en dépendent. Une version bêta s'installe en scratch org et en sandbox ; seule une version promue s'installe en production.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Plan de release et sandboxes</h3></div>
+            <p class="lead">Scénario type : deux streams en parallèle (CRM et Service), une release mensuelle, une équipe de formation, et des correctifs urgents possibles à tout moment.</p>
+            <ul>
+              <li>Stream CRM : sandboxes Developer pour chaque développeur → Developer Pro d'intégration CRM.</li>
+              <li>Stream Service : même schéma, avec sa propre Developer Pro d'intégration.</li>
+              <li>Convergence : une Partial Copy de QA commune où les deux streams sont fusionnés, puis l'UAT, puis une Full de staging qui répète le déploiement de production.</li>
+              <li>Formation : une Partial Copy rafraîchie après chaque release, avec ses données de démonstration.</li>
+              <li>Hotfix : une Developer Pro rafraîchie depuis la production, hors du flux des streams.</li>
+            </ul>
+            <p>Après chaque release, toutes les branches et sandboxes de développement repartent de la nouvelle version de production (back-merge et refresh), sinon les écarts s'accumulent.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Stratégie de release management</h3></div>
+            <p class="lead">Une stratégie de release répond à quatre questions : quand, quoi, comment, et comment revenir en arrière.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">Question</th><th class="wrap">Réponse attendue</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Quand</b></td><td class="wrap">Calendrier publié : majeures planifiées, mineures régulières, hotfix ; pas pendant le week-end de mise à jour Salesforce</td></tr>
+                  <tr><td class="wrap"><b>Quoi</b></td><td class="wrap">Contenu figé par le release manager, stories tracées jusqu'aux commits, release notes internes</td></tr>
+                  <tr><td class="wrap"><b>Comment</b></td><td class="wrap">Validation la veille, quick deploy, étapes du runbook, smoke test, go/no-go au CAB</td></tr>
+                  <tr><td class="wrap"><b>Retour arrière</b></td><td class="wrap">Redéployer le tag Git précédent, désactiver par feature flag ; pas de rollback natif</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="trap"><b>Piège</b>La livraison continue n'est pas une recommandation par défaut : elle demande des tests automatisés fiables et une équipe mature.</div>
+          </article>
+        </section>
+
+        <!-- ============ EXPLOITATION ============ -->
+        <section class="domain" id="d-ops">
+          <div class="domain-head"><div><span class="weight">Operating · 10 %</span><h2>Exploitation</h2></div></div>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Changer directement en production</h3></div>
+            <p class="lead">Scénario type : pour débloquer une équipe commerciale, un admin a modifié une règle de validation en production. Deux semaines plus tard, la release suivante remet l'ancienne version.</p>
+            <ul>
+              <li>Le repo contenait encore l'ancienne règle : le déploiement l'a réécrite. C'est la conséquence directe de la dérive entre la production et le source control.</li>
+              <li>Le bon réflexe, juste après le changement : retrieve de la règle depuis la production, commit sur <code>main</code>, fusion dans <code>develop</code> et dans les branches en cours, mise à jour des sandboxes. Lifecycle Center propose un back-sync pour ramener ces changements.</li>
+              <li>Setup Audit Trail (180 jours, export possible) retrouve ces changements a posteriori.</li>
+              <li>Pour éviter que cela se reproduise : définir les changements autorisés en production et le processus d'urgence, et retirer « Customize Application » aux profils qui n'en ont pas besoin.</li>
+            </ul>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Hotfix, refresh et supervision</h3></div>
+            <ol class="steps">
+              <li><b>Reproduire</b> le bug dans la sandbox de hotfix, rafraîchie depuis la production.</li>
+              <li><b>Corriger</b> sur une branche <code>hotfix/*</code> partie de <code>main</code>, avec un test qui prouve la correction.</li>
+              <li><b>Approuver</b> par le circuit d'urgence (CAB restreint).</li>
+              <li><b>Déployer</b> en production avec <code>RunSpecifiedTests</code> ou <code>RunLocalTests</code>, puis smoke test.</li>
+              <li><b>Réintégrer</b> : fusion dans <code>main</code> et <code>develop</code>, propagation aux sandboxes.</li>
+            </ol>
+            <p>Supervision après une release : e-mails d'exception Apex, debug logs ciblés, Event Monitoring, Scale Center pour les lenteurs et les verrous, Setup Audit Trail pour les changements de configuration.</p>
+          </article>
+
+          <article class="topic">
+            <div class="topic-head"><h3>Artefacts communs à plusieurs orgs</h3></div>
+            <p class="lead">Scénario type : quatre orgs internes partagent un framework de journalisation, un framework de triggers et des utilitaires d'intégration. Chaque org a aussi sa logique propre.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th class="wrap">Approche</th><th class="wrap">Avantage</th><th class="wrap">Limite</th></tr></thead>
+                <tbody>
+                  <tr><td class="wrap"><b>Copier le code dans chaque org</b></td><td class="wrap">Aucun outillage</td><td class="wrap">Versions divergentes, correctifs à refaire quatre fois</td></tr>
+                  <tr><td class="wrap"><b>Un repo, un manifeste par org</b></td><td class="wrap">Simple, un seul historique</td><td class="wrap">Dépendances implicites, risque d'écraser une spécificité</td></tr>
+                  <tr><td class="wrap"><b>Package unlocked « Core » + packages par org</b></td><td class="wrap">Versions, dépendances explicites, mises à jour contrôlées</td><td class="wrap">Découpage et Dev Hub nécessaires</td></tr>
+                  <tr><td class="wrap"><b>Package managé</b></td><td class="wrap">Code protégé, push upgrades</td><td class="wrap">Lourd pour un usage interne, code verrouillé</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Réponse attendue : le package unlocked commun, avec la configuration propre à chaque org dans des Custom Metadata et des Named Credentials définies dans chaque org.</p>
+          </article>
+        </section>
+
+      </main>
+    </div>
